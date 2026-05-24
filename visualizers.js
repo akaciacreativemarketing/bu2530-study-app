@@ -1366,4 +1366,3 @@ window.vis_productPlatform = function(container, lang) {
       </div>
     </div>`;
 };
-};
