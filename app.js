@@ -67,7 +67,7 @@ function getLevelInfo(xp) {
   const idx = XP_LEVELS.indexOf(lvl);
   const next = XP_LEVELS[idx + 1];
   const pct = next ? Math.round(((xp - lvl.min) / (next.min - lvl.min)) * 100) : 100;
-  return { name: t(lvl.name), nextXP: next ? next.min : null, pct };
+  return { name: t(lvl.name), nextXP: next ? next.min : null, pct, idx };
 }
 
 function updateXPBar() {
@@ -75,14 +75,57 @@ function updateXPBar() {
   const info = getLevelInfo(xp);
   const el = document.getElementById('xpBar');
   if (!el) return;
+
+  const r = 18, c = r + 2, sz = (c + 2) * 2;
+  const circumference = 2 * Math.PI * r;
+  const offset = circumference - (info.pct / 100) * circumference;
+  const nextTxt = info.nextXP ? `${info.nextXP - xp} XP` : 'MAX';
+
   el.innerHTML = `
     <div class="xp-bar-wrap">
-      <div class="xp-level-row">
-        <span class="xp-level-name">${info.name}</span>
-        <span class="xp-count">${xp} XP</span>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <svg width="${sz}" height="${sz}" viewBox="0 0 ${sz} ${sz}" style="flex-shrink:0;">
+          <circle cx="${c+2}" cy="${c+2}" r="${r}" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="3.5"/>
+          <circle cx="${c+2}" cy="${c+2}" r="${r}" fill="none" stroke="url(#xpGrad)" stroke-width="3.5"
+            stroke-dasharray="${circumference}" stroke-dashoffset="${offset}"
+            stroke-linecap="round" transform="rotate(-90 ${c+2} ${c+2})"
+            style="transition:stroke-dashoffset .7s cubic-bezier(.4,0,.2,1)"/>
+          <defs>
+            <linearGradient id="xpGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#F59E0B"/>
+              <stop offset="100%" stop-color="#FDE68A"/>
+            </linearGradient>
+          </defs>
+          <text x="${c+2}" y="${c+2}" text-anchor="middle" dominant-baseline="central"
+            fill="#F59E0B" font-size="9" font-weight="800" font-family="-apple-system,sans-serif"
+          >${info.pct}%</text>
+        </svg>
+        <div style="flex:1;min-width:0;">
+          <div class="xp-level-name">${info.name}</div>
+          <div class="xp-count">${xp} XP · ${nextTxt} ${lang === 'pt' ? 'p/ próx.' : 'to next'}</div>
+        </div>
       </div>
-      <div class="xp-bar"><div class="xp-fill" style="width:${info.pct}%"></div></div>
     </div>`;
+}
+
+/* ─── Achievements ──────────────────────────────────────── */
+const ACHIEVEMENTS = [
+  { id: 'first_step',  icon: '🚀', pt: 'Primeiro Passo',      en: 'First Step',        check: () => weekStatus(1) === 'done' },
+  { id: 'strategist',  icon: '♟️', pt: 'Estrategista',         en: 'Strategist',        check: () => weekStatus(2) === 'done' },
+  { id: 'ops_master',  icon: '⚙️', pt: 'Mestre de Operações', en: 'Ops Master',        check: () => [1,2,3,4,5,6,7,8,9,10].every(n => weekStatus(n) === 'done') },
+  { id: 'flashcard',   icon: '🃏', pt: 'Flashcard Pro',        en: 'Flashcard Pro',     check: () => parseInt(localStorage.getItem('bu2530-fc-count') || '0') >= 50 },
+  { id: 'bilingual',   icon: '🌍', pt: 'Bilíngue',             en: 'Bilingual',         check: () => parseInt(localStorage.getItem('bu2530-lang-toggle') || '0') >= 5 },
+  { id: 'cmo',         icon: '👑', pt: 'CMO',                  en: 'CMO',               check: () => getXP() >= 2200 },
+];
+
+function trackFcScore() {
+  const n = parseInt(localStorage.getItem('bu2530-fc-count') || '0') + 1;
+  localStorage.setItem('bu2530-fc-count', String(n));
+}
+
+function trackLangToggle() {
+  const n = parseInt(localStorage.getItem('bu2530-lang-toggle') || '0') + 1;
+  localStorage.setItem('bu2530-lang-toggle', String(n));
 }
 
 /* ─── Toast + Confetti ──────────────────────────────────── */
@@ -99,14 +142,14 @@ function launchConfetti() {
   const wrap = document.createElement('div');
   wrap.className = 'confetti-wrap';
   const colors = ['#C8102E','#003865','#10B981','#F59E0B','#7C3AED','#0EA5E9','#EC4899'];
-  for (let i = 0; i < 48; i++) {
+  for (let i = 0; i < 60; i++) {
     const p = document.createElement('div');
     p.className = 'confetti-piece';
-    p.style.cssText = `left:${Math.random()*100}%;background:${colors[i%colors.length]};animation-duration:${1.4+Math.random()*1.6}s;animation-delay:${Math.random()*.8}s;transform:rotate(${Math.random()*360}deg);width:${6+Math.random()*6}px;height:${10+Math.random()*8}px;`;
+    p.style.cssText = `left:${Math.random()*100}%;background:${colors[i%colors.length]};animation-duration:${1.4+Math.random()*1.8}s;animation-delay:${Math.random()*1}s;transform:rotate(${Math.random()*360}deg);width:${5+Math.random()*7}px;height:${8+Math.random()*10}px;`;
     wrap.appendChild(p);
   }
   document.body.appendChild(wrap);
-  setTimeout(() => wrap.remove(), 3500);
+  setTimeout(() => wrap.remove(), 4000);
 }
 
 /* ─── Helpers ───────────────────────────────────────────── */
@@ -194,6 +237,7 @@ function checkWeekCompletion(weekNum, state) {
 function toggleLang() {
   lang = lang === 'pt' ? 'en' : 'pt';
   localStorage.setItem('bu2530-lang', lang);
+  trackLangToggle();
   document.getElementById('langFlag').textContent = lang === 'pt' ? '🇧🇷' : '🇬🇧';
   document.getElementById('langText').textContent = lang === 'pt' ? 'PT+EN' : 'EN';
   renderSidebar();
@@ -280,7 +324,14 @@ function sectionWrapper(key, weekNum, bodyHtml, state) {
 function toggleSection(e, key, weekNum) {
   if (e.target.closest('.ok-btn')) return;
   const sec = document.getElementById(`sec-${weekNum}-${key}`);
-  if (sec) sec.classList.toggle('open');
+  if (!sec) return;
+  const wasOpen = sec.classList.contains('open');
+  sec.classList.toggle('open');
+  if (!wasOpen) {
+    sec.querySelectorAll('.vis-container[data-renderer]').forEach(el => {
+      if (!el.hasAttribute('data-vis-init')) initSingleVis(el);
+    });
+  }
 }
 
 function toggleOk(e, key, weekNum) {
@@ -344,6 +395,11 @@ function renderDashboard() {
   const mkt = Object.keys(WEEK_META).map(Number).filter(n => WEEK_META[n].part === 2);
   const pt1 = lang === 'pt';
 
+  const pct = Math.round((done / total) * 100);
+  const r = 28, sz = (r + 5) * 2;
+  const circumference = 2 * Math.PI * r;
+  const offset = circumference - (pct / 100) * circumference;
+
   function weekCard(n) {
     const status = weekStatus(n);
     return `
@@ -365,12 +421,21 @@ function renderDashboard() {
       </div>`;
   }
 
+  const achievementsHtml = ACHIEVEMENTS.map(a => {
+    const unlocked = a.check();
+    return `
+      <div class="achievement-badge ${unlocked ? 'unlocked' : ''}">
+        <div class="achievement-icon ${unlocked ? 'unlocked' : 'locked'}">${a.icon}</div>
+        <div class="achievement-name">${pt1 ? a.pt : a.en}</div>
+      </div>`;
+  }).join('');
+
   document.getElementById('mainContent').innerHTML = `
     <div class="dash-hero">
       <div class="dash-eyebrow">University of London · Coursera</div>
       <div class="dash-title">BU2530</div>
       <div class="dash-desc">${pt1
-        ? 'Gestão de Operações e Estratégia de Marketing (Operations Management and Marketing Strategy). Explore cada semana no seu ritmo — conceitos, teorias, casos e flashcards.'
+        ? 'Gestão de Operações e Estratégia de Marketing. Explore cada semana no seu ritmo — conceitos, teorias, casos e flashcards.'
         : 'Operations Management and Marketing Strategy. Explore each week at your own pace — concepts, theories, cases and flashcards.'
       }</div>
     </div>
@@ -391,6 +456,26 @@ function renderDashboard() {
       <div class="stat-card">
         <div class="stat-num">${notStarted}</div>
         <div class="stat-label">${pt1 ? 'Não iniciadas' : 'Not started'}</div>
+      </div>
+    </div>
+
+    <div style="display:flex;align-items:center;gap:24px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:20px 24px;margin-bottom:32px;box-shadow:var(--shadow);">
+      <svg width="${sz}" height="${sz}" viewBox="0 0 ${sz} ${sz}">
+        <circle cx="${r+5}" cy="${r+5}" r="${r}" fill="none" stroke="var(--border)" stroke-width="5"/>
+        <circle cx="${r+5}" cy="${r+5}" r="${r}" fill="none" stroke="var(--blue)" stroke-width="5"
+          stroke-dasharray="${circumference}" stroke-dashoffset="${offset}"
+          stroke-linecap="round" transform="rotate(-90 ${r+5} ${r+5})"
+          style="transition:stroke-dashoffset 1s cubic-bezier(.4,0,.2,1)"/>
+        <text x="${r+5}" y="${r+5}" text-anchor="middle" dominant-baseline="central"
+          fill="var(--blue)" font-size="12" font-weight="900" font-family="-apple-system,sans-serif">${pct}%</text>
+      </svg>
+      <div>
+        <div style="font-size:13px;font-weight:800;color:var(--blue);margin-bottom:4px;">${pt1 ? 'Progresso do Curso' : 'Course Progress'}</div>
+        <div style="font-size:12px;color:var(--text-mid);">${done}/${total} ${pt1 ? 'semanas concluídas' : 'weeks completed'}</div>
+      </div>
+      <div style="margin-left:auto;">
+        <div style="font-size:11px;font-weight:700;color:var(--text-lt);text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px;">${pt1 ? 'Conquistas' : 'Achievements'}</div>
+        <div class="achievement-grid" style="margin-top:0;">${achievementsHtml}</div>
       </div>
     </div>
 
@@ -428,6 +513,7 @@ function renderWeek(num) {
 
   let html = `
     <div class="week-hero">
+      <div class="week-num-bg">${num}</div>
       <div class="week-hero-tag">Week ${num} · ${partLabel}</div>
       <div class="week-hero-title">${title}</div>
       <div class="week-hero-bottom">
@@ -472,7 +558,7 @@ function renderOverviewBody(overview) {
   return `<div class="overview-text">${t(overview)}</div>`;
 }
 
-/* ─── Concept Pills ──────────────────────────────────────── */
+/* ─── Concept Cards ──────────────────────────────────────── */
 const PILL_COLORS = [
   { bg:'#EFF6FF', text:'#1E40AF', border:'#BFDBFE' },
   { bg:'#F0FDF4', text:'#065F46', border:'#A7F3D0' },
@@ -487,14 +573,23 @@ const PILL_COLORS = [
 const currentConcept = {};
 
 function renderConceptsBody(concepts, weekNum) {
-  const pills = concepts.map((c, i) => {
+  const cards = concepts.map((c, i) => {
     const col = PILL_COLORS[i % PILL_COLORS.length];
+    const num = String(i + 1).padStart(2, '0');
     const label = lang === 'pt' ? c.pt : c.en;
-    const enSuffix = lang === 'pt' && c.en && c.en !== c.pt
-      ? ` <span class="concept-pill-en">${c.en}</span>` : '';
-    return `<button class="concept-pill" style="background:${col.bg};color:${col.text};border-color:${col.border};" onclick="selectConcept(${weekNum},${i})">${label}${enSuffix}</button>`;
+    const enLabel = lang === 'pt' && c.en && c.en !== c.pt ? c.en : '';
+    return `
+      <div class="concept-card" data-idx="${i}"
+        style="background:${col.bg};border-color:${col.border};"
+        onclick="selectConcept(${weekNum},${i})">
+        <div class="concept-num" style="color:${col.text}">${num}</div>
+        <div class="concept-term" style="color:${col.text}">${label}</div>
+        ${enLabel ? `<div class="concept-en" style="color:${col.text}">${enLabel}</div>` : ''}
+      </div>`;
   }).join('');
-  return `<div class="pill-wrap">${pills}</div><div class="concept-detail" id="cdetail-${weekNum}" style="display:none"></div>`;
+  return `
+    <div class="concept-grid">${cards}</div>
+    <div class="concept-detail-v2" id="cdetail-${weekNum}" style="display:none"></div>`;
 }
 
 function selectConcept(weekNum, idx) {
@@ -504,8 +599,19 @@ function selectConcept(weekNum, idx) {
   currentConcept[weekNum] = isSame ? -1 : idx;
 
   const detail = document.getElementById(`cdetail-${weekNum}`);
-  const pills = document.querySelectorAll(`#sec-${weekNum}-concepts .concept-pill`);
-  pills.forEach((p, i) => p.classList.toggle('active', i === currentConcept[weekNum]));
+  const cards = document.querySelectorAll(`#sec-${weekNum}-concepts .concept-card`);
+
+  cards.forEach((card, i) => {
+    const col = PILL_COLORS[i % PILL_COLORS.length];
+    card.classList.toggle('active', i === currentConcept[weekNum]);
+    if (i === currentConcept[weekNum]) {
+      card.style.boxShadow = `0 0 0 2.5px ${col.text}, 0 8px 24px ${col.border}`;
+      card.style.transform = 'translateY(-2px)';
+    } else {
+      card.style.boxShadow = '';
+      card.style.transform = '';
+    }
+  });
 
   if (isSame || currentConcept[weekNum] === -1) {
     if (detail) detail.style.display = 'none';
@@ -526,28 +632,96 @@ function renderTheoriesBody(theories) {
   return `<div class="theory-list">${theories.map(th => renderTheoryCard(th)).join('')}</div>`;
 }
 
+const VIS_DISPATCH = {
+  '4vs-scatter':       true,
+  'radar':             true,
+  'forces':            true,
+  'ladder':            true,
+  'wave':              true,
+  'spectrum':          true,
+  'timeline':          true,
+  'fourvsCards':       true,
+  'performMatrix':     true,
+  'lifecycle':         true,
+  'genericStrategies': true,
+  'valueDisciplines':  true,
+  'valueMatrix':       true,
+};
+
 function renderTheoryCard(th) {
   const nameEn = th.name?.en || (typeof th.name === 'string' ? th.name : '');
   const namePt = th.name?.pt || nameEn;
+
+  // Explicit renderer field takes priority over hardcoded name detection
+  if (th.renderer && VIS_DISPATCH[th.renderer]) {
+    return renderTwoPanelCard(th);
+  }
+
   if (nameEn.includes('4Vs') || namePt.includes('4Vs')) return render4VsCard();
   if (nameEn.includes('Conversion') || namePt.includes('Conversão')) return renderConversionCard(th);
+
+  return renderGenericTheoryCard(th);
+}
+
+function renderGenericTheoryCard(th) {
+  const nameEn = th.name?.en || (typeof th.name === 'string' ? th.name : '');
+  const namePt = th.name?.pt || nameEn;
   return `
     <div class="theory-card">
-      <div class="theory-card-head">
-        <div class="theory-card-head-left">
-          <div class="theory-name">${lang === 'pt' ? t(th.name) : (nameEn || t(th.name))}</div>
-          ${lang === 'pt' && nameEn ? `<div class="theory-en">${nameEn}</div>` : ''}
-          <div class="theory-meta">
-            ${(th.authors||[]).map(a=>`<span class="theory-tag author">${a}</span>`).join('')}
-            ${th.year ? `<span class="theory-tag year">${th.year}</span>` : ''}
-            ${th.company ? `<span class="theory-tag company">${th.company}</span>` : ''}
-          </div>
-        </div>
-      </div>
+      ${theoryHead(th, namePt, nameEn)}
       <div class="theory-body">${t(th.description)}</div>
     </div>`;
 }
 
+function renderTwoPanelCard(th) {
+  const nameEn = th.name?.en || '';
+  const namePt = th.name?.pt || nameEn;
+  const uid = `vis-${th.renderer}-${Math.random().toString(36).substr(2,5)}`;
+  return `
+    <div class="theory-card">
+      ${theoryHead(th, namePt, nameEn)}
+      <div class="theory-two-panel">
+        <div class="theory-text-panel">${t(th.description)}</div>
+        <div class="theory-vis-panel">
+          <div class="vis-container" id="${uid}" data-renderer="${th.renderer}"></div>
+        </div>
+      </div>
+    </div>`;
+}
+
+function theoryHead(th, namePt, nameEn) {
+  const pt1 = lang === 'pt';
+  return `
+    <div class="theory-card-head">
+      <div class="theory-card-head-left">
+        <div class="theory-name">${pt1 ? (namePt || nameEn) : (nameEn || namePt)}</div>
+        ${pt1 && nameEn ? `<div class="theory-en">${nameEn}</div>` : ''}
+        <div class="theory-meta">
+          ${(th.authors||[]).map(a=>`<span class="theory-tag author">${a}</span>`).join('')}
+          ${th.year ? `<span class="theory-tag year">${th.year}</span>` : ''}
+          ${th.company ? `<span class="theory-tag company">${th.company}</span>` : ''}
+        </div>
+      </div>
+    </div>`;
+}
+
+/* ─── Visualization Init ─────────────────────────────────── */
+function initSingleVis(el) {
+  el.setAttribute('data-vis-init', '1');
+  const renderer = el.getAttribute('data-renderer');
+  const fnName = `vis_${renderer.replace(/-/g, '_')}`;
+  if (typeof window[fnName] === 'function') {
+    window[fnName](el, lang, {});
+  }
+}
+
+function initVisualizations() {
+  document.querySelectorAll('.vis-container[data-renderer]').forEach(el => {
+    if (!el.hasAttribute('data-vis-init')) initSingleVis(el);
+  });
+}
+
+/* ─── 4Vs Card ───────────────────────────────────────────── */
 function render4VsCard() {
   const pt1 = lang === 'pt';
   const dims = [
@@ -572,8 +746,8 @@ function render4VsCard() {
       pt:'Variação na Demanda', en:'Variation in Demand',
       highPt:'Alta variação → sistema precisa absorver picos e vales; capacidade extra necessária (ex: hotéis de luxo)',
       highEn:'High variation → system must absorb peaks and troughs; extra capacity needed (e.g. luxury hotels)',
-      lowPt:'Baixa variação → demanda previsível, estável, utilização máxima de recursos (ex: Holiday Inn Express próximo a aeroportos)',
-      lowEn:'Low variation → predictable, stable demand, maximum resource utilisation (e.g. airport Holiday Inn Express)',
+      lowPt:'Baixa variação → demanda previsível, estável, utilização máxima de recursos',
+      lowEn:'Low variation → predictable, stable demand, maximum resource utilisation',
     },
     {
       num:'V4', color:'#6B21A8', bg:'#FDF4FF',
@@ -595,9 +769,9 @@ function render4VsCard() {
         </div>
       </div>
       <div class="fourv-spectrum">
-        <div class="fourv-spectrum-bar" style="background:linear-gradient(90deg,${d.color},${d.color}40);"></div>
+        <div class="fourv-spectrum-bar" style="background:linear-gradient(90deg,${d.color},${d.color}35);"></div>
         <div class="fourv-spectrum-labels">
-          <span style="color:${d.color};font-weight:700">${pt1?'Alto ▲':'High ▲'}</span>
+          <span style="color:${d.color};font-weight:800">${pt1?'Alto ▲':'High ▲'}</span>
           <span>${pt1?'Baixo ▼':'Low ▼'}</span>
         </div>
       </div>
@@ -667,7 +841,7 @@ function renderConversionCard(th) {
           <div class="conv-arrow-col">→</div>
           <div class="conv-box conv-box-proc">
             <div class="conv-box-label-top">${pt1?'Transformação':'Transformation'}</div>
-            <div class="conv-box-title">${pt1?'Processo de Conversão':'Conversion Process'}</div>
+            <div class="conv-box-title">${pt1?'Processo':'Process'}</div>
             <div class="conv-box-items">
               <span class="conv-item">Design</span>
               <span class="conv-item">${pt1?'Produção':'Production'}</span>
@@ -685,7 +859,7 @@ function renderConversionCard(th) {
           <span class="conv-feedback-arrow">↺</span>
           ${feedbackText}
         </div>
-        <div style="font-size:12.5px;color:var(--text-mid);line-height:1.7;margin-top:10px;">${t(th.description)}</div>
+        <div style="font-size:13px;color:var(--text-mid);line-height:1.75;margin-top:10px;">${t(th.description)}</div>
       </div>
     </div>`;
 }
@@ -699,7 +873,7 @@ function renderAuthorsBody(authors) {
       ${authors.map((a, i) => `
         <div class="author-card">
           <div class="author-avatar" style="background:${AUTHOR_COLORS[i % AUTHOR_COLORS.length]}">${initials(a.name)}</div>
-          <div>
+          <div class="author-info">
             <div class="author-name">${a.name}</div>
             <div class="author-role">${t(a.role)}</div>
             <div class="author-contribution">${t(a.contribution)}</div>
@@ -709,7 +883,7 @@ function renderAuthorsBody(authors) {
 }
 
 /* ─── Case Studies ───────────────────────────────────────── */
-const CASE_COLORS = ['#C8102E','#003865','#10B981','#F59E0B','#7C3AED','#0EA5E9'];
+const CASE_COLORS = ['#C8102E','#003865','#10B981','#F59E0B','#7C3AED','#0EA5E9','#EC4899','#0F766E'];
 
 function renderCasesBody(cases) {
   return `
@@ -756,7 +930,7 @@ function renderConnectionsBody(connections) {
     </div>`;
 }
 
-/* ─── Flashcards (Study Mode) ────────────────────────────── */
+/* ─── Flashcards ─────────────────────────────────────────── */
 const fcState = {};
 
 function renderFlashcardsBody(flashcards, weekNum) {
@@ -816,6 +990,7 @@ function fcNav(weekNum, dir) {
 }
 
 function fcScore(weekNum, knew) {
+  trackFcScore();
   const st = fcState[weekNum];
   if (!st?.cards) return;
   const arr = knew ? st.known : st.unknown;
@@ -831,7 +1006,7 @@ function fcScore(weekNum, knew) {
   if (inner) inner.innerHTML = renderFlashcardsBody(st.cards, weekNum);
 }
 
-/* ─── Links / Supplementary Material ────────────────────── */
+/* ─── Links ──────────────────────────────────────────────── */
 function renderLinksBody(links) {
   const icons = { video: '🎬', article: '📄', news: '📰', other: '🔗' };
   const typePt = { video: 'Vídeo', article: 'Artigo', news: 'Notícia', other: 'Link' };
@@ -908,8 +1083,6 @@ function renderReview(reviewId) {
 }
 
 /* ─── Interactions ──────────────────────────────────────── */
-function flipCard(el) { el.classList.toggle('flipped'); }
-
 function filterGlossary(id, query) {
   const items = document.querySelectorAll(`#${id}-list .glossary-item`);
   const q = query.toLowerCase();

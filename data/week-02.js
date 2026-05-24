@@ -2,7 +2,7 @@ window.WEEKS = window.WEEKS || {};
 window.WEEKS[2] = {
   week: 2,
   part: 1,
-  status: 'in-progress',
+  status: 'done',
   title: {
     pt: 'Estratégia de Operações',
     en: 'Operations Strategy'
@@ -127,12 +127,32 @@ window.WEEKS[2] = {
   ],
   theories: [
     {
+      name: { pt: 'Modelo de Definição de Negócio — Abell', en: 'Business Definition Model — Abell' },
+      authors: ['Derek Abell'],
+      year: '1980',
+      description: {
+        pt: 'Framework para definir claramente o que é o negócio por meio de três perguntas:\n\n• WHO? → Quem são os clientes (segmentos de mercado)?\n• WHAT? → O que eles querem (necessidade / valor percebido)?\n• HOW? → Como a empresa entrega isso (tecnologia / processos)?\n\nWHO e WHAT são perguntas externas (orientadas ao mercado). HOW é interna (capacidade operacional). A conexão entre HOW (operações) e WHO/WHAT (mercado) é exatamente onde a estratégia de operações vive — e onde order-winners e order-qualifiers são definidos.\n\nEXEMPLO DE APLICAÇÃO — Warner Bros.:\n• WHO? → Famílias, fãs de entretenimento, diversas gerações\n• WHAT? → Experiência de entretenimento, emoção, nostalgia\n• HOW? → Inicialmente cinema em preto e branco → posteriormente som, cor, TV, streaming, parques temáticos\n\nA estratégia de operações da Warner foi evoluir o HOW continuamente para manter a relevância junto ao mesmo WHO/WHAT. Cada evolução tecnológica exigiu novas decisões operacionais sobre como reorganizar recursos.',
+        en: 'Framework for clearly defining what the business is through three questions:\n\n• WHO? → Who are the customers (market segments)?\n• WHAT? → What do they want (need / perceived value)?\n• HOW? → How does the firm deliver it (technology / processes)?\n\nWHO and WHAT are external questions (market-oriented). HOW is internal (operational capability). The connection between HOW (operations) and WHO/WHAT (market) is exactly where operations strategy lives — and where order-winners and order-qualifiers are defined.\n\nAPPLICATION EXAMPLE — Warner Bros.:\n• WHO? → Families, entertainment fans, multiple generations\n• WHAT? → Entertainment experience, emotion, nostalgia\n• HOW? → Initially black-and-white cinema → later sound, colour, TV, streaming, theme parks\n\nWarner\'s operations strategy was to continuously evolve the HOW to stay relevant to the same WHO/WHAT. Each technological evolution required new operational decisions about how to reorganise resources.'
+      }
+    },
+    {
       name: { pt: 'Os 5 Objetivos de Desempenho', en: 'Five Performance Objectives' },
+      renderer: 'radar',
       authors: ['Paton, Clegg, Hsuan, Pilkington'],
       year: 'Clássico',
       description: {
         pt: 'Framework que identifica cinco dimensões pelas quais as operações de uma organização podem criar vantagem competitiva:\n\n• Quality (Qualidade): fazer as coisas certo da primeira vez, de forma consistente. Produtos e serviços que funcionam conforme prometido, sem defeitos.\n\n• Speed (Velocidade): executar operações mais rapidamente que os concorrentes. Encurtar o tempo entre o pedido do cliente e a entrega.\n\n• Dependability (Dependabilidade / Confiabilidade): cumprir o que foi prometido, no prazo prometido, consistentemente. Clientes e parceiros podem contar com a organização.\n\n• Flexibility (Flexibilidade): capacidade de mudar o que é feito, como é feito ou quanto é feito. Inclui flexibilidade de produto, volume e entrega.\n\n• Cost (Custo): operar com menor custo que os concorrentes. INSIGHT CRUCIAL: as empresas líderes não competem pelo custo como ponto de partida — o custo baixo emerge como consequência de executar bem as outras quatro dimensões. Cortar custos sem qualidade, velocidade, dependabilidade e flexibilidade é uma estratégia frágil.',
         en: 'Framework identifying five dimensions through which an organisation\'s operations can create competitive advantage:\n\n• Quality: doing things right first time, consistently. Products and services that work as promised, without defects.\n\n• Speed: executing operations faster than competitors. Shortening the time between customer order and delivery.\n\n• Dependability: delivering on what was promised, on time, consistently. Customers and partners can count on the organisation.\n\n• Flexibility: ability to change what is done, how it is done or how much is done. Includes product, volume and delivery flexibility.\n\n• Cost: operating at lower cost than competitors. CRUCIAL INSIGHT: leading firms do not compete on cost as a starting point — low cost emerges as a consequence of executing the other four dimensions well. Cutting costs without quality, speed, dependability and flexibility is a fragile strategy.'
+      }
+    },
+    {
+      name: { pt: 'Matriz de Priorização de Desempenho', en: 'Performance Prioritizing Matrix' },
+      renderer: 'performMatrix',
+      authors: ['Nigel Slack', 'Stuart Chambers', 'Robert Johnston'],
+      year: '2007',
+      description: {
+        pt: 'Ferramenta para priorizar quais dos 5 objetivos de desempenho (quality, speed, dependability, flexibility, cost) precisam de investimento urgente, quais estão adequados e quais recebem investimento excessivo.\n\nCOMO FUNCIONA:\nPositiona cada objetivo numa matriz 9×9:\n• Eixo Y — Desempenho vs. Concorrentes: escala 1 (muito pior) a 9 (muito melhor)\n• Eixo X — Importância para os Clientes: escala 1 (pouco importante) a 9 (crítico para a compra)\n\nQUATRO ZONAS:\n• Excesso? (alta perf, baixa importância): investe demais em algo que o cliente não valoriza — considerar realocar recursos\n• Apropriado (alta perf, alta importância): manter — é um diferencial competitivo ativo\n• Melhorar (baixa perf, média/alta importância): investir para elevar o padrão — vulnerabilidade potencial\n• Ação Urgente! (baixa perf, alta importância): prioridade máxima — ameaça competitiva direta\n\nUSO PRÁTICO:\n1. Liste os objetivos operacionais relevantes\n2. Avalie cada um em Desempenho (1–9) e Importância para o cliente (1–9)\n3. Plote no mapa → posições revelam onde concentrar esforços\n4. Reavalie periodicamente — importância muda com o mercado e com a entrada de novos concorrentes\n\nCONEXÃO:\nA matriz é uma extensão natural do framework Terry Hill: os order-winners caem na zona "Apropriado" ou "Melhorar urgente"; os order-qualifiers ficam na zona "Manter" com perf moderada.',
+        en: 'Tool for prioritising which of the 5 performance objectives (quality, speed, dependability, flexibility, cost) need urgent investment, which are adequate, and which are over-resourced.\n\nHOW IT WORKS:\nPositions each objective on a 9×9 matrix:\n• Y-axis — Performance vs. Competitors: scale 1 (much worse) to 9 (much better)\n• X-axis — Importance to Customers: scale 1 (less important) to 9 (critical to purchase)\n\nFOUR ZONES:\n• Excess? (high perf, low importance): over-investing in something customers don\'t value — consider reallocating resources\n• Appropriate (high perf, high importance): maintain — it is an active competitive differentiator\n• Improve (low perf, medium/high importance): invest to raise the standard — potential vulnerability\n• Urgent Action! (low perf, high importance): top priority — direct competitive threat\n\nPRACTICAL USE:\n1. List the relevant operational objectives\n2. Rate each on Performance (1–9) and Customer Importance (1–9)\n3. Plot on the map → positions reveal where to concentrate efforts\n4. Reassess periodically — importance changes with the market and the entry of new competitors\n\nCONNECTION:\nThe matrix is a natural extension of Terry Hill\'s framework: order-winners fall in the "Appropriate" or "Urgent Improve" zone; order-qualifiers sit in the "Maintain" zone with moderate performance.'
       }
     },
     {
@@ -145,7 +165,18 @@ window.WEEKS[2] = {
       }
     },
     {
+      name: { pt: 'Ciclo de Vida do Produto', en: 'Product Life Cycle' },
+      renderer: 'lifecycle',
+      authors: ['Raymond Vernon'],
+      year: '1966',
+      description: {
+        pt: 'Modelo que descreve como o volume de vendas de um produto evolui ao longo de cinco estágios — e como os order-winners e as decisões de operações devem mudar em cada estágio.\n\n1. INTRODUÇÃO (Introduction)\n   Volume: baixo e crescente\n   Order winners: especificação do produto, design inovador\n   Clientes típicos: inovadores e early adopters — aceitam preço premium\n   Implicação OM: operações flexíveis, capacidade limitada, custo alto por unidade aceitável\n\n2. CRESCIMENTO (Growth)\n   Volume: crescimento rápido\n   Order winners: disponibilidade, velocidade de entrega\n   Clientes típicos: early majority — querem acesso fácil\n   Implicação OM: expandir capacidade, garantir dependabilidade de entrega\n\n3. MATURIDADE (Maturity)\n   Volume: alto e estável — mercado saturado\n   Order winners: preço, confiabilidade\n   Clientes típicos: late majority — comparam preços\n   Implicação OM: economias de escala, eficiência máxima, qualidade consistente\n\n4. DECLÍNIO (Decline)\n   Volume: caindo\n   Order winners: preço — diferenciação quase impossível\n   Clientes típicos: laggards — compram por hábito ou falta de alternativa\n   Implicação OM: redução de capacidade, eliminação de SKUs não rentáveis\n\n5. RETIRADA (Withdrawal)\n   Volume: muito baixo ou zero\n   Decisão: descontinuar ou servir nicho muito segmentado\n\nINSIGHT CRUCIAL PARA OM:\nOs order-winners mudam em CADA estágio. Uma estratégia de operações eficaz deve ser reavaliada continuamente. O que era diferencial em Introdução (design inovador) pode ser apenas qualifier em Maturidade, onde custo passa a dominar. Empresas presas em operações otimizadas para o estágio anterior perdem competitividade.',
+        en: 'Model describing how the sales volume of a product evolves through five stages — and how order-winners and operations decisions must change at each stage.\n\n1. INTRODUCTION\n   Volume: low and growing\n   Order winners: product specification, innovative design\n   Typical customers: innovators and early adopters — accept premium price\n   OM implication: flexible operations, limited capacity, higher unit cost acceptable\n\n2. GROWTH\n   Volume: rapid growth\n   Order winners: availability, delivery speed\n   Typical customers: early majority — want easy access\n   OM implication: expand capacity, ensure delivery dependability\n\n3. MATURITY\n   Volume: high and stable — market saturated\n   Order winners: price, reliability\n   Typical customers: late majority — compare prices\n   OM implication: economies of scale, maximum efficiency, consistent quality\n\n4. DECLINE\n   Volume: falling\n   Order winners: price — differentiation almost impossible\n   Typical customers: laggards — buy out of habit or lack of alternative\n   OM implication: reduce capacity, eliminate unprofitable SKUs\n\n5. WITHDRAWAL\n   Volume: very low or zero\n   Decision: discontinue or serve highly segmented niche\n\nCRUCIAL INSIGHT FOR OM:\nOrder-winners CHANGE at every stage. An effective operations strategy must be continuously reassessed. What differentiated in Introduction (innovative design) may be just a qualifier at Maturity, where cost comes to dominate. Firms locked into operations optimised for the previous stage lose competitiveness.'
+      }
+    },
+    {
       name: { pt: '5 Forças de Porter', en: 'Porter\'s Five Forces' },
+      renderer: 'forces',
       authors: ['Michael E. Porter'],
       year: '1979',
       description: {
@@ -154,7 +185,38 @@ window.WEEKS[2] = {
       }
     },
     {
+      name: { pt: 'Estratégias Genéricas de Porter', en: 'Porter\'s Generic Strategies' },
+      renderer: 'genericStrategies',
+      authors: ['Michael E. Porter'],
+      year: '1985',
+      description: {
+        pt: 'Framework de Porter (1985, "Competitive Advantage") que descreve três posições estratégicas fundamentais para obter vantagem competitiva sustentável.\n\nTRÊS ESTRATÉGIAS:\n\n1. LIDERANÇA EM CUSTO (Cost Leadership)\n   Escopo: amplo (todo o mercado)\n   Vantagem: menor custo total de produção e entrega\n   Operações exigidas: economias de escala máximas, padronização, eficiência, automação\n   Exemplos: Toyota, Aldi, Ryanair, McDonald\'s\n\n2. DIFERENCIAÇÃO (Differentiation)\n   Escopo: amplo (todo o mercado)\n   Vantagem: produto/serviço percebido como único e superior — justifica preço premium\n   Operações exigidas: qualidade impecável, velocidade de inovação, flexibilidade\n   Exemplos: Apple, Rolex, Rolls-Royce, BMW\n\n3. FOCO (Focus / Niche)\n   Escopo: estreito (segmento específico)\n   Vantagem: custo OU diferenciação DENTRO do nicho\n   Operações exigidas: especialização extrema no segmento\n   Exemplos: Linn Products (hi-fi audiófilo), Pashley Cycles (bicicletas artesanais)\n\nARMADILHA — "STUCK IN THE MIDDLE":\nPorter argumenta que tentar perseguir duas estratégias ao mesmo tempo sem comprometimento leva ao "stuck in the middle": a empresa não tem custo baixo suficiente para competir com líderes de custo, nem diferenciação suficiente para justificar preço premium. Resultado: desempenho medíocre.\n\nCONEXÃO COM OS 5 OBJETIVOS:\n• Cost Leadership → prioriza COST + DEPENDABILITY como order-winners\n• Differentiation → prioriza QUALITY + FLEXIBILITY + SPEED\n• Focus → perfil de objetivos específico para o nicho escolhido',
+        en: 'Porter\'s framework (1985, "Competitive Advantage") describing three fundamental strategic positions to achieve sustainable competitive advantage.\n\nTHREE STRATEGIES:\n\n1. COST LEADERSHIP\n   Scope: broad (whole market)\n   Advantage: lowest total cost of production and delivery\n   Required operations: maximum economies of scale, standardisation, efficiency, automation\n   Examples: Toyota, Aldi, Ryanair, McDonald\'s\n\n2. DIFFERENTIATION\n   Scope: broad (whole market)\n   Advantage: product/service perceived as unique and superior — justifies price premium\n   Required operations: impeccable quality, speed of innovation, flexibility\n   Examples: Apple, Rolex, Rolls-Royce, BMW\n\n3. FOCUS (Niche)\n   Scope: narrow (specific segment)\n   Advantage: cost OR differentiation WITHIN the niche\n   Required operations: extreme specialisation in the segment\n   Examples: Linn Products (audiophile hi-fi), Pashley Cycles (artisan bicycles)\n\nTRAP — "STUCK IN THE MIDDLE":\nPorter argues that attempting two strategies simultaneously without commitment leads to being "stuck in the middle": the firm has neither enough cost advantage to compete with cost leaders, nor enough differentiation to justify a price premium. Result: mediocre performance.\n\nCONNECTION WITH THE 5 OBJECTIVES:\n• Cost Leadership → prioritises COST + DEPENDABILITY as order-winners\n• Differentiation → prioritises QUALITY + FLEXIBILITY + SPEED\n• Focus → objectives profile specific to the chosen niche'
+      }
+    },
+    {
+      name: { pt: 'Disciplinas de Valor de Treacy & Wiersema', en: 'Value Disciplines — Treacy & Wiersema' },
+      renderer: 'valueDisciplines',
+      authors: ['Michael Treacy', 'Fred Wiersema'],
+      year: '1993',
+      description: {
+        pt: 'Framework publicado na Harvard Business Review (1993) e desenvolvido no livro "The Discipline of Market Leaders" (1995). Descreve três formas de criar valor superior para clientes — e argumenta que as empresas líderes escolhem UMA e se tornam excelentes nela, mantendo nível adequado nas outras duas.\n\nAS TRÊS DISCIPLINAS:\n\n1. EXCELÊNCIA OPERACIONAL (Operational Excellence)\n   Proposta de valor: melhor custo total (best total cost)\n   Foco: processos eficientes, supply chain enxuta, padronização, mínimo de fricção\n   Clientes buscam: conveniência e preço baixo — não querem complexidade\n   Exemplos: McDonald\'s, Toyota, Dell, Aldi, Amazon (varejo)\n\n2. LIDERANÇA DE PRODUTO (Product Leadership)\n   Proposta de valor: melhor produto (best product)\n   Foco: inovação contínua, R&D intensivo, time-to-market rápido, cultura de criatividade\n   Clientes buscam: desempenho máximo e novidade — dispostos a pagar mais\n   Exemplos: Apple, Intel, Nike, 3M\n\n3. INTIMIDADE COM O CLIENTE (Customer Intimacy)\n   Proposta de valor: melhor solução total (best total solution)\n   Foco: conhecimento profundo do cliente, customização, relacionamento de longo prazo\n   Clientes buscam: solução específica para suas necessidades únicas\n   Exemplos: IBM, Salesforce, Four Seasons Hotels\n\nREGRA DAS TRÊS DISCIPLINAS:\n"Excel in one. Be adequate in the other two."\nNão é possível liderar em todas as três simultaneamente sem diluir foco e recursos. Mas é imperativo não ficar abaixo do mínimo aceitável em nenhuma delas.\n\nCOMPARAÇÃO COM PORTER:\n• Cost Leadership ≈ Operational Excellence\n• Differentiation ≈ Product Leadership ou Customer Intimacy\n• Focus ≈ Customer Intimacy num nicho específico\n\nCOMPLEMENTARIDADE COM A MATRIZ DE VALOR:\nA Matriz de Valor de Martinez & Bititci operacionaliza as três disciplinas identificando quais capacidades HARD (físicas/tangíveis) e SOFT (culturais/intangíveis) são necessárias para entregar cada disciplina.',
+        en: 'Framework published in Harvard Business Review (1993) and developed in "The Discipline of Market Leaders" (1995). Describes three ways of creating superior customer value — and argues that market leaders choose ONE and become excellent at it, maintaining adequate level in the other two.\n\nTHE THREE DISCIPLINES:\n\n1. OPERATIONAL EXCELLENCE\n   Value proposition: best total cost\n   Focus: efficient processes, lean supply chain, standardisation, minimum friction\n   Customers seek: convenience and low price — don\'t want complexity\n   Examples: McDonald\'s, Toyota, Dell, Aldi, Amazon (retail)\n\n2. PRODUCT LEADERSHIP\n   Value proposition: best product\n   Focus: continuous innovation, intensive R&D, fast time-to-market, creativity culture\n   Customers seek: maximum performance and novelty — willing to pay more\n   Examples: Apple, Intel, Nike, 3M\n\n3. CUSTOMER INTIMACY\n   Value proposition: best total solution\n   Focus: deep customer knowledge, customisation, long-term relationships\n   Customers seek: specific solution for their unique needs\n   Examples: IBM, Salesforce, Four Seasons Hotels\n\nTHE THREE DISCIPLINES RULE:\n"Excel in one. Be adequate in the other two."\nLeading in all three simultaneously without diluting focus and resources is impossible. But it is imperative not to fall below the acceptable minimum in any of them.\n\nCOMPARISON WITH PORTER:\n• Cost Leadership ≈ Operational Excellence\n• Differentiation ≈ Product Leadership or Customer Intimacy\n• Focus ≈ Customer Intimacy in a specific niche\n\nCOMPLEMENTARITY WITH VALUE MATRIX:\nMartinez & Bititci\'s Value Matrix operationalises the three disciplines by identifying which HARD (physical/tangible) and SOFT (cultural/intangible) capabilities are needed to deliver each discipline.'
+      }
+    },
+    {
+      name: { pt: 'Matriz de Valor de Martinez & Bititci', en: 'Value Matrix — Martinez & Bititci' },
+      renderer: 'valueMatrix',
+      authors: ['José Martinez', 'Umit Bititci'],
+      year: '2000',
+      description: {
+        pt: 'Framework que integra as disciplinas de valor de Treacy & Wiersema com os recursos operacionais — mostrando COMO cada disciplina é entregue na prática por meio de capacidades tangíveis e intangíveis.\n\nESTRUTURA DA MATRIZ:\nCruzamento de:\n• Colunas: Excelência Operacional | Liderança de Produto | Intimidade com o Cliente\n• Linhas: Hard (capacidades físicas/tangíveis) | Soft (capacidades culturais/intangíveis)\n\nCAPACIDADES HARD:\n• Exc. Operacional: Lean, Six Sigma, tecnologia de supply chain, sistemas de qualidade\n• Liderança Produto: P&D, patentes, engenharia de precisão, equipamentos avançados\n• Intimidade Cliente: CRM, bases de dados de cliente, plataformas de analytics\n\nCAPACIDADES SOFT:\n• Exc. Operacional: cultura de melhoria contínua, TQM, padronização, mentalidade de eficiência\n• Liderança Produto: cultura de inovação, gestão de talentos criativos, tolerância ao risco\n• Intimidade Cliente: gestão de relacionamentos, conhecimento profundo do cliente, confiança\n\nUTILIDADE PRÁTICA:\n1. Operacionaliza a estratégia: não basta declarar uma disciplina — é preciso identificar e desenvolver as capacidades necessárias\n2. Diagnóstico organizacional: a empresa pode mapear onde está forte/fraca em cada célula\n3. Guia de investimento: onde alocar recursos humanos, tecnológicos e financeiros\n4. Conecta estratégia (disciplinas) com gestão de operações (capacidades)',
+        en: 'Framework integrating Treacy & Wiersema\'s value disciplines with operational resources — showing HOW each discipline is delivered in practice through tangible and intangible capabilities.\n\nMATRIX STRUCTURE:\nCross-referencing of:\n• Columns: Operational Excellence | Product Leadership | Customer Intimacy\n• Rows: Hard (physical/tangible capabilities) | Soft (cultural/intangible capabilities)\n\nHARD CAPABILITIES:\n• Op. Excellence: Lean, Six Sigma, supply chain technology, quality systems\n• Product Leadership: R&D, patents, precision engineering, advanced equipment\n• Customer Intimacy: CRM, customer databases, analytics platforms\n\nSOFT CAPABILITIES:\n• Op. Excellence: continuous improvement culture, TQM, process standardisation, efficiency mindset\n• Product Leadership: innovation culture, creative talent management, risk tolerance\n• Customer Intimacy: relationship management, deep customer knowledge, trust\n\nPRACTICAL USES:\n1. Operationalises strategy: it is not enough to declare a discipline — you must identify and develop the necessary capabilities\n2. Organisational diagnosis: the firm can map where it is strong/weak in each cell\n3. Investment guide: where to allocate human, technological and financial resources\n4. Connects strategy (disciplines) with operations management (capabilities)'
+      }
+    },
+    {
       name: { pt: 'Modelo de 4 Estágios de Contribuição das Operações', en: 'Four-Stage Model of Operations Contribution' },
+      renderer: 'ladder',
       authors: ['Nigel Slack', 'Nigel Chetty'],
       year: '2020',
       description: {
@@ -164,6 +226,7 @@ window.WEEKS[2] = {
     },
     {
       name: { pt: 'Servitization', en: 'Servitization' },
+      renderer: 'spectrum',
       authors: ['Sandra Vandermerwe', 'Juan Rada', 'Andy Neely'],
       year: '1988 / 2013',
       description: {
@@ -173,6 +236,7 @@ window.WEEKS[2] = {
     },
     {
       name: { pt: 'Efeito Chicote', en: 'Bullwhip Effect' },
+      renderer: 'wave',
       authors: ['Hau Lee', 'V. Padmanabhan', 'Seungjin Whang'],
       year: '1997',
       description: {
@@ -180,15 +244,6 @@ window.WEEKS[2] = {
         en: 'Phenomenon described by Hau Lee et al. (1997) explaining why small variations in end-consumer demand amplify progressively along supply chain links — like the motion of a bullwhip where the tip vibrates far more than the hand.\n\nHow it works:\nImagine a supermarket selling 100 units/week of a product. One week, sales rise 10% to 110. The supermarket, fearing stockout, orders 130 from the distributor. The distributor, seeing the increase, orders 160 from the manufacturer. The manufacturer, fearing scarcity, produces 200. Result: the end consumer varied 10%, but the manufacturer swung 100%.\n\nCauses:\n1. Demand forecasting based on orders (not actual consumer demand)\n2. Long order cycles — the longer between orders, the greater the uncertainty and the larger the "safety" batch\n3. Price fluctuations — promotions generate excess orders followed by collapse\n4. Rationing and shortage gaming — when product is scarce, buyers order more than they need\n\nConsequences:\n• Excess inventory at some links, stockouts at others\n• Extra production, transport and storage costs\n• Factory capacity underutilised or overloaded\n• Worsening of all 5 performance objectives: cost rises, dependability falls, speed becomes unpredictable\n\nHow Zara solves it:\n• Orders 2x/week (short cycle) → less accumulated uncertainty between orders\n• 15-day S&OP cycle vs. competitors\' 30–60 → short-term forecasts far more accurate\n• Stores report real demand in near real-time → demand signal arrives clean, undistorted\n• Result: Zara nearly eliminates the bullwhip effect — while competitors produce 80–90% in advance with high error risk, it produces 50–60% with far more reliable forecasts'
       }
     },
-    {
-      name: { pt: 'Modelo de Definição de Negócio — Abell', en: 'Business Definition Model — Abell' },
-      authors: ['Derek Abell'],
-      year: '1980',
-      description: {
-        pt: 'Framework para definir claramente o que é o negócio por meio de três perguntas:\n\n• WHO? → Quem são os clientes (segmentos de mercado)?\n• WHAT? → O que eles querem (necessidade / valor percebido)?\n• HOW? → Como a empresa entrega isso (tecnologia / processos)?\n\nWHO e WHAT são perguntas externas (orientadas ao mercado). HOW é interna (capacidade operacional). A conexão entre HOW (operações) e WHO/WHAT (mercado) é exatamente onde a estratégia de operações vive — e onde order-winners e order-qualifiers são definidos.',
-        en: 'Framework for clearly defining what the business is through three questions:\n\n• WHO? → Who are the customers (market segments)?\n• WHAT? → What do they want (need / perceived value)?\n• HOW? → How does the firm deliver it (technology / processes)?\n\nWHO and WHAT are external questions (market-oriented). HOW is internal (operational capability). The connection between HOW (operations) and WHO/WHAT (market) is exactly where operations strategy lives — and where order-winners and order-qualifiers are defined.'
-      }
-    }
   ],
   authors: [
     {
@@ -247,6 +302,28 @@ window.WEEKS[2] = {
       }
     },
     {
+      name: 'Michael Treacy',
+      role: {
+        pt: 'Académico e consultor de estratégia — MIT',
+        en: 'Academic and strategy consultant — MIT'
+      },
+      contribution: {
+        pt: 'Coautor (com Fred Wiersema) do framework das Disciplinas de Valor, publicado na Harvard Business Review (1993) e no livro "The Discipline of Market Leaders" (1995). O framework identifica três caminhos distintos para criação de valor superior — Excelência Operacional, Liderança de Produto e Intimidade com o Cliente — e argumenta que empresas líderes se concentram numa e mantêm nível adequado nas outras.',
+        en: 'Co-author (with Fred Wiersema) of the Value Disciplines framework, published in Harvard Business Review (1993) and in "The Discipline of Market Leaders" (1995). The framework identifies three distinct paths to superior value creation — Operational Excellence, Product Leadership and Customer Intimacy — and argues that market leaders focus on one and maintain adequate level in the others.'
+      }
+    },
+    {
+      name: 'Nigel Slack',
+      role: {
+        pt: 'Professor de Gestão de Operações — Warwick Business School',
+        en: 'Professor of Operations Management — Warwick Business School'
+      },
+      contribution: {
+        pt: 'Um dos mais influentes académicos de gestão de operações britânicos. Coautor do livro "Operations Management" (múltiplas edições), referência standard nos cursos da área. Desenvolveu a Matriz de Priorização de Desempenho (Performance Prioritizing Matrix, 2007) — ferramenta para identificar onde concentrar esforços de melhoria a partir do posicionamento dos objetivos de desempenho em relação à concorrência e à importância para os clientes.',
+        en: 'One of the most influential British operations management academics. Co-author of "Operations Management" (multiple editions), a standard reference in the field. Developed the Performance Prioritizing Matrix (2007) — a tool for identifying where to concentrate improvement efforts based on the positioning of performance objectives relative to competition and customer importance.'
+      }
+    },
+    {
       name: 'Amancio Ortega',
       role: {
         pt: 'Fundador da Zara / Inditex (1974)',
@@ -297,6 +374,30 @@ window.WEEKS[2] = {
       lesson: {
         pt: 'Exemplo clássico de servitization. Em vez de vender motores aeronáuticos (produto), Rolls-Royce vende "power-by-the-hour" — contratos onde as companhias aéreas pagam por horas de propulsão. A Rolls-Royce mantém a propriedade, responsabilidade e manutenção dos motores.\n\nAlinhamento de interesses: antes, a Rolls-Royce lucrava com falhas (mais reparos = mais receita). Agora, downtime do motor = perda direta de receita para a Rolls-Royce — o incentivo é manter o motor funcionando ao máximo. Impacto nas operações: foco total em reliability e dependability, não em custo de produção unitário.',
         en: 'Classic example of servitization. Instead of selling aero engines (product), Rolls-Royce sells "power-by-the-hour" — contracts where airlines pay per hour of thrust. Rolls-Royce retains ownership, responsibility and maintenance of the engines.\n\nAligned interests: previously Rolls-Royce profited from failures (more repairs = more revenue). Now, engine downtime = direct revenue loss for Rolls-Royce — the incentive is to keep the engine working at maximum. Operational impact: total focus on reliability and dependability, not unit production cost.'
+      }
+    },
+    {
+      company: 'Linn Products',
+      sector: { pt: 'Áudio hi-fi de alta performance', en: 'High-performance hi-fi audio' },
+      lesson: {
+        pt: 'Fabricante escocesa de equipamentos de áudio de altíssima qualidade (amplificadores, toca-discos, streamers). Exemplo perfeito de estratégia de Foco + Diferenciação de Porter aplicada às operações: opera em nicho extremamente estreito (audiófilos), compete exclusivamente em qualidade de produto e especificação técnica, nunca em preço. Order winner: excelência técnica reconhecida por entusiastas que pagam £5.000–50.000 por um equipamento. Não tenta ser global nem de alto volume — suas operações são otimizadas para artesanato de precisão. Ilustra o princípio de que a escolha estratégica (Focus) deve determinar o design das operações, não o contrário. Também demonstra como operar no Estágio 3–4 do modelo de 4 estágios sem escala massiva.',
+        en: 'Scottish manufacturer of ultra-high-quality audio equipment (amplifiers, turntables, streamers). Perfect example of Porter\'s Focus + Differentiation strategy applied to operations: operates in an extremely narrow niche (audiophiles), competing exclusively on product quality and technical specification, never on price. Order winner: technical excellence recognised by enthusiasts who pay £5,000–50,000 for a piece of equipment. Does not attempt to go global or high-volume — its operations are optimised for precision craftsmanship. Illustrates the principle that the strategic choice (Focus) should determine operations design, not the other way around. Also demonstrates how to operate at Stage 3–4 of the four-stage model without massive scale.'
+      }
+    },
+    {
+      company: 'Teekay Corporation',
+      sector: { pt: 'Transporte marítimo de energia / Logística offshore', en: 'Energy maritime transport / Offshore logistics' },
+      lesson: {
+        pt: 'Empresa canadense de transporte marítimo especializada no transporte de GNL (gás natural liquefeito), petróleo bruto e derivados offshore. Exemplo de servitização (servitization) aplicada ao transporte marítimo: passou de vender "capacidade de navio" para vender soluções completas de logística de energia — incluindo gestão de frota, manutenção, tripulação e otimização de rotas.\n\nAplicação do PSS: o cliente não contrata um navio — contrata a entrega garantida de energia com uptime máximo. Teekay assume toda a responsabilidade operacional.\n\nAlinhamento de interesses (igual ao modelo Rolls-Royce): no modelo tradicional, o armador ganha por hora de navio contratado, independentemente de eficiência. No modelo servitizado, Teekay lucra com operações eficientes e sem interrupções. Downtime = perda direta de receita → incentivo total para confiabilidade.\n\nConexão com os 5 objetivos: dependability e quality passam a ser os objectives mais críticos (acima de custo), porque o cliente paga pela garantia de entrega, não pela embarcação.',
+        en: 'Canadian maritime transport company specialised in LNG (liquefied natural gas), crude oil and offshore derivative transport. Example of servitization applied to maritime transport: shifted from selling "ship capacity" to selling complete energy logistics solutions — including fleet management, maintenance, crew and route optimisation.\n\nPSS application: the customer does not charter a ship — they contract guaranteed energy delivery with maximum uptime. Teekay assumes full operational responsibility.\n\nAligned interests (same as the Rolls-Royce model): in the traditional model, the shipowner earns per chartered hour regardless of efficiency. In the servitized model, Teekay profits from efficient, uninterrupted operations. Downtime = direct revenue loss → total incentive for reliability.\n\nConnection to the 5 objectives: dependability and quality become the most critical objectives (above cost), because the customer pays for guaranteed delivery, not the vessel.'
+      }
+    },
+    {
+      company: "S'Baggers Restaurant",
+      sector: { pt: 'Restauração / Automação radical de serviços', en: 'Foodservice / Radical service automation' },
+      lesson: {
+        pt: 'Restaurante alemão (Nuremberg) que eliminou completamente o serviço de mesa tradicional e o substituiu por automação total: clientes fazem pedidos via touchscreen nas mesas, comida é entregada diretamente por trilhos que percorrem todo o restaurante (sistema de pistas tipo parque de diversões).\n\nDecisões operacionais radicais:\n• Zero garçons no processo de entrega → custo operacional drasticamente reduzido\n• Cozinha otimizada para velocidade e consistência, não para flexibilidade\n• Order qualifier: qualidade e variedade suficientes para o público-alvo\n• Order winner: preço baixo + novelty (experiência divertida e inusitada)\n\nIlustração do modelo de Abell (WHO/WHAT/HOW):\n• WHO: famílias, grupos jovens que buscam entretenimento além da comida\n• WHAT: refeição acessível + experiência memorável (diferenciação pela diversão)\n• HOW: automação radical que reduz custo e cria o diferencial competitivo\n\nLigação com Excelência Operacional: S\'Baggers usa automação não apenas para reduzir custo (como McDonald\'s), mas para criar um order winner de diferenciação (a experiência) — mostrando que Excelência Operacional e diferenciação não são necessariamente excludentes quando a inovação do processo é o próprio produto.',
+        en: 'German restaurant (Nuremberg) that completely eliminated traditional table service, replacing it with full automation: customers order via touchscreens at tables, food is delivered directly via rails running throughout the restaurant (amusement-park-style track system).\n\nRadical operational decisions:\n• Zero waiters in the delivery process → drastically reduced operational cost\n• Kitchen optimised for speed and consistency, not flexibility\n• Order qualifier: sufficient quality and variety for the target audience\n• Order winner: low price + novelty (fun, unusual experience)\n\nIllustration of Abell\'s model (WHO/WHAT/HOW):\n• WHO: families, young groups seeking entertainment beyond the food itself\n• WHAT: affordable meal + memorable experience (differentiation through fun)\n• HOW: radical automation that reduces cost and creates the competitive differentiator\n\nLink to Operational Excellence: S\'Baggers uses automation not only to reduce cost (like McDonald\'s) but to create a differentiation order winner (the experience) — showing that Operational Excellence and differentiation are not necessarily mutually exclusive when process innovation is the product itself.'
       }
     },
     {
@@ -434,6 +535,55 @@ window.WEEKS[2] = {
         pt: 'Modelo de negócio que opera com mínimo de ativos físicos próprios. Ex: Deliveroo não possui restaurantes nem frota — seu valor está no algoritmo e na rede. Oposto de empresas intensivas em capital (asset-heavy) como fábricas.',
         en: 'Business model operating with minimal owned physical assets. E.g. Deliveroo owns no restaurants or fleet — its value lies in the algorithm and network. Opposite of capital-intensive (asset-heavy) firms like factories.'
       }
+    },
+    {
+      term: 'PLC (Product Life Cycle)',
+      definition: {
+        pt: 'Ciclo de vida do produto — sequência de estágios (Introdução, Crescimento, Maturidade, Declínio, Retirada) que descreve como o volume de vendas evolui. Em cada estágio, os order-winners mudam — o que exige adaptar a estratégia de operações.',
+        en: 'Sequence of stages (Introduction, Growth, Maturity, Decline, Withdrawal) describing how sales volume evolves. At each stage, order-winners change — requiring adaptation of the operations strategy.'
+      }
+    },
+    {
+      term: 'Cost Leadership',
+      definition: {
+        pt: 'Estratégia genérica de Porter: vantagem competitiva por ser o produtor de menor custo total num mercado amplo. Requer economias de escala, padronização e eficiência máxima.',
+        en: 'Porter\'s generic strategy: competitive advantage by being the lowest total cost producer in a broad market. Requires economies of scale, standardisation and maximum efficiency.'
+      }
+    },
+    {
+      term: 'Differentiation Strategy',
+      definition: {
+        pt: 'Estratégia genérica de Porter: vantagem competitiva por oferecer produto/serviço percebido como único e superior, justificando preço premium num mercado amplo. Requer qualidade, inovação e flexibilidade.',
+        en: 'Porter\'s generic strategy: competitive advantage by offering a product/service perceived as unique and superior, justifying a price premium in a broad market. Requires quality, innovation and flexibility.'
+      }
+    },
+    {
+      term: 'Stuck in the Middle',
+      definition: {
+        pt: 'Armadilha estratégica identificada por Porter: empresa que tenta perseguir múltiplas estratégias genéricas sem comprometimento acaba sem vantagem real em nenhuma — nem custo suficientemente baixo, nem diferenciação suficiente. Resultado: desempenho medíocre.',
+        en: 'Strategic trap identified by Porter: a firm that attempts multiple generic strategies without commitment ends up with no real advantage in any — neither low enough cost nor sufficient differentiation. Result: mediocre performance.'
+      }
+    },
+    {
+      term: 'Value Discipline',
+      definition: {
+        pt: 'Uma das três formas de criar valor superior para clientes (Treacy & Wiersema): Excelência Operacional (best total cost), Liderança de Produto (best product), Intimidade com o Cliente (best total solution). Empresas líderes dominam uma e mantêm nível adequado nas outras.',
+        en: 'One of three ways to create superior customer value (Treacy & Wiersema): Operational Excellence (best total cost), Product Leadership (best product), Customer Intimacy (best total solution). Market leaders master one and maintain adequate level in the others.'
+      }
+    },
+    {
+      term: 'Trade-off',
+      definition: {
+        pt: 'Compensação estratégica: ao otimizar uma dimensão operacional (ex: custo), geralmente sacrifica-se outra (ex: variedade). Trade-offs são escolhas inevitáveis em operações — fazer tudo ao máximo simultaneamente é impossível. Reconhecer e gerir trade-offs é o núcleo da estratégia de operações.',
+        en: 'Strategic trade-off: optimising one operational dimension (e.g. cost) typically sacrifices another (e.g. variety). Trade-offs are inevitable choices in operations — doing everything at maximum simultaneously is impossible. Recognising and managing trade-offs is the core of operations strategy.'
+      }
+    },
+    {
+      term: 'Performance Prioritizing Matrix',
+      definition: {
+        pt: 'Ferramenta de Slack et al. (2007): matriz 9×9 que posiciona objetivos de desempenho em relação a dois eixos — Importância para Clientes (X) e Desempenho vs. Concorrentes (Y). Identifica quatro zonas: Excesso?, Apropriado, Melhorar e Ação Urgente!',
+        en: 'Slack et al. (2007) tool: 9×9 matrix positioning performance objectives on two axes — Importance to Customers (X) and Performance vs. Competitors (Y). Identifies four zones: Excess?, Appropriate, Improve and Urgent Action!'
+      }
     }
   ],
   connections: [
@@ -565,6 +715,38 @@ window.WEEKS[2] = {
     {
       q: { pt: 'O que é o modelo de plataforma bilateral (two-sided marketplace)?', en: 'What is the two-sided marketplace model?' },
       a: { pt: 'Modelo que conecta dois grupos distintos (ex: restaurantes + clientes no Deliveroo) e monetiza dos dois lados: comissão % dos restaurantes + taxa dos clientes. Ativo principal é o algoritmo e a rede, não um produto físico.', en: 'Model connecting two distinct groups (e.g. restaurants + customers in Deliveroo) and monetising both sides: commission % from restaurants + fee from customers. Core asset is the algorithm and network, not a physical product.' }
+    },
+    {
+      q: { pt: 'Quais são as três perguntas do modelo de Abell e o que cada uma representa?', en: 'What are the three questions of Abell\'s model and what does each represent?' },
+      a: { pt: 'WHO? → quem são os clientes (segmentos de mercado); WHAT? → o que querem / valor percebido; HOW? → como a empresa entrega (tecnologia e processos). WHO e WHAT são externas (mercado); HOW é interna (operações). A estratégia de operações vive na conexão entre HOW e WHO/WHAT.', en: 'WHO? → who are the customers (market segments); WHAT? → what do they want / perceived value; HOW? → how does the firm deliver (technology and processes). WHO and WHAT are external (market); HOW is internal (operations). Operations strategy lives in the connection between HOW and WHO/WHAT.' }
+    },
+    {
+      q: { pt: 'O que é a Matriz de Priorização de Desempenho e quais suas quatro zonas?', en: 'What is the Performance Prioritizing Matrix and what are its four zones?' },
+      a: { pt: 'Ferramenta de Slack et al. (2007) que posiciona objetivos de desempenho numa matriz 9×9 (Importância vs. Desempenho). Quatro zonas: Excesso? (alta perf, baixa importância), Apropriado (alta perf, alta importância), Melhorar (baixa perf, média importância), Ação Urgente! (baixa perf, alta importância).', en: 'Slack et al. (2007) tool positioning performance objectives in a 9×9 matrix (Importance vs. Performance). Four zones: Excess? (high perf, low importance), Appropriate (high perf, high importance), Improve (low perf, medium importance), Urgent Action! (low perf, high importance).' }
+    },
+    {
+      q: { pt: 'Quais são os 5 estágios do Ciclo de Vida do Produto e o order winner em cada um?', en: 'What are the 5 Product Life Cycle stages and the order winner at each?' },
+      a: { pt: 'Introdução → design/especificação. Crescimento → disponibilidade. Maturidade → preço + confiabilidade. Declínio → preço. Retirada → preço/descontinuação. Insight: os order-winners mudam em CADA estágio — a estratégia de operações deve se adaptar.', en: 'Introduction → design/specification. Growth → availability. Maturity → price + reliability. Decline → price. Withdrawal → price/discontinue. Insight: order-winners CHANGE at each stage — the operations strategy must adapt.' }
+    },
+    {
+      q: { pt: 'Quais são as três estratégias genéricas de Porter? O que é o "stuck in the middle"?', en: 'What are Porter\'s three generic strategies? What is "stuck in the middle"?' },
+      a: { pt: 'Cost Leadership (menor custo, mercado amplo), Differentiation (produto único, mercado amplo), Focus (custo ou diferenciação num nicho). "Stuck in the middle": tentar duas estratégias sem comprometimento → nem custo baixo suficiente nem diferenciação suficiente → desempenho medíocre.', en: 'Cost Leadership (lowest cost, broad market), Differentiation (unique product, broad market), Focus (cost or differentiation in a niche). "Stuck in the middle": attempting two strategies without commitment → neither enough cost advantage nor enough differentiation → mediocre performance.' }
+    },
+    {
+      q: { pt: 'Quais são as 3 Disciplinas de Valor de Treacy & Wiersema? Qual é a regra fundamental?', en: 'What are Treacy & Wiersema\'s 3 Value Disciplines? What is the fundamental rule?' },
+      a: { pt: 'Excelência Operacional (best total cost), Liderança de Produto (best product), Intimidade com o Cliente (best total solution). Regra: "Excel in one. Be adequate in the other two." — liderar em todas as três ao mesmo tempo é impossível sem diluir foco e recursos.', en: 'Operational Excellence (best total cost), Product Leadership (best product), Customer Intimacy (best total solution). Rule: "Excel in one. Be adequate in the other two." — leading in all three simultaneously is impossible without diluting focus and resources.' }
+    },
+    {
+      q: { pt: 'O que a Matriz de Valor de Martinez & Bititci acrescenta às disciplinas de Treacy & Wiersema?', en: 'What does Martinez & Bititci\'s Value Matrix add to Treacy & Wiersema\'s disciplines?' },
+      a: { pt: 'Operacionaliza as disciplinas: mostra COMO cada disciplina é entregue por capacidades HARD (tangíveis: Lean, CRM, P&D) e SOFT (intangíveis: cultura de inovação, relacionamento, melhoria contínua). Transforma a estratégia em ações concretas de OM.', en: 'Operationalises the disciplines: shows HOW each discipline is delivered through HARD (tangible: Lean, CRM, R&D) and SOFT (intangible: innovation culture, relationships, continuous improvement) capabilities. Transforms strategy into concrete OM actions.' }
+    },
+    {
+      q: { pt: 'O que o caso Linn Products ilustra sobre estratégia de nicho e operações?', en: 'What does the Linn Products case illustrate about niche strategy and operations?' },
+      a: { pt: 'Ilustra a estratégia de Foco + Diferenciação de Porter: opera em nicho estreitíssimo (audiófilos), compete exclusivamente em qualidade técnica, nunca em preço. Mostra que operações de Estágio 3–4 não requerem escala massiva — requerem especialização extrema alinhada ao nicho.', en: 'Illustrates Porter\'s Focus + Differentiation strategy: operates in an extremely narrow niche (audiophiles), competing exclusively on technical quality, never on price. Shows that Stage 3–4 operations do not require massive scale — they require extreme specialisation aligned to the niche.' }
+    },
+    {
+      q: { pt: 'Como o S\'Baggers conecta Excelência Operacional com diferenciação?', en: 'How does S\'Baggers connect Operational Excellence with differentiation?' },
+      a: { pt: 'O S\'Baggers usa automação radical (zero garçons, entrega por trilhos) para reduzir custo OU mas também para criar um order winner de diferenciação — a novelty da experiência. Mostra que inovação do processo (HOW) pode ser o próprio produto, combinando eficiência e diferenciação quando a automação define a proposta de valor.', en: 'S\'Baggers uses radical automation (zero waiters, rail delivery) to reduce cost AND to create a differentiation order winner — the novelty of the experience. Shows that process innovation (HOW) can be the product itself, combining efficiency and differentiation when automation defines the value proposition.' }
     }
   ],
   notes: {
@@ -629,11 +811,91 @@ Zara minimiza: ciclos de 15 dias (vs. 30–60 dos concorrentes) + 2x/semana
 
 ═══ MODELO DE ABELL + PORTER ═══
 
-Abell: WHO? (clientes) + WHAT? (necessidade) + HOW? (operações)
+Abell (1980): WHO? (clientes) + WHAT? (necessidade) + HOW? (operações)
   → HOW é onde a estratégia de operações vive
+  → Aplicação: Warner Bros. evoluiu o HOW (cinema → TV → streaming → parques) para o mesmo WHO/WHAT
 
 Porter 5 Forças: rivalidade + entrantes + substitutos + fornecedores + compradores
-  → identifica onde criar vantagem competitiva com operações`,
+  → identifica onde criar vantagem competitiva com operações
+
+═══ MATRIZ DE PRIORIZAÇÃO DE DESEMPENHO ═══
+(Slack, Chambers & Johnston 2007 — Figura 2.2 do ebook)
+
+Eixo Y: Desempenho vs. Concorrentes (1=muito pior, 9=muito melhor)
+Eixo X: Importância para Clientes (1=baixa, 9=crítica)
+
+ZONAS:
+         | Baixa imp.   | Média imp.    | Alta imp.
+Alta perf| Excesso?     | Apropriado    | APROPRIADO ✓
+Média perf| Aceitável   | Melhorar      | Melhorar ↑
+Baixa perf| Aceitável   | Ação Urgente  | AÇÃO URGENTE! 🔴
+
+═══ CICLO DE VIDA DO PRODUTO ═══
+(Vernon 1966 — Figura 2.4 + Tabela 2.4 do ebook)
+
+Estágio      | Volume       | Order Winner          | Clientes
+Introdução   | Baixo/↑      | Design/Especificação  | Inovadores
+Crescimento  | Crescendo    | Disponibilidade       | Maioria precoce
+Maturidade   | Alto/estável | Preço + Confiab.      | Maioria tardia
+Declínio     | Caindo       | Preço                 | Retardatários
+Retirada     | Muito baixo  | Preço                 | Retardatários
+
+INSIGHT CHAVE: order-winners mudam em CADA estágio → estratégia de OM deve evoluir.
+
+═══ ESTRATÉGIAS GENÉRICAS DE PORTER ═══
+(Porter 1985 — Tabela 2.3 do ebook)
+
+Liderança em Custo:     mercado amplo + menor custo → Toyota, Aldi, Ryanair
+Diferenciação:          mercado amplo + produto único → Apple, Rolex, Rolls-Royce
+Foco em Custo:          nicho estreito + menor custo no nicho → cias aéreas regionais
+Foco em Diferenciação:  nicho estreito + único no nicho → Linn Products, Pashley
+
+⚠️ Stuck in the Middle: perseguir dois extremos sem foco = desempenho medíocre.
+
+═══ DISCIPLINAS DE VALOR — TREACY & WIERSEMA ═══
+(1993, Harvard Business Review + "The Discipline of Market Leaders")
+
+Excelência Operacional → best total cost → McDonald's, Toyota, Aldi, Amazon
+Liderança de Produto   → best product → Apple, Intel, Nike, 3M
+Intimidade c/ Cliente  → best total solution → IBM, Salesforce, Four Seasons
+
+REGRA: "Excel in one. Be adequate in the other two."
+
+═══ MATRIZ DE VALOR — MARTINEZ & BITITCI ═══
+(2000 — Tabela 2.2 do ebook)
+
+           | Exc. Operacional   | Lid. Produto          | Intim. Cliente
+HARD       | Lean, Six Sigma,   | P&D, Patentes,        | CRM, Bases de dados,
+(tangível) | Supply chain tech  | Engenharia precisão   | Analytics
+SOFT       | Cultura melhoria   | Cultura inovação,     | Gestão relacionamento,
+(intangível)| contínua, TQM    | Gestão talentos       | Confiança, conhecimento
+
+═══ CASOS DA SEMANA ═══
+
+Linn Products → Foco + Diferenciação → nicho hi-fi audiófilo → Stage 3–4 sem escala massiva
+Teekay        → Servitização no transporte marítimo → PSS de logística de energia offshore
+S'Baggers     → Automação radical = order winner de novelty + custo baixo → HOW é o produto
+Zara          → supply chain ágil → todos os 5 objetivos ao mesmo tempo → referência global
+Toyota        → TPS → custo como CONSEQUÊNCIA da excelência nos outros 4 objetivos
+Rolls-Royce   → power-by-the-hour → alinhamento de interesses → dependability = receita
+Nissan        → Stage 2–3 (benchmarking/Aliança) mas não Estágio 4
+British Leyland → Stage 1 → problemas crônicos de qualidade e greves
+Warner Bros.  → Abell WHO/WHAT/HOW: manteve audiência, mudou HOW 7 vezes em 100 anos
+
+═══ FONTES ═══
+📖 Ebook — EBOOK_ Operations Management 2_e.pdf
+   → Capítulo 1, pp. 55–66: Modelo Abell, 5 Objetivos, Order-Winning/Qualifying (Terry Hill)
+   → Capítulo 2, pp. 67–85: Modelo 4 Estágios, Servitização (Neely), Bullwhip Effect
+   → Figura 1.1/1.2 (pp. 58–60): Modelo de Definição de Negócio de Abell — triângulo WHO/WHAT/HOW
+   → Figura 2.2 (p. 70): Matriz de Priorização de Desempenho (Slack et al. 2007 — grid 9×9)
+   → Figura 2.3 (p. 75): Modelo de 4 Estágios de Contribuição das Operações
+   → Figura 2.4 (p. 78): Ciclo de Vida do Produto — curva bell + Tabela 2.4 (Order Winners por estágio)
+   → Tabela 2.2 (p. 72): Matriz de Valor de Martinez & Bititci (Hard/Soft × 3 Disciplinas)
+   → Tabela 2.3 (p. 73): Estratégias Genéricas de Porter (Cost Leadership, Differentiation, Focus)
+🎬 Vídeo — Coursera, Semana 2 (Aulas 1–5)
+   → Transcrições: Zara supply chain, Bullwhip Effect, 5 Objectives, Four-Stage Model, Deliveroo
+🔗 Case Zara — SCM Globe (material complementar)
+   → Números chave: ciclo 2 semanas, 12 inventory turns/ano, 85% preço cheio, mão de obra Espanha`,
     en: `Week 2 — Operations Strategy
 Source: Coursera (Lectures + Transcripts) + Paton et al. pp.55–66 + Zara Case (SCM Globe)
 
@@ -695,11 +957,64 @@ Zara minimises: 15-day cycles (vs. competitors' 30–60) + 2x/week ordering
 
 ═══ ABELL MODEL + PORTER ═══
 
-Abell: WHO? (customers) + WHAT? (need) + HOW? (operations)
+Abell (1980): WHO? (customers) + WHAT? (need) + HOW? (operations)
   → HOW is where operations strategy lives
+  → Application: Warner Bros. evolved the HOW (cinema → TV → streaming → parks) for the same WHO/WHAT
 
 Porter Five Forces: rivalry + entrants + substitutes + suppliers + buyers
   → identifies where to create competitive advantage with operations
+
+═══ PERFORMANCE PRIORITIZING MATRIX ═══
+(Slack, Chambers & Johnston 2007 — Figure 2.2 of ebook)
+
+Y-axis: Performance vs. Competitors (1=much worse, 9=much better)
+X-axis: Importance to Customers (1=low, 9=critical)
+
+ZONES:
+         | Low importance | Mid importance | High importance
+High perf| Excess?        | Appropriate    | APPROPRIATE ✓
+Mid perf | Acceptable     | Improve        | Improve ↑
+Low perf | Acceptable     | Urgent Action  | URGENT ACTION! 🔴
+
+═══ PRODUCT LIFE CYCLE ═══
+(Vernon 1966 — Figure 2.4 + Table 2.4 of ebook)
+
+Stage        | Volume       | Order Winner          | Customers
+Introduction | Low/↑        | Design/Specification  | Innovators
+Growth       | Growing fast | Availability          | Early majority
+Maturity     | High/stable  | Price + Reliability   | Late majority
+Decline      | Falling      | Price                 | Laggards
+Withdrawal   | Very low     | Price                 | Laggards
+
+KEY INSIGHT: order-winners CHANGE at every stage → OM strategy must evolve.
+
+═══ PORTER'S GENERIC STRATEGIES ═══
+(Porter 1985 — Table 2.3 of ebook)
+
+Cost Leadership:       broad market + lowest cost → Toyota, Aldi, Ryanair
+Differentiation:       broad market + unique product → Apple, Rolex, Rolls-Royce
+Cost Focus:            narrow niche + lowest cost in niche → regional budget airlines
+Differentiation Focus: narrow niche + unique in niche → Linn Products, Pashley Cycles
+
+⚠️ Stuck in the Middle: pursuing two extremes without focus = mediocre performance.
+
+═══ VALUE DISCIPLINES — TREACY & WIERSEMA ═══
+(1993, Harvard Business Review + "The Discipline of Market Leaders")
+
+Operational Excellence → best total cost → McDonald's, Toyota, Aldi, Amazon
+Product Leadership     → best product → Apple, Intel, Nike, 3M
+Customer Intimacy      → best total solution → IBM, Salesforce, Four Seasons
+
+RULE: "Excel in one. Be adequate in the other two."
+
+═══ VALUE MATRIX — MARTINEZ & BITITCI ═══
+(2000 — Table 2.2 of ebook)
+
+         | Op. Excellence       | Product Leadership    | Customer Intimacy
+HARD     | Lean, Six Sigma,     | R&D, Patents,         | CRM, Databases,
+(tangible)| Supply chain tech   | Precision engineering | Analytics platforms
+SOFT     | Continuous improv.   | Innovation culture,   | Relationship mgmt,
+(intangible)| culture, TQM      | talent management     | Trust, knowledge
 
 ═══ FOUR-STAGE MODEL (Figure 2.3 / Nigel Chetty 2020) ═══
 
@@ -732,6 +1047,18 @@ Microsoft     → Office as monthly subscription
 OPERATIONAL SHIFT: metric changes from production cost per unit → service reliability
 Downtime = direct revenue loss → quality + dependability become priority #1
 
+═══ CASE STUDIES — KEY LESSONS ═══
+
+Linn Products → Focus + Differentiation → audiophile hi-fi niche → Stage 3-4 without mass scale
+Teekay        → Servitization in maritime transport → PSS for energy logistics
+S'Baggers     → Radical automation = novelty order winner + low cost → HOW IS the product
+Zara          → Agile supply chain → all 5 objectives at once → global supply chain leader
+Toyota        → TPS → cost as CONSEQUENCE of excellence in the other 4 objectives
+Rolls-Royce   → power-by-the-hour → aligned interests → dependability = revenue
+Nissan        → Stage 2-3 (benchmarking/Alliance) but not Stage 4
+British Leyland → Stage 1 → chronic quality problems + strikes
+Warner Bros.  → Abell WHO/WHAT/HOW: kept audience, changed HOW 7 times over 100 years
+
 ═══ DELIVEROO — PLATFORM OPERATIONS ═══
 
 NOT a restaurant. A logistics coordination platform (two-sided marketplace).
@@ -752,6 +1079,21 @@ Core asset: algorithm + network (not a physical product)
 Expansion advice:
 1. Deepen (dark kitchens) before widening geographically
 2. Invest in dependability — promised vs. actual time = main order-winner
-3. Diversify into grocery/quick commerce (infrastructure already exists)`
+3. Diversify into grocery/quick commerce (infrastructure already exists)
+
+═══ SOURCES ═══
+📖 Ebook — EBOOK_ Operations Management 2_e.pdf
+   → Chapter 1, pp. 55–66: Abell model, 5 Objectives, Order-Winning/Qualifying (Terry Hill)
+   → Chapter 2, pp. 67–85: Four-Stage Model, Servitization (Neely), Bullwhip Effect
+   → Figure 1.1/1.2 (pp. 58–60): Abell Business Definition Model — WHO/WHAT/HOW triangle
+   → Figure 2.2 (p. 70): Performance Prioritizing Matrix (Slack et al. 2007 — 9×9 grid)
+   → Figure 2.3 (p. 75): Four-Stage Model of Operations Contribution
+   → Figure 2.4 (p. 78): Product Life Cycle — bell curve + Table 2.4 (Order Winners by stage)
+   → Table 2.2 (p. 72): Martinez & Bititci Value Matrix (Hard/Soft × 3 Disciplines)
+   → Table 2.3 (p. 73): Porter's Generic Strategies (Cost Leadership, Differentiation, Focus)
+🎬 Video — Coursera, Week 2 (Lectures 1–5)
+   → Transcripts: Zara supply chain, Bullwhip Effect, 5 Objectives, Four-Stage Model, Deliveroo
+🔗 Zara case — SCM Globe (supplementary material)
+   → Key numbers: 2-week cycle, 12 inventory turns/year, 85% full price, Spain labour cost`
   }
 };

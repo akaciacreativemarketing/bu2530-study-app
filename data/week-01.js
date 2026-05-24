@@ -98,6 +98,7 @@ window.WEEKS[1] = {
       name: { pt: 'Modelo 4Vs', en: '4Vs Model' },
       authors: ['Operations Management textbook'],
       year: 'Clássico',
+      renderer: 'fourvsCards',
       description: {
         pt: 'As quatro características fundamentais que determinam como sistemas de operações diferem entre si e como devem ser projetados:\n\n• Volume (Volume de Produção): quantas unidades são produzidas. Alto volume → economias de escala (economies of scale), especialização, baixo custo por unidade. Baixo volume → flexibilidade, custo unitário maior.\n\n• Variety (Variedade da Oferta): quantos tipos diferentes de produto/serviço o mesmo sistema produz. Alta variedade → maquinário geral, staff com habilidades amplas, mais flexibilidade. Baixa variedade → especialização, maior eficiência.\n\n• Variation in Demand (Variação na Demanda): como a demanda flutua ao longo do tempo. Alta variação → sistema precisa de flexibilidade para absorver picos e vales. Baixa variação → previsível, estável, mais eficiente.\n\n• Visibility (Grau de Visibilidade): quanto do processo de operações é visível ao cliente. Alta visibilidade → cliente presente, participa do processo (serviços); precisa ser projetado para lidar com comportamento imprevisível. Baixa visibilidade → operações "fechadas", como fábricas; menos interrupções.\n\nVolume e Variedade tendem a ter relação inversamente proporcional: alto volume → baixa variedade; baixo volume → alta variedade.',
         en: 'The four fundamental characteristics determining how operations systems differ and how they should be designed:\n\n• Volume: how many units are produced. High volume → economies of scale, specialization, lower cost per unit. Low volume → flexibility, higher unit cost.\n\n• Variety: how many different types of product/service the same system produces. High variety → general equipment, broadly skilled staff, more flexibility. Low variety → specialization, greater efficiency.\n\n• Variation in Demand: how demand fluctuates over time. High variation → system needs flexibility to absorb peaks and troughs. Low variation → predictable, stable, more efficient.\n\n• Visibility: how much of the operations process is visible to the customer. High visibility → customer present, participates in process (services); must be designed to handle unpredictable behaviour. Low visibility → "closed" operations like factories; fewer disruptions.\n\nVolume and Variety tend to have an inversely proportional relationship: high volume → low variety; low volume → high variety.'
@@ -114,6 +115,7 @@ window.WEEKS[1] = {
     },
     {
       name: { pt: 'Gestão Científica', en: 'Scientific Management' },
+      renderer: 'timeline',
       authors: ['Frederick Winslow Taylor'],
       year: '1911',
       description: {
@@ -503,7 +505,19 @@ RELAÇÃO COM OS 4Vs
 • Alto volume     → KPIs de eficiência (custo/unidade, throughput)
 • Alta variedade  → KPIs de flexibilidade (lead time, capacidade de customização)
 • Alta visibilidade → KPIs de cliente (NPS, satisfação, tempo de resposta)
-• Alta variação   → KPIs de capacidade (utilização de recursos, tempo de espera)`,
+• Alta variação   → KPIs de capacidade (utilização de recursos, tempo de espera)
+
+═══ FONTES ═══
+📖 Ebook — EBOOK_ Operations Management 2_e.pdf
+   → Capítulo 0 (Introdução), pp. 1–14: Processo de Conversão, Recursos Transformadores/Transformados
+   → Figuras 0.5, 0.6, 0.7 (pp. 8–12): Implicações operacionais de cada dimensão dos 4Vs
+      (base visual para o renderer "fourvsCards")
+🎬 Vídeo — Coursera, Semana 1 (Aulas 1–4)
+   → Transcrições: OM como "doing part", KPIs, Taylor/Ford/Ohno timeline
+📝 Anotações próprias
+   → KPIs e Leading vs. Lagging Indicators (síntese do material do curso)
+🔗 Link externo — Qlik.com (KPI)
+   → Conceitos extraídos: KPI, tipos por área, relação com feedback system`,
     en: `Week 1 — What is Operations Management?
 Source: Coursera (Lectures + Transcripts) + Operations Management 2e (pp.1-14)
 
@@ -585,6 +599,18 @@ RELATIONSHIP WITH THE 4Vs
 • High volume     → efficiency KPIs (cost/unit, throughput rate)
 • High variety    → flexibility KPIs (lead time, customisation capacity)
 • High visibility → customer KPIs (NPS, satisfaction, response time)
-• High variation  → capacity KPIs (resource utilisation, wait time)`
+• High variation  → capacity KPIs (resource utilisation, wait time)
+
+═══ SOURCES ═══
+📖 Ebook — EBOOK_ Operations Management 2_e.pdf
+   → Chapter 0 (Introduction), pp. 1–14: Conversion Process, Transforming/Transformed Resources
+   → Figures 0.5, 0.6, 0.7 (pp. 8–12): Operational implications of each 4Vs dimension
+      (visual basis for the "fourvsCards" renderer)
+🎬 Video — Coursera, Week 1 (Lectures 1–4)
+   → Transcripts: OM as "doing part", KPIs, Taylor/Ford/Ohno timeline
+📝 Own notes
+   → KPIs and Leading vs. Lagging Indicators (synthesis of course material)
+🔗 External link — Qlik.com (KPI)
+   → Concepts extracted: KPI, types by area, relationship with feedback system`
   }
 };
