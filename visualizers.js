@@ -1163,3 +1163,207 @@ window.vis_valueMatrix = function(container, lang) {
     </table>
   </div>`;
 };
+
+/* ─── WEEK 3: NPD Flow ─────────────────────────────────────────── */
+window.vis_npdFlow = function(container, lang) {
+  const pt = lang === 'pt';
+  const phases = [
+    {
+      label: pt ? 'Fase 0\nPlanejamento' : 'Phase 0\nPlanning',
+      color: '#1E3A5F',
+      details: pt
+        ? '<b>Objetivos:</b> definir mercado-alvo, tecnologia disponível, metas financeiras e estratégia de supply chain.<br><b>Quem:</b> Marketing (oportunidades), P&D (tecnologias), Financeiro (metas), CEO (recursos).'
+        : '<b>Goals:</b> define target market, available technology, financial goals and supply chain strategy.<br><b>Who:</b> Marketing (opportunities), R&D (technologies), Finance (goals), CEO (resources).'
+    },
+    {
+      label: pt ? 'Fase 1\nConceito' : 'Phase 1\nConcept',
+      color: '#2E86AB',
+      details: pt
+        ? '<b>"Fuzzy Front End"</b> — a fase mais incerta. Investigação de viabilidade, geração e teste de conceitos com lead users.<br><b>Quem:</b> Marketing (necessidades), Financeiro (análise econômica), Jurídico (patentes).'
+        : '<b>"Fuzzy Front End"</b> — the most uncertain phase. Feasibility investigation, concept generation and testing with lead users.<br><b>Who:</b> Marketing (needs), Finance (economic analysis), Legal (patents).'
+    },
+    {
+      label: pt ? 'Fase 2\nSistema' : 'Phase 2\nSystem',
+      color: '#006E6D',
+      details: pt
+        ? '<b>Design de Nível Sistema:</b> alternativas de design de produto e subsistemas; arquitetura do produto definida.<br><b>Quem:</b> Marketing (planos por variante), Compras (make-or-buy), Manufatura (esquemas de montagem).'
+        : '<b>System-level Design:</b> product and subsystem design alternatives; product architecture defined.<br><b>Who:</b> Marketing (plans per variant), Procurement (make-or-buy), Manufacturing (assembly schemes).'
+    },
+    {
+      label: pt ? 'Fase 3\nDetalhes' : 'Phase 3\nDetailed',
+      color: '#2D7D46',
+      details: pt
+        ? '<b>Design Detalhado:</b> especificações de cada peça, materiais, tolerâncias, BOM completo.<br><b>Quem:</b> Manufatura (processos piece-part, ferramentas, DFM), Financeiro (business plan atualizado).'
+        : '<b>Detailed Design:</b> specifications for each part, materials, tolerances, complete BOM.<br><b>Who:</b> Manufacturing (piece-part processes, tooling, DFM), Finance (updated business plan).'
+    },
+    {
+      label: pt ? 'Fase 4\nTeste' : 'Phase 4\nTesting',
+      color: '#B8621A',
+      details: pt
+        ? '<b>Teste e Refinamento:</b> testes de confiabilidade, vida e performance. Aprovações regulatórias. Mudanças de design.<br><b>Quem:</b> Marketing (materiais de lançamento, teste de campo), Manufatura (ramp-up de fornecedores, treinamento).'
+        : '<b>Testing and Refinement:</b> reliability, life and performance tests. Regulatory approvals. Design changes.<br><b>Who:</b> Marketing (launch materials, field testing), Manufacturing (supplier ramp-up, workforce training).'
+    },
+    {
+      label: pt ? 'Fase 5\nProdução' : 'Phase 5\nRamp-up',
+      color: '#8B1A1A',
+      details: pt
+        ? '<b>Produção em Escala:</b> transição de prototipagem para alto volume. Marketing posiciona com clientes-chave. Sistema de produção entra em plena operação.'
+        : '<b>Production Ramp-up:</b> transition from prototyping to high volume. Marketing positions with key customers. Production system enters full operation.'
+    }
+  ];
+  const id = 'npdf-' + Math.random().toString(36).substr(2,5);
+  container.innerHTML = `
+    <div style="padding:6px;font-size:10px;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#003865;margin-bottom:8px;">
+        ${pt ? 'Processo DNP — 6 Fases (Ulrich & Eppinger, 2008)' : 'NPD Process — 6 Phases (Ulrich & Eppinger, 2008)'}
+      </div>
+      <div style="display:flex;gap:2px;margin-bottom:6px;overflow-x:auto;padding-bottom:2px;">
+        ${phases.map((p, i) => `<div
+          onclick="var ds=document.querySelectorAll('.${id}-detail');var el=document.getElementById('${id}-d${i}');var wasOpen=el.style.display==='block';ds.forEach(function(d){d.style.display='none';});if(!wasOpen){el.style.display='block';}"
+          style="flex:1;min-width:46px;background:${p.color};color:#fff;padding:7px 3px 7px 6px;
+            clip-path:${i < 5 ? 'polygon(0 0,calc(100% - 7px) 0,100% 50%,calc(100% - 7px) 100%,0 100%)' : 'none'};
+            cursor:pointer;text-align:center;font-size:8.5px;font-weight:700;line-height:1.3;user-select:none;"
+          onmouseover="this.style.filter='brightness(1.2)'" onmouseout="this.style.filter='none'">
+          ${p.label.replace('\n', '<br>')}
+        </div>`).join('')}
+      </div>
+      <div style="font-size:8.5px;color:#9CA3AF;text-align:center;margin-bottom:6px;">
+        ${pt ? '▲ Clique numa fase para ver detalhes' : '▲ Click a phase to see details'}
+      </div>
+      ${phases.map((p, i) => `<div id="${id}-d${i}" class="${id}-detail" style="display:none;background:#F8FAFC;border-left:3px solid ${p.color};padding:8px 10px;margin-bottom:3px;border-radius:0 6px 6px 0;font-size:9.5px;line-height:1.6;color:#374151;">
+        <div style="font-weight:700;color:${p.color};margin-bottom:3px;font-size:10px;">${p.label.replace('\n', ' — ')}</div>
+        ${p.details}
+      </div>`).join('')}
+    </div>`;
+};
+
+/* ─── WEEK 3: R&D Funnel ───────────────────────────────────────── */
+window.vis_rdFunnel = function(container, lang) {
+  const pt = lang === 'pt';
+  const stages = [
+    { n: '60', label: pt ? 'Ideias avaliadas (técnica, financeira, adequação)' : 'Ideas evaluated (technical, financial, suitability)', w: 100, c: '#1E3A5F' },
+    { n: '12', label: pt ? 'Avaliação técnica e de mercado aprofundada' : 'Technical evaluation & market research analysis', w: 78, c: '#2E86AB' },
+    { n: '6',  label: pt ? 'Potencial para desenvolvimento e análise' : 'Potential for further development & analysis', w: 58, c: '#006E6D' },
+    { n: '3',  label: pt ? 'Protótipos para teste técnico e de mercado' : 'Prototypes for technical & market testing', w: 42, c: '#2D7D46' },
+    { n: '2',  label: pt ? 'Produtos lançados no mercado' : 'Products launched', w: 28, c: '#B8621A' },
+    { n: '1 ✓',label: pt ? 'Produto bem-sucedido — taxa: 1,67%' : 'Successful product — rate: 1.67%', w: 18, c: '#C8102E' }
+  ];
+  container.innerHTML = `
+    <div style="padding:6px 6px 8px;font-size:10px;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#003865;margin-bottom:10px;">
+        ${pt ? 'Funil de Descarte em P&D (Babcock, 1996)' : 'R&D Drop-out Funnel (Babcock, 1996)'}
+      </div>
+      <div style="display:flex;flex-direction:column;gap:3px;margin-bottom:10px;">
+        ${stages.map((s, i) => `<div style="display:flex;align-items:center;gap:8px;">
+          <div style="background:${s.c};color:#fff;font-weight:800;font-size:${i===5?'12':'10'}px;
+            text-align:center;padding:5px 4px;border-radius:4px 2px 2px 4px;
+            width:${s.w}%;min-width:28px;transition:all .3s;flex-shrink:0;">
+            ${s.n}
+          </div>
+          <div style="font-size:9px;color:#4B5563;line-height:1.4;">${s.label}</div>
+        </div>${i < stages.length - 1 ? `<div style="margin-left:calc(${Math.round(s.w/2)}% - 6px);color:#9CA3AF;font-size:11px;line-height:1;">▼</div>` : ''}`).join('')}
+      </div>
+      <div style="background:#FEF3C7;border:1px solid #F59E0B;border-radius:6px;padding:6px 10px;font-size:9px;color:#92400E;text-align:center;line-height:1.5;">
+        ⚠️ ${pt ? 'De <b>60 ideias</b>, apenas <b>1</b> vira produto bem-sucedido — <b>taxa de sucesso: 1,67%</b>' : 'Out of <b>60 ideas</b>, only <b>1</b> becomes a successful product — <b>success rate: 1.67%</b>'}
+      </div>
+    </div>`;
+};
+
+/* ─── WEEK 3: Modular vs Integral ─────────────────────────────── */
+window.vis_modularVsIntegral = function(container, lang) {
+  const pt = lang === 'pt';
+  const rows = pt ? [
+    ['Especialização de tarefas',             'Aprendizado interativo entre equipes'],
+    ['Flexibilidade de plataforma',           'Performance máxima (tecnologias proprietárias)'],
+    ['Maior número de variantes de produto',  'Inovações sistêmicas integradas'],
+    ['Economias de escala em componentes',    'Acesso rápido a informações críticas'],
+    ['Menor custo de estoque e logística',    'Proteção da inovação contra imitação'],
+    ['Reuso e troca de componentes',          'Altas barreiras para fornecedores concorrentes'],
+    ['Outsourcing simplificado',              'Craftsmanship — produto único artesanal'],
+    ['Desenvolvimento independente de produtos', ''],
+  ] : [
+    ['Task specialization',                  'Interactive cross-team learning'],
+    ['Platform flexibility',                 'High performance via proprietary technologies'],
+    ['Increased product variants',           'Systemic innovations'],
+    ['Economies of scale in components',     'Faster access to critical information'],
+    ['Lower inventory and logistics costs',  'Protection of innovation from imitation'],
+    ['Component reuse and swapping',         'High entry barriers for component suppliers'],
+    ['Simplified outsourcing',               'Craftsmanship — unique artisanal product'],
+    ['Independent product development',      ''],
+  ];
+  container.innerHTML = `
+    <div style="padding:4px;font-size:10px;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#003865;margin-bottom:8px;">
+        ${pt ? 'Modular vs. Integral — Trade-offs (Mikkola & Gassmann, 2003)' : 'Modular vs. Integral — Trade-offs (Mikkola & Gassmann, 2003)'}
+      </div>
+      <table style="width:100%;border-collapse:collapse;font-size:9.5px;">
+        <thead>
+          <tr>
+            <th style="background:#2E86AB;color:#fff;padding:7px 8px;text-align:center;border-radius:6px 0 0 0;width:50%;">
+              ✦ ${pt ? 'Modular' : 'Modular'}
+            </th>
+            <th style="background:#8B1A1A;color:#fff;padding:7px 8px;text-align:center;border-radius:0 6px 0 0;width:50%;">
+              ✦ ${pt ? 'Integral' : 'Integral'}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rows.map((r, i) => `<tr>
+            <td style="background:${i%2===0?'#EBF5FB':'#F8FAFC'};padding:5px 8px;border:1px solid #E5E7EB;color:#1E3A5F;line-height:1.4;">${r[0] ? '• '+r[0] : ''}</td>
+            <td style="background:${i%2===0?'#FEF2F2':'#FFF5F5'};padding:5px 8px;border:1px solid #E5E7EB;color:#7B1C1C;line-height:1.4;">${r[1] ? '• '+r[1] : ''}</td>
+          </tr>`).join('')}
+          <tr>
+            <td style="background:#D6EAF8;padding:6px 8px;font-size:9px;font-weight:700;color:#1E3A5F;border:1px solid #E5E7EB;">
+              📱 ${pt ? 'Ex: PCs IBM, LEGO, celulares, elevadores' : 'Ex: IBM PCs, LEGO, mobile phones, elevators'}
+            </td>
+            <td style="background:#FADBD8;padding:6px 8px;font-size:9px;font-weight:700;color:#7B1C1C;border:1px solid #E5E7EB;">
+              🏎️ ${pt ? 'Ex: F1, satélites, Apollo, violinos Stradivarius' : 'Ex: F1, satellites, Apollo, Stradivarius violins'}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>`;
+};
+
+/* ─── WEEK 3: Product Platform (VW) ────────────────────────────── */
+window.vis_productPlatform = function(container, lang) {
+  const pt = lang === 'pt';
+  const brands = [
+    { name: 'Skoda Oktavia', pos: 5,  color: '#2D7D46', label: pt ? 'Liderança em Custo' : 'Cost Leadership' },
+    { name: 'Seat Leon',     pos: 24, color: '#2E86AB', label: pt ? 'Custo-Qualidade'    : 'Cost-Quality' },
+    { name: 'VW Golf',       pos: 45, color: '#003865', label: pt ? 'Volume / Equilíbrio': 'Volume / Balance' },
+    { name: 'Audi A3',       pos: 66, color: '#B8621A', label: pt ? 'Diferenciação'      : 'Differentiation' },
+    { name: 'Audi TT',       pos: 85, color: '#8B1A1A', label: pt ? 'Premium'            : 'Premium Diff.' },
+  ];
+  container.innerHTML = `
+    <div style="padding:6px;font-size:10px;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#003865;margin-bottom:10px;">
+        ${pt ? 'Estratégia de Plataforma VW Group — Plataforma A4' : 'VW Group Platform Strategy — A4 Platform'}
+      </div>
+      <div style="background:#F1F5F9;border-radius:6px;padding:8px 10px;margin-bottom:10px;">
+        <div style="font-size:8.5px;color:#6B7280;text-align:center;margin-bottom:8px;">
+          ${pt ? '🔩 Todos compartilham: chassis, direção e suspensão' : '🔩 All share: chassis, steering and suspension'}
+        </div>
+        <div style="position:relative;height:28px;background:linear-gradient(to right,#2D7D46,#8B1A1A);border-radius:4px;margin:0 4px 20px;">
+          ${brands.map(b => `<div style="position:absolute;left:${b.pos}%;top:50%;transform:translate(-50%,-50%);">
+            <div style="background:${b.color};color:#fff;font-size:7.5px;font-weight:700;padding:2px 5px;
+              border-radius:8px;white-space:nowrap;box-shadow:0 2px 5px rgba(0,0,0,.35);">${b.name}</div>
+          </div>`).join('')}
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:8px;color:#6B7280;padding:0 4px;margin-top:2px;">
+          <span>◄ ${pt ? 'Baixo Custo' : 'Low Cost'}</span>
+          <span>${pt ? 'Diferenciação' : 'Differentiation'} ►</span>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:8px;">
+        ${brands.map(b => `<div style="border:1px solid ${b.color};border-left:3px solid ${b.color};border-radius:5px;padding:4px 7px;">
+          <div style="font-weight:700;font-size:9.5px;color:${b.color};">${b.name}</div>
+          <div style="font-size:8.5px;color:#6B7280;">${b.label}</div>
+        </div>`).join('')}
+      </div>
+      <div style="background:#EBF5FB;border-radius:5px;padding:5px 8px;font-size:8.5px;color:#1E3A5F;line-height:1.5;">
+        💡 ${pt ? 'Sony: 160+ variações do Walkman (1980–1990) a partir de uma única plataforma' : 'Sony: 160+ Walkman variations (1980–1990) from a single platform'}
+      </div>
+    </div>`;
+};
+};

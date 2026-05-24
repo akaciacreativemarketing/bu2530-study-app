@@ -646,6 +646,11 @@ const VIS_DISPATCH = {
   'genericStrategies': true,
   'valueDisciplines':  true,
   'valueMatrix':       true,
+  // Week 3
+  'npdFlow':           true,
+  'rdFunnel':          true,
+  'modularVsIntegral': true,
+  'productPlatform':   true,
 };
 
 function renderTheoryCard(th) {
