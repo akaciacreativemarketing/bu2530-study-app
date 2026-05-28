@@ -1365,4 +1365,299 @@ window.vis_productPlatform = function(container, lang) {
         💡 ${pt ? 'Sony: 160+ variações do Walkman (1980–1990) a partir de uma única plataforma' : 'Sony: 160+ Walkman variations (1980–1990) from a single platform'}
       </div>
     </div>`;
+// END vis_productPlatform
+};
+
+// ─── WEEK 4: PROCESS TYPES ─────────────────────────────────────────────────
+window.vis_processTypes = function(container, lang) {
+  const pt = lang === 'pt';
+  const types = [
+    { id: 'project',  color: '#7C3AED', label: pt?'Projeto':'Project',       vol: pt?'Único':'Unique',      var: pt?'Máxima':'Maximum',   order:'MTO',     layout: pt?'Posição Fixa':'Fixed Position',             ex: pt?'Airbus, Olimpíadas, Cirurgia':'Airbus, Olympics, Surgery',    cx:48,  cy:168, key: pt?'Grande escala, fixo no local, gestão de projeto':'Large-scale, fixed at location, project management' },
+    { id: 'jobshop',  color: '#DC2626', label: pt?'Oficina (Job Shop)':'Job Shop', vol: pt?'Muito baixo':'Very low', var: pt?'Muito alta':'Very high', order:'MTO',     layout: pt?'Processo Dominante':'Process-Dominant',      ex: pt?'Läderach, alfaiate, joalheria':'Läderach, bespoke tailor, jeweller', cx:88,  cy:142, key: pt?'Alta habilidade, cada trabalho é único, alto custo unitário':'High skill, each job unique, high unit cost' },
+    { id: 'batch',    color: '#D97706', label: pt?'Lote (Batch)':'Batch',     vol: pt?'Médio':'Medium',      var: pt?'Média':'Medium',     order:'MTO/ATO', layout: pt?'Célula ou Processo':'Cell or Process',          ex: pt?'Padaria, cervejaria, marcenaria':'Bakery, brewery, furniture maker',     cx:140, cy:110, key: pt?'Produção em lotes, semi-flexível, reconfiguração entre lotes':'Lot-based, semi-flexible, reconfigured between lots' },
+    { id: 'assembly', color: '#059669', label: pt?'Linha de Montagem':'Assembly Line', vol: pt?'Alto':'High', var: pt?'Baixa':'Low',    order:'ATO/MTS', layout: pt?'Produto-Serviço Dominante':'Product-Service Dominant', ex: "Toyota, Tesla, McDonald's",                                cx:196, cy:76,  key: pt?'Fluxo contínuo de produtos discretos, balanceamento de linha':'Continuous flow of discrete products, line balancing' },
+    { id: 'continuous',color:'#0284C7', label: pt?'Contínuo':'Continuous',    vol: '24/7',              var: pt?'Zero':'Zero',        order:'MTS',     layout: pt?'Produto-Serviço Extremo':'Extreme Product-Service',    ex: pt?'Refinaria, usina elétrica, papel':'Oil refinery, power plant, paper',   cx:244, cy:46,  key: pt?'Automatizado 24/7, variedade zero, parar é muito caro':'Automated 24/7, zero variety, stopping is very expensive' },
+  ];
+  let active = 'batch';
+  const render = () => {
+    const a = types.find(t => t.id === active);
+    container.innerHTML = `
+    <div style="font-family:sans-serif;padding:4px;">
+      <div style="display:flex;gap:12px;align-items:flex-start;">
+        <div style="flex-shrink:0;">
+          <svg width="300" height="220" viewBox="0 0 300 220" style="display:block;border-radius:8px;background:#F8FAFC;border:1px solid #E2E8F0;">
+            <text x="150" y="214" text-anchor="middle" font-size="10" fill="#64748B" font-family="sans-serif">${pt?'← Volume baixo · · · Volume alto →':'← Low volume · · · High volume →'}</text>
+            <text x="10" y="110" text-anchor="middle" font-size="10" fill="#64748B" font-family="sans-serif" transform="rotate(-90,10,110)">${pt?'← Var. baixa · Var. alta →':'← Low var. · High var. →'}</text>
+            <rect x="170" y="20" width="118" height="130" rx="6" fill="#FEE2E2" opacity="0.55"/>
+            <text x="229" y="55" text-anchor="middle" font-size="9" fill="#991B1B" font-family="sans-serif" font-weight="700">${pt?'⚠ ZONA MORTA':'⚠ DEAD ZONE'}</text>
+            <text x="229" y="68" text-anchor="middle" font-size="8" fill="#991B1B" font-family="sans-serif">${pt?'Custo inviável':'Prohibitive cost'}</text>
+            <rect x="18" y="140" width="120" height="60" rx="6" fill="#FEE2E2" opacity="0.55"/>
+            <text x="78" y="165" text-anchor="middle" font-size="9" fill="#991B1B" font-family="sans-serif" font-weight="700">${pt?'⚠ ZONA MORTA':'⚠ DEAD ZONE'}</text>
+            <text x="78" y="178" text-anchor="middle" font-size="8" fill="#991B1B" font-family="sans-serif">${pt?'Escala insuficiente':'Insufficient scale'}</text>
+            <polygon points="20,190 20,160 290,20 290,50" fill="#DBEAFE" opacity="0.65"/>
+            ${types.map(t => `
+              <g style="cursor:pointer" onclick="(function(){window._pt4active='${t.id}';window._pt4render&&window._pt4render();})()">
+                <circle cx="${t.cx}" cy="${t.cy}" r="${active===t.id?13:9}" fill="${t.color}" opacity="${active===t.id?1:0.75}" stroke="white" stroke-width="2"/>
+                <text x="${t.cx}" y="${t.cy+4}" text-anchor="middle" font-size="8" fill="white" font-family="sans-serif" font-weight="700">${t.label.split(' (')[0].split(' ')[0].substring(0,3).toUpperCase()}</text>
+              </g>`).join('')}
+            <line x1="18" y1="200" x2="290" y2="200" stroke="#CBD5E1" stroke-width="1.5"/>
+            <line x1="18" y1="20" x2="18" y2="200" stroke="#CBD5E1" stroke-width="1.5"/>
+          </svg>
+          <div style="margin-top:6px;display:flex;flex-wrap:wrap;gap:3px;">
+            ${types.map(t => `<button onclick="(function(){window._pt4active='${t.id}';window._pt4render&&window._pt4render();})()" style="padding:3px 7px;border-radius:4px;border:1.5px solid ${t.color};background:${active===t.id?t.color:'white'};color:${active===t.id?'white':t.color};font-size:8px;font-weight:700;cursor:pointer;font-family:sans-serif;">${t.label.replace(' (Job Shop)','').replace(' (Batch)','')}</button>`).join('')}
+          </div>
+        </div>
+        <div style="flex:1;min-width:0;">
+          <div style="background:${a.color}15;border-left:3px solid ${a.color};border-radius:6px;padding:10px 12px;">
+            <div style="font-size:14px;font-weight:800;color:${a.color};margin-bottom:6px;">${a.label}</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px 8px;font-size:9px;margin-bottom:8px;">
+              <div><span style="color:#64748B;">${pt?'Volume':'Volume'}:</span> <strong>${a.vol}</strong></div>
+              <div><span style="color:#64748B;">${pt?'Variedade':'Variety'}:</span> <strong>${a.var}</strong></div>
+              <div><span style="color:#64748B;">${pt?'Tipo de pedido':'Order type'}:</span> <strong>${a.order}</strong></div>
+              <div><span style="color:#64748B;">Layout:</span> <strong>${a.layout}</strong></div>
+            </div>
+            <div style="font-size:8.5px;color:#1E293B;line-height:1.5;margin-bottom:6px;">${a.key}</div>
+            <div style="background:white;border-radius:4px;padding:4px 7px;font-size:8px;color:#6B7280;">📍 ${a.ex}</div>
+          </div>
+          <div style="margin-top:8px;background:#F1F5F9;border-radius:6px;padding:7px 10px;font-size:8px;color:#475569;line-height:1.6;">
+            <strong>${pt?'Diagonal eficiente:':'Efficient diagonal:'}</strong><br>
+            ${pt?'Operações eficientes ficam NA diagonal. Fora dela:':'Efficient operations sit ON the diagonal. Off it:'}<br>
+            🔴 ${pt?'Canto sup. direito = alto vol + alta var → custo inviável':'Top right = high vol + high var → prohibitive cost'}<br>
+            🔴 ${pt?'Canto inf. esquerdo = baixo vol + baixa var → escala insuficiente':'Bottom left = low vol + low var → insufficient scale'}
+          </div>
+        </div>
+      </div>
+    </div>`;
+    window._pt4active = active;
+    window._pt4render = () => { active = window._pt4active; render(); };
+  };
+  window._pt4active = active;
+  render();
+  window._pt4render = () => { active = window._pt4active; render(); };
+};
+
+// ─── WEEK 4: ORDER TYPES ───────────────────────────────────────────────────
+window.vis_orderTypes = function(container, lang) {
+  const pt = lang === 'pt';
+  container.innerHTML = `
+  <div style="font-family:sans-serif;padding:4px;">
+    <div style="position:relative;height:36px;margin-bottom:14px;">
+      <div style="position:absolute;left:0;right:0;top:14px;height:8px;border-radius:4px;background:linear-gradient(to right,#0284C7,#059669,#DC2626);"></div>
+      <div style="position:absolute;left:0;top:0;font-size:9px;font-weight:700;color:#0284C7;text-align:center;width:33%;">MTS</div>
+      <div style="position:absolute;left:33%;top:0;font-size:9px;font-weight:700;color:#059669;text-align:center;width:34%;">ATO</div>
+      <div style="position:absolute;right:0;top:0;font-size:9px;font-weight:700;color:#DC2626;text-align:center;width:33%;">MTO</div>
+      <div style="position:absolute;left:0;bottom:0;font-size:8px;color:#64748B;width:33%;text-align:center;">${pt?'← Padronizado':'← Standardized'}</div>
+      <div style="position:absolute;right:0;bottom:0;font-size:8px;color:#64748B;width:33%;text-align:right;">${pt?'Customizado →':'Customized →'}</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;">
+      ${[
+        { key:'MTS', title: pt?'Fabricar para Estoque':'Make to Stock', color:'#0284C7', icon:'📦',
+          rows: [[pt?'Gatilho':'Trigger',pt?'Previsão de demanda':'Demand forecast'],[pt?'Lead time':'Lead time',pt?'Curto — imediato':'Short — immediate'],[pt?'Customização':'Customization',pt?'Zero':'Zero'],[pt?'Estoque':'Inventory',pt?'Produto acabado':'Finished goods'],[pt?'Ponto custom.':'Custom. point',pt?'Início da cadeia':'Start of chain'],[pt?'Risco':'Risk',pt?'Estoque encalhado':'Unsold stock'],[pt?'Exemplos':'Examples',pt?'Supermercado, lata':'Supermarket, canned']]},
+        { key:'ATO', title: pt?'Montar sob Pedido':'Assemble to Order', color:'#059669', icon:'🔧',
+          rows: [[pt?'Gatilho':'Trigger',pt?'Pedido do cliente':'Customer order'],[pt?'Lead time':'Lead time',pt?'Moderado':'Moderate'],[pt?'Customização':'Customization',pt?'Limitada (módulos)':'Limited (modules)'],[pt?'Estoque':'Inventory',pt?'Componentes padrão':'Standard components'],[pt?'Ponto custom.':'Custom. point',pt?'Na montagem':'At assembly'],[pt?'Risco':'Risk',pt?'Previsão de comp.':'Component forecast'],[pt?'Exemplos':'Examples',pt?'Dell, Tesla, fast food':'Dell, Tesla, fast food']]},
+        { key:'MTO', title: pt?'Fabricar sob Pedido':'Make to Order', color:'#DC2626', icon:'🎨',
+          rows: [[pt?'Gatilho':'Trigger',pt?'Pedido do cliente':'Customer order'],[pt?'Lead time':'Lead time',pt?'Longo':'Long'],[pt?'Customização':'Customization',pt?'Máxima':'Maximum'],[pt?'Estoque':'Inventory',pt?'Matéria-prima':'Raw material'],[pt?'Ponto custom.':'Custom. point',pt?'Na concepção':'At conception'],[pt?'Risco':'Risk',pt?'Lead time longo':'Long lead time'],[pt?'Exemplos':'Examples',pt?'Läderach, obra civil':'Läderach, construction']]},
+      ].map(col => `
+        <div style="border:1.5px solid ${col.color};border-radius:8px;overflow:hidden;">
+          <div style="background:${col.color};padding:6px 8px;color:white;font-size:10px;font-weight:800;">${col.icon} ${col.title}</div>
+          ${col.rows.map(([k,v]) => `<div style="padding:4px 8px;border-bottom:1px solid ${col.color}22;"><div style="font-size:7px;color:#94A3B8;text-transform:uppercase;letter-spacing:.4px;">${k}</div><div style="font-size:8.5px;color:#1E293B;font-weight:600;line-height:1.3;">${v}</div></div>`).join('')}
+        </div>`).join('')}
+    </div>
+  </div>`;
+};
+
+// ─── WEEK 4: PROCESS MAPPING TOOLS ────────────────────────────────────────
+window.vis_processMappingTools = function(container, lang) {
+  const pt = lang === 'pt';
+  const tools = [
+    { icon:'→', color:'#0284C7', name: pt?'Diagrama de Fluxo':'Flow Diagram',
+      when: pt?'Processo simples e linear':'Simple, linear process',
+      key: pt?'Sequência lógica com inputs/outputs. Símbolos: losango=decisão, oval=início/fim, retângulo=processo.':'Logical sequence with inputs/outputs. Symbols: diamond=decision, oval=start/end, rectangle=process.',
+      ex: pt?'Fig. 5.6: Pedido de sofá':'Fig. 5.6: Sofa ordering' },
+    { icon:'≡', color:'#7C3AED', name: pt?'Swim Lane Map':'Swim Lane Map',
+      when: pt?'Hand-offs entre departamentos e tempos de espera':'Hand-offs between departments and waiting times',
+      key: pt?'Eixo Y = funções/responsáveis. Eixo X = tempo. Revela quem faz o quê e quando.':'Y axis = functions/roles. X axis = time. Reveals who does what and when.',
+      ex: pt?'Fig. 5.7: Pedido de sofá com raias (Customer/Sales/Warehouse/Factory)':'Fig. 5.7: Sofa order with lanes (Customer/Sales/Warehouse/Factory)' },
+    { icon:'○', color:'#D97706', name: pt?'Gráfico de Processo':'Process Chart',
+      when: pt?'Identificar atividades sem valor agregado (non-value-adding)':'Identify non-value-adding activities',
+      key: pt?'Tabela padronizada com 5 símbolos: Operação ○, Transporte →, Inspeção □, Espera D, Armazenagem ∇':'Standardized table with 5 symbols: Operation ○, Transport →, Inspection □, Delay D, Storage ∇',
+      ex: pt?'Fig. 5.8: Entrega de documentos — 24 atividades mapeadas':'Fig. 5.8: Document delivery — 24 activities mapped' },
+    { icon:'⚙', color:'#059669', name: pt?'Blueprint de Serviço':'Service Blueprint',
+      when: pt?'Processos com alto componente de serviço ao cliente':'Processes with high customer service component',
+      key: pt?'Separa: Evidência Física | Ações do Usuário | Front-of-stage (visível) | Back-of-stage (invisível) | Suporte':'Separates: Physical Evidence | User Actions | Front-of-stage (visible) | Back-of-stage (invisible) | Support',
+      ex: pt?'Fig. 5.9: Boas-vindas a estudantes de curso universitário':'Fig. 5.9: Welcoming students to a university course' },
+    { icon:'⟿', color:'#DC2626', name: pt?'Mapa de Fluxo de Valor (VSM)':'Value Stream Map (VSM)',
+      when: pt?'Eliminar desperdício lean em processos de manufatura':'Eliminate lean waste in manufacturing processes',
+      key: pt?'Estado Atual + Estado Futuro. Métricas: C/T, C/O, WIP, Takt time. Mostra fluxos de material E informação.':'Current State + Future State. Metrics: C/T, C/O, WIP, Takt time. Shows material AND information flows.',
+      ex: pt?'Fig. 5.11/5.13: ACME — 23,6 dias → 4,5 dias (−81% espera)':'Fig. 5.11/5.13: ACME — 23.6 days → 4.5 days (−81% waiting)' },
+  ];
+  container.innerHTML = `
+  <div style="font-family:sans-serif;padding:4px;display:flex;flex-direction:column;gap:5px;">
+    ${tools.map(t => `
+    <div style="display:flex;gap:8px;align-items:flex-start;border:1px solid ${t.color}44;border-left:3px solid ${t.color};border-radius:6px;padding:7px 9px;background:${t.color}08;">
+      <div style="width:26px;height:26px;border-radius:50%;background:${t.color};color:white;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;font-family:monospace;">${t.icon}</div>
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:10.5px;font-weight:800;color:${t.color};margin-bottom:2px;">${t.name}</div>
+        <div style="font-size:8px;color:#475569;margin-bottom:3px;line-height:1.4;"><strong>${pt?'Quando:':'When:'}</strong> ${t.when}</div>
+        <div style="font-size:8px;color:#374151;line-height:1.4;margin-bottom:3px;">${t.key}</div>
+        <div style="font-size:7.5px;color:#94A3B8;">📌 ${t.ex}</div>
+      </div>
+    </div>`).join('')}
+  </div>`;
+};
+
+// ─── WEEK 4: VSM CONCEPT ──────────────────────────────────────────────────
+window.vis_vsmConcept = function(container, lang) {
+  const pt = lang === 'pt';
+  container.innerHTML = `
+  <div style="font-family:sans-serif;padding:4px;">
+    <div style="text-align:center;font-size:9px;font-weight:700;color:#64748B;margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px;">
+      ${pt?'Caso ACME — Suportes para Tratores (Rother & Shook, 1999)':'ACME Case — Tractor Brackets (Rother & Shook, 1999)'}
+    </div>
+    <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center;margin-bottom:10px;">
+      <div style="background:#FEF2F2;border:1.5px solid #DC2626;border-radius:8px;padding:8px 10px;">
+        <div style="font-size:9px;font-weight:800;color:#DC2626;margin-bottom:6px;text-align:center;">${pt?'⚠ ESTADO ATUAL':'⚠ CURRENT STATE'}</div>
+        <div style="display:flex;flex-direction:column;gap:3px;font-size:8px;">
+          ${['Stamping','S.Weld 1','S.Weld 2','Assembly 1','Assembly 2','Shipping'].map((s,i) => `
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <span style="color:#374151;">${s}</span>
+              <span style="background:#DC262620;color:#DC2626;padding:1px 5px;border-radius:3px;font-weight:700;">${['1s','46s','46s','62s','40s','0s'][i]}</span>
+            </div>`).join('')}
+          <div style="margin-top:5px;padding-top:5px;border-top:1px solid #DC262640;">
+            <div style="background:#DC2626;color:white;border-radius:5px;padding:4px 7px;margin-bottom:3px;">
+              <div style="font-size:9px;font-weight:800;">${pt?'⏱ Espera total':'⏱ Total waiting'}</div>
+              <div style="font-size:18px;font-weight:900;">23.6 ${pt?'dias':'days'}</div>
+            </div>
+            <div style="background:#F87171;color:white;border-radius:5px;padding:4px 7px;">
+              <div style="font-size:9px;font-weight:800;">${pt?'⚙ Processamento':'⚙ Processing'}</div>
+              <div style="font-size:14px;font-weight:900;">195 s</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
+        <div style="font-size:20px;color:#6B7280;">→</div>
+        <div style="font-size:7px;text-align:center;color:#64748B;max-width:60px;line-height:1.3;">
+          ${pt?'Kanban + células + fluxo contínuo':'Kanban + cells + continuous flow'}
+        </div>
+      </div>
+      <div style="background:#F0FDF4;border:1.5px solid #059669;border-radius:8px;padding:8px 10px;">
+        <div style="font-size:9px;font-weight:800;color:#059669;margin-bottom:6px;text-align:center;">${pt?'✅ ESTADO FUTURO':'✅ FUTURE STATE'}</div>
+        <div style="display:flex;flex-direction:column;gap:3px;font-size:8px;">
+          ${['Stamping','Weld & Assembly','Shipping'].map((s,i) => `
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <span style="color:#374151;">${s}</span>
+              <span style="background:#05996920;color:#059669;padding:1px 5px;border-radius:3px;font-weight:700;">${['1s','168s','0s'][i]}</span>
+            </div>`).join('')}
+          <div style="margin-top:5px;padding-top:5px;border-top:1px solid #05996940;">
+            <div style="background:#059669;color:white;border-radius:5px;padding:4px 7px;margin-bottom:3px;">
+              <div style="font-size:9px;font-weight:800;">${pt?'⏱ Espera total':'⏱ Total waiting'}</div>
+              <div style="font-size:18px;font-weight:900;">4.5 ${pt?'dias':'days'}</div>
+            </div>
+            <div style="background:#34D399;color:white;border-radius:5px;padding:4px 7px;">
+              <div style="font-size:9px;font-weight:800;">${pt?'⚙ Processamento':'⚙ Processing'}</div>
+              <div style="font-size:14px;font-weight:900;">169 s</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px;">
+      <div style="background:#EFF6FF;border-radius:6px;padding:6px 9px;">
+        <div style="font-size:8px;color:#1D4ED8;font-weight:700;">Takt time</div>
+        <div style="font-size:9px;color:#1E3A5F;line-height:1.4;">${pt?'OEE ÷ Demanda média':'OEE ÷ Average demand'}<br>${pt?'"Metrônomo" do cliente':'"Metronome" set by customer'}</div>
+      </div>
+      <div style="background:#F5F3FF;border-radius:6px;padding:6px 9px;">
+        <div style="font-size:8px;color:#7C3AED;font-weight:700;">${pt?'Tarefa Marcapasso':'Pacemaker Task'}</div>
+        <div style="font-size:9px;color:#4C1D95;line-height:1.4;">${pt?'Define velocidade do processo. Sinal direto do cliente, sem WIP downstream.':'Sets process speed. Direct signal from customer, no downstream WIP.'}</div>
+      </div>
+    </div>
+    <div style="background:#FFF7ED;border:1px solid #F97316;border-radius:6px;padding:6px 9px;font-size:8.5px;color:#7C2D12;">
+      💡 <strong>${pt?'Lição-chave ACME:':'Key ACME lesson:'}</strong> ${pt?'81% do desperdício estava no TEMPO DE ESPERA entre tarefas (19,1 dias), não no processamento (26 segundos). O desperdício mora no WIP, não no trabalho em si.':'81% of waste was in WAITING TIME between tasks (19.1 days), not in processing (26 seconds saved). Waste lives in WIP, not in the work itself.'}
+    </div>
+  </div>`;
+};
+
+// ─── WEEK 4: FACILITY LAYOUTS ─────────────────────────────────────────────
+window.vis_facilityLayouts = function(container, lang) {
+  const pt = lang === 'pt';
+  let active = 0;
+  const layouts = [
+    {
+      name: pt?'Posição Fixa':'Fixed Position',
+      color: '#7C3AED', icon: '🏗',
+      types: pt?'Projeto':'Project', order: 'MTO',
+      adv:    pt?['Único para projetos grandes','Não precisa mover o produto','Equipe multidisciplinar no site']:['Only option for large-scale projects','No need to move the product','Multidisciplinary team on-site'],
+      disadv: pt?['Coordenação de timing é crítica','Falta de espaço de armazenagem','Gestão de projeto sofisticada']:['Delivery timing coordination critical','Lack of on-site storage space','Sophisticated project management required'],
+      ex: pt?'Airbus Toulouse, cirurgia cardíaca, construção civil, Olimpíadas 2012':'Airbus Toulouse, cardiac surgery, civil construction, 2012 Olympics',
+      svg: '<svg width="120" height="90" viewBox="0 0 120 90"><rect x="40" y="30" width="40" height="30" rx="4" fill="#7C3AED22" stroke="#7C3AED" stroke-width="2"/><text x="60" y="50" text-anchor="middle" font-size="8" fill="#7C3AED" font-weight="700">PRODUTO</text><line x1="20" y1="20" x2="38" y2="38" stroke="#7C3AED" stroke-width="1.5"/><polygon points="30,38 38,38 38,30" fill="#7C3AED"/><line x1="100" y1="20" x2="82" y2="38" stroke="#7C3AED" stroke-width="1.5"/><polygon points="82,30 90,38 82,38" fill="#7C3AED"/><line x1="20" y1="70" x2="38" y2="52" stroke="#7C3AED" stroke-width="1.5"/><polygon points="30,52 38,60 38,52" fill="#7C3AED"/><line x1="100" y1="70" x2="82" y2="52" stroke="#7C3AED" stroke-width="1.5"/><polygon points="90,52 82,52 82,60" fill="#7C3AED"/><circle cx="15" cy="15" r="8" fill="#7C3AED" opacity="0.7"/><text x="15" y="19" text-anchor="middle" font-size="8" fill="white">👷</text><circle cx="105" cy="15" r="8" fill="#7C3AED" opacity="0.7"/><text x="105" y="19" text-anchor="middle" font-size="8" fill="white">🔧</text><circle cx="15" cy="75" r="8" fill="#7C3AED" opacity="0.7"/><text x="15" y="79" text-anchor="middle" font-size="8" fill="white">📦</text><circle cx="105" cy="75" r="8" fill="#7C3AED" opacity="0.7"/><text x="105" y="79" text-anchor="middle" font-size="8" fill="white">🚚</text></svg>'
+    },
+    {
+      name: pt?'Produto-Serviço Dominante':'Product-Service Dominant',
+      color: '#059669', icon: '🏭',
+      types: pt?'Linha de Montagem, Contínuo':'Assembly Line, Continuous', order: 'ATO / MTS',
+      adv:    pt?['Baixo custo unitário','Alta eficiência e velocidade','Fluxo previsível e padronizado']:['Low unit cost','High efficiency and speed','Predictable, standardized flow'],
+      disadv: pt?['Inflexível — difícil mudar produto','Ambiente de trabalho repetitivo','Vulnerável a quebras (interdependência)']:['Inflexible — hard to change product','Repetitive working environment','Vulnerable to breakdowns (interdependency)'],
+      ex: pt?'Linha de montagem Toyota/Tesla, alfândega de aeroporto, lavanderia industrial':'Toyota/Tesla assembly line, airport customs, industrial laundry',
+      svg: '<svg width="120" height="90" viewBox="0 0 120 90"><rect x="5" y="35" width="18" height="20" rx="3" fill="#05996922" stroke="#059669" stroke-width="1.5"/><text x="14" y="48" text-anchor="middle" font-size="8" fill="#059669">①</text><rect x="27" y="35" width="18" height="20" rx="3" fill="#05996922" stroke="#059669" stroke-width="1.5"/><text x="36" y="48" text-anchor="middle" font-size="8" fill="#059669">②</text><rect x="49" y="35" width="18" height="20" rx="3" fill="#05996922" stroke="#059669" stroke-width="1.5"/><text x="58" y="48" text-anchor="middle" font-size="8" fill="#059669">③</text><rect x="71" y="35" width="18" height="20" rx="3" fill="#05996922" stroke="#059669" stroke-width="1.5"/><text x="80" y="48" text-anchor="middle" font-size="8" fill="#059669">④</text><rect x="93" y="35" width="18" height="20" rx="3" fill="#05996922" stroke="#059669" stroke-width="1.5"/><text x="102" y="48" text-anchor="middle" font-size="8" fill="#059669">⑤</text><line x1="5" y1="45" x2="112" y2="45" stroke="#059669" stroke-width="2" stroke-dasharray="3,2" opacity="0.4"/><polygon points="108,41 116,45 108,49" fill="#059669"/><text x="60" y="24" text-anchor="middle" font-size="8" fill="#059669" font-weight="700">→ FLUXO LINEAR →</text><text x="5" y="72" font-size="7" fill="#6B7280">INPUT</text><text x="92" y="72" font-size="7" fill="#6B7280">OUTPUT</text></svg>'
+    },
+    {
+      name: pt?'Dominado por Processo':'Process-Dominant',
+      color: '#D97706', icon: '🏥',
+      types: pt?'Oficina (Job Shop), Lote':'Job Shop, Batch', order: 'MTO / ATO',
+      adv:    pt?['Flexível — lida com alta variedade','Equipamentos genéricos (menos caros)','Pouca interdependência entre operações']:['Flexible — handles high variety','General-purpose equipment (less costly)','Little interdependence between operations'],
+      disadv: pt?['Alto WIP entre departamentos','Roteamento e agendamento complexos','Baixa utilização de equipamentos']:['High WIP between departments','Complex routing and scheduling','Low equipment utilization'],
+      ex: pt?'Hospitais, IKEA (rota forçada), machine shops, universidades, bancos':'Hospitals, IKEA (forced route), machine shops, universities, banks',
+      svg: '<svg width="120" height="90" viewBox="0 0 120 90"><rect x="10" y="8" width="28" height="18" rx="3" fill="#D9770622" stroke="#D97706" stroke-width="1.5"/><text x="24" y="20" text-anchor="middle" font-size="8" fill="#D97706" font-weight="700">Milling</text><rect x="70" y="8" width="28" height="18" rx="3" fill="#D9770622" stroke="#D97706" stroke-width="1.5"/><text x="84" y="20" text-anchor="middle" font-size="8" fill="#D97706" font-weight="700">Weld</text><rect x="10" y="55" width="28" height="18" rx="3" fill="#D9770622" stroke="#D97706" stroke-width="1.5"/><text x="24" y="67" text-anchor="middle" font-size="8" fill="#D97706" font-weight="700">Paint</text><rect x="70" y="55" width="28" height="18" rx="3" fill="#D9770622" stroke="#D97706" stroke-width="1.5"/><text x="84" y="67" text-anchor="middle" font-size="8" fill="#D97706" font-weight="700">Asm</text><polyline points="38,17 60,17 60,17 70,17" fill="none" stroke="#D97706" stroke-width="1.5" stroke-dasharray="3,2"/><polyline points="24,26 24,40 84,40 84,55" fill="none" stroke="#D97706" stroke-width="1.5" stroke-dasharray="3,2" opacity="0.7"/><polygon points="66,14 70,17 66,20" fill="#D97706"/><polygon points="81,51 84,55 87,51" fill="#D97706" opacity="0.7"/><text x="60" y="83" text-anchor="middle" font-size="7" fill="#92400E">↕ rotas variáveis</text></svg>'
+    },
+    {
+      name: pt?'Célula de Trabalho':'Work Cell',
+      color: '#0284C7', icon: '🔄',
+      types: pt?'Lote, Oficina':'Batch, Job Shop', order: 'MTO / ATO',
+      adv:    pt?['Menor WIP e menos espaço','Melhor moral dos funcionários','Fluxo mais rápido (one-piece flow)']:['Less WIP and less space','Better employee morale','Quicker flow (one-piece flow)'],
+      disadv: pt?['Requer funcionários multi-skill','Pode ser difícil definir "famílias" de produtos','Menos flexível que layout de processo']:['Requires multi-skilled workers','Hard to define product "families"','Less flexible than process layout'],
+      ex: pt?'Cozinha de restaurante pequeno (célula em U), célula de produção de placas eletrônicas, reparação sob garantia':'Small restaurant kitchen (U-shaped cell), PCB production cell, warranty repair shop',
+      svg: '<svg width="120" height="90" viewBox="0 0 120 90"><rect x="8" y="35" width="16" height="12" rx="2" fill="#0284C722" stroke="#0284C7" stroke-width="1.5"/><text x="16" y="44" text-anchor="middle" font-size="6" fill="#0284C7">W1</text><rect x="28" y="10" width="16" height="12" rx="2" fill="#0284C722" stroke="#0284C7" stroke-width="1.5"/><text x="36" y="19" text-anchor="middle" font-size="6" fill="#0284C7">W2</text><rect x="52" y="8" width="16" height="12" rx="2" fill="#0284C722" stroke="#0284C7" stroke-width="1.5"/><text x="60" y="17" text-anchor="middle" font-size="6" fill="#0284C7">W3</text><rect x="76" y="10" width="16" height="12" rx="2" fill="#0284C722" stroke="#0284C7" stroke-width="1.5"/><text x="84" y="19" text-anchor="middle" font-size="6" fill="#0284C7">W4</text><rect x="96" y="35" width="16" height="12" rx="2" fill="#0284C722" stroke="#0284C7" stroke-width="1.5"/><text x="104" y="44" text-anchor="middle" font-size="6" fill="#0284C7">W5</text><rect x="76" y="60" width="16" height="12" rx="2" fill="#0284C722" stroke="#0284C7" stroke-width="1.5"/><text x="84" y="69" text-anchor="middle" font-size="6" fill="#0284C7">W6</text><rect x="28" y="60" width="16" height="12" rx="2" fill="#0284C722" stroke="#0284C7" stroke-width="1.5"/><text x="36" y="69" text-anchor="middle" font-size="6" fill="#0284C7">W7</text><path d="M16,47 Q16,80 36,72 Q60,85 84,72 Q104,60 104,47 Q104,32 84,22 Q60,5 36,22 Q16,20 16,35" fill="none" stroke="#0284C7" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.5"/><text x="60" y="48" text-anchor="middle" font-size="7" fill="#0284C7">U-shape</text></svg>'
+    }
+  ];
+  const render = () => {
+    const l = layouts[active];
+    container.innerHTML = `
+    <div style="font-family:sans-serif;padding:4px;">
+      <div style="display:flex;gap:4px;margin-bottom:8px;flex-wrap:wrap;">
+        ${layouts.map((x,i) => `<button onclick="(function(){window._fl4active=${i};window._fl4render&&window._fl4render();})()" style="padding:4px 9px;border-radius:5px;border:1.5px solid ${x.color};background:${i===active?x.color:'white'};color:${i===active?'white':x.color};font-size:8px;font-weight:700;cursor:pointer;font-family:sans-serif;">${x.icon} ${x.name.split('(')[0].trim()}</button>`).join('')}
+      </div>
+      <div style="display:flex;gap:12px;align-items:flex-start;">
+        <div style="flex-shrink:0;background:${l.color}10;border:1px solid ${l.color}44;border-radius:8px;padding:10px;display:flex;flex-direction:column;align-items:center;gap:6px;">
+          ${l.svg}
+          <div style="font-size:8px;color:${l.color};font-weight:700;text-align:center;">${l.name}</div>
+        </div>
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:12px;font-weight:800;color:${l.color};margin-bottom:4px;">${l.icon} ${l.name}</div>
+          <div style="display:flex;gap:6px;margin-bottom:6px;font-size:8px;">
+            <span style="background:${l.color}22;color:${l.color};padding:2px 7px;border-radius:10px;font-weight:700;">${l.types}</span>
+            <span style="background:#F1F5F9;color:#475569;padding:2px 7px;border-radius:10px;font-weight:700;">${l.order}</span>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-bottom:6px;">
+            <div style="background:#F0FDF4;border-radius:5px;padding:5px 7px;">
+              <div style="font-size:8px;font-weight:700;color:#059669;margin-bottom:2px;">✓ ${pt?'Vantagens':'Advantages'}</div>
+              ${l.adv.map(a => `<div style="font-size:8px;color:#374151;line-height:1.4;">• ${a}</div>`).join('')}
+            </div>
+            <div style="background:#FEF2F2;border-radius:5px;padding:5px 7px;">
+              <div style="font-size:8px;font-weight:700;color:#DC2626;margin-bottom:2px;">✗ ${pt?'Desvantagens':'Disadvantages'}</div>
+              ${l.disadv.map(d => `<div style="font-size:8px;color:#374151;line-height:1.4;">• ${d}</div>`).join('')}
+            </div>
+          </div>
+          <div style="background:${l.color}10;border-radius:5px;padding:5px 8px;font-size:8px;color:#374151;line-height:1.4;">
+            📍 <strong>${pt?'Exemplos:':'Examples:'}</strong> ${l.ex}
+          </div>
+        </div>
+      </div>
+    </div>`;
+    window._fl4active = active;
+    window._fl4render = () => { active = window._fl4active; render(); };
+  };
+  window._fl4active = active;
+  render();
+  window._fl4render = () => { active = window._fl4active; render(); };
 };

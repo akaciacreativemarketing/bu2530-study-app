@@ -651,6 +651,12 @@ const VIS_DISPATCH = {
   'rdFunnel':          true,
   'modularVsIntegral': true,
   'productPlatform':   true,
+  // Week 4
+  'processTypes':        true,
+  'orderTypes':          true,
+  'processMappingTools': true,
+  'vsmConcept':          true,
+  'facilityLayouts':     true,
 };
 
 function renderTheoryCard(th) {
