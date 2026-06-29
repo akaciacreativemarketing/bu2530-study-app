@@ -1661,3 +1661,243 @@ window.vis_facilityLayouts = function(container, lang) {
   render();
   window._fl4render = () => { active = window._fl4active; render(); };
 };
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  WEEK 5 — SUPPLY NETWORK DESIGN (Chapter 6)
+// ═══════════════════════════════════════════════════════════════════════════
+
+// ─── WEEK 5: SUPPLIER NETWORK + THREE FLOWS (Fig 6.1 + 6.3) ─────────────────
+window.vis_scmNetwork = function(container, lang) {
+  const pt = lang === 'pt';
+  let view = 'network'; // 'network' | 'flows'
+  const render = () => {
+    const tabBtn = (id, label) => `<button onclick="(function(){window._scmnv='${id}';window._scmnr&&window._scmnr();})()" style="padding:4px 10px;border-radius:5px;border:1.5px solid #0284C7;background:${view===id?'#0284C7':'white'};color:${view===id?'white':'#0284C7'};font-size:8.5px;font-weight:700;cursor:pointer;font-family:sans-serif;">${label}</button>`;
+    let body = '';
+    if (view === 'network') {
+      body = `
+        <svg width="320" height="210" viewBox="0 0 320 210" style="display:block;background:#F8FAFC;border:1px solid #E2E8F0;border-radius:8px;">
+          <!-- tiers labels -->
+          <text x="42" y="14" text-anchor="middle" font-size="7.5" fill="#92400E" font-weight="700">2nd tier</text>
+          <text x="108" y="14" text-anchor="middle" font-size="7.5" fill="#B45309" font-weight="700">1st tier</text>
+          <text x="160" y="14" text-anchor="middle" font-size="8" fill="#0C4A6E" font-weight="800">OPERAÇÃO</text>
+          <text x="212" y="14" text-anchor="middle" font-size="7.5" fill="#047857" font-weight="700">1st tier</text>
+          <text x="278" y="14" text-anchor="middle" font-size="7.5" fill="#065F46" font-weight="700">2nd tier</text>
+          <text x="75" y="204" text-anchor="middle" font-size="8" fill="#B45309" font-weight="700">◀ ${pt?'LADO DA OFERTA (supply side)':'SUPPLY SIDE'}</text>
+          <text x="245" y="204" text-anchor="middle" font-size="8" fill="#047857" font-weight="700">${pt?'LADO DA DEMANDA (demand side)':'DEMAND SIDE'} ▶</text>
+          <!-- links -->
+          <g stroke="#CBD5E1" stroke-width="1.3">
+            <line x1="55" y1="50" x2="95" y2="70"/><line x1="55" y1="110" x2="95" y2="70"/>
+            <line x1="55" y1="110" x2="95" y2="130"/><line x1="55" y1="165" x2="95" y2="130"/>
+            <line x1="121" y1="70" x2="148" y2="105"/><line x1="121" y1="130" x2="148" y2="105"/>
+            <line x1="172" y1="105" x2="199" y2="70"/><line x1="172" y1="105" x2="199" y2="130"/>
+            <line x1="225" y1="70" x2="265" y2="50"/><line x1="225" y1="70" x2="265" y2="110"/>
+            <line x1="225" y1="130" x2="265" y2="110"/><line x1="225" y1="130" x2="265" y2="165"/>
+          </g>
+          <!-- bypass tier (2nd->operation) -->
+          <line x1="55" y1="110" x2="148" y2="105" stroke="#F59E0B" stroke-width="1" stroke-dasharray="3,2" opacity="0.7"/>
+          <!-- supply nodes -->
+          ${[[55,50],[55,110],[55,165]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="9" fill="#FCD34D" stroke="#B45309" stroke-width="1.5"/>`).join('')}
+          ${[[95,70],[95,130]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="10" fill="#F59E0B" stroke="#92400E" stroke-width="1.5"/>`).join('')}
+          <!-- focal -->
+          <rect x="146" y="88" width="28" height="34" rx="5" fill="#0284C7" stroke="#0C4A6E" stroke-width="2"/>
+          <text x="160" y="109" text-anchor="middle" font-size="14" fill="white">★</text>
+          <!-- demand nodes -->
+          ${[[225,70],[225,130]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="10" fill="#10B981" stroke="#065F46" stroke-width="1.5"/>`).join('')}
+          ${[[265,50],[265,110],[265,165]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="9" fill="#6EE7B7" stroke="#047857" stroke-width="1.5"/>`).join('')}
+        </svg>
+        <div style="margin-top:6px;background:#FFFBEB;border-left:3px solid #F59E0B;border-radius:5px;padding:6px 9px;font-size:8px;color:#475569;line-height:1.55;">
+          <strong>${pt?'1st-tier':'1st-tier'}</strong> ${pt?'= fornecem/recebem diretamente da operação.':'= supply/receive directly from the operation.'} <strong>${pt?'2nd-tier':'2nd-tier'}</strong> ${pt?'= um nível além.':'= one level beyond.'} ${pt?'A linha tracejada mostra um 2nd-tier que entrega direto à operação (pula um nível).':'The dashed line shows a 2nd-tier supplying the operation directly (skipping a tier).'}<br>
+          <strong>${pt?'Rede imediata':'Immediate network'}</strong> = ${pt?'só os 1st-tier.':'1st-tier only.'} <strong>${pt?'Rede total':'Total network'}</strong> = ${pt?'todos os tiers.':'all tiers.'}
+        </div>`;
+    } else {
+      body = `
+        <svg width="320" height="170" viewBox="0 0 320 170" style="display:block;background:#F8FAFC;border:1px solid #E2E8F0;border-radius:8px;">
+          ${[[40,'#92400E',pt?'Fornecedor':'Supplier'],[160,'#0284C7',pt?'Fabricante':'Manufacturer'],[280,'#047857',pt?'Cliente':'Customer']].map(([x,c,l])=>`
+            <rect x="${x-34}" y="62" width="68" height="44" rx="6" fill="${c}15" stroke="${c}" stroke-width="1.8"/>
+            <text x="${x}" y="88" text-anchor="middle" font-size="9" fill="${c}" font-weight="700">${l}</text>`).join('')}
+          <!-- materials downstream -->
+          <line x1="74" y1="50" x2="246" y2="50" stroke="#DC2626" stroke-width="2.5"/>
+          <polygon points="246,44 258,50 246,56" fill="#DC2626"/>
+          <text x="160" y="44" text-anchor="middle" font-size="8.5" fill="#DC2626" font-weight="800">📦 ${pt?'MATERIAIS — jusante (downstream)':'MATERIALS — downstream'} ▶</text>
+          <!-- info + money upstream -->
+          <line x1="246" y1="124" x2="74" y2="124" stroke="#7C3AED" stroke-width="2.5"/>
+          <polygon points="74,118 62,124 74,130" fill="#7C3AED"/>
+          <text x="160" y="138" text-anchor="middle" font-size="8.5" fill="#7C3AED" font-weight="800">◀ ${pt?'INFORMAÇÃO + DINHEIRO — montante (upstream)':'INFORMATION + MONEY — upstream'} 💰</text>
+        </svg>
+        <div style="margin-top:6px;background:#EFF6FF;border-left:3px solid #0284C7;border-radius:5px;padding:6px 9px;font-size:8px;color:#475569;line-height:1.55;">
+          ${pt?'Toda supply chain gerencia <strong>3 fluxos</strong>: materiais/bens descem para o cliente (downstream), enquanto informação (pedidos) e dinheiro sobem para o fornecedor (upstream). Mover bens gera <strong>custos de transação</strong> (transaction costs).':'Every supply chain manages <strong>3 flows</strong>: materials/goods move down to the customer (downstream), while information (orders) and money move up to the supplier (upstream). Moving goods creates <strong>transaction costs</strong>.'}
+        </div>`;
+    }
+    container.innerHTML = `
+      <div style="font-family:sans-serif;padding:4px;">
+        <div style="display:flex;gap:5px;margin-bottom:8px;">
+          ${tabBtn('network', pt?'🕸 Rede de fornecedores':'🕸 Supplier network')}
+          ${tabBtn('flows', pt?'🔁 Os 3 fluxos':'🔁 The 3 flows')}
+        </div>
+        ${body}
+      </div>`;
+    window._scmnv = view; window._scmnr = () => { view = window._scmnv; render(); };
+  };
+  window._scmnv = view; render(); window._scmnr = () => { view = window._scmnv; render(); };
+};
+
+// ─── WEEK 5: SINGLE vs MULTIPLE vs DUAL SOURCING ────────────────────────────
+window.vis_sourcingCompare = function(container, lang) {
+  const pt = lang === 'pt';
+  const cols = [
+    { key:'single', color:'#0284C7', icon:'🤝', title: pt?'Single Sourcing':'Single Sourcing', sub: pt?'1 fornecedor':'1 supplier',
+      rows:[[pt?'Relação':'Relationship', pt?'Parceria forte, durável, confiança':'Strong, durable, trusting partnership'],[pt?'Preço':'Price', pt?'Não é o critério principal':'Not the main criterion'],[pt?'Vantagem':'Strength', pt?'Compromisso, qualidade, JIT, economias de escala':'Commitment, quality, JIT, economies of scale'],[pt?'Risco':'Risk', pt?'Vulnerável a falha/falência; refém de preços (monopólio)':'Vulnerable to failure/bankruptcy; price hostage (monopoly)']]},
+    { key:'multiple', color:'#DC2626', icon:'⚔', title: pt?'Multiple Sourcing':'Multiple Sourcing', sub: pt?'Vários fornecedores':'Many suppliers',
+      rows:[[pt?'Relação':'Relationship', pt?'Competitiva — fornecedores competem (preço)':'Competitive — suppliers compete (price)'],[pt?'Preço':'Price', pt?'Baixado por concorrência (tendering)':'Driven down by competitive tendering'],[pt?'Vantagem':'Strength', pt?'Backup contra falhas, acesso a + conhecimento':'Backup against failure, wider knowledge'],[pt?'Risco':'Risk', pt?'Pouco compromisso; menos investimento dos fornecedores':'Low commitment; less supplier investment']]},
+    { key:'dual', color:'#059669', icon:'⚖', title: pt?'Dual Sourcing':'Dual Sourcing', sub: pt?'2 fornecedores':'2 suppliers',
+      rows:[[pt?'Relação':'Relationship', pt?'Híbrido — o melhor dos dois mundos':'Hybrid — best of both worlds'],[pt?'Preço':'Price', pt?'Equilíbrio competição × relação':'Balance competition × relationship'],[pt?'Vantagem':'Strength', pt?'Relação forte SEM monopólio':'Strong relationship WITHOUT monopoly'],[pt?'Risco':'Risk', pt?'Coordenação de 2 parceiros':'Coordinating 2 partners']]},
+  ];
+  container.innerHTML = `
+    <div style="font-family:sans-serif;padding:4px;">
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;">
+        ${cols.map(c=>`
+          <div style="border:1.5px solid ${c.color};border-radius:8px;overflow:hidden;">
+            <div style="background:${c.color};padding:6px 8px;color:white;"><div style="font-size:10px;font-weight:800;">${c.icon} ${c.title}</div><div style="font-size:7.5px;opacity:.9;">${c.sub}</div></div>
+            ${c.rows.map(([k,v])=>`<div style="padding:4px 8px;border-bottom:1px solid ${c.color}22;"><div style="font-size:7px;color:#94A3B8;text-transform:uppercase;letter-spacing:.4px;">${k}</div><div style="font-size:8px;color:#1E293B;font-weight:600;line-height:1.35;">${v}</div></div>`).join('')}
+          </div>`).join('')}
+      </div>
+      <div style="margin-top:8px;display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+        <div style="background:#EFF6FF;border-radius:6px;padding:7px 9px;">
+          <div style="font-size:8.5px;font-weight:800;color:#0284C7;margin-bottom:3px;">✓ ${pt?'Single quando…':'Single when…'}</div>
+          <div style="font-size:7.5px;color:#475569;line-height:1.5;">${pt?'Economias de escala · qualidade dita · JIT · menor lead time · time-to-market crítico · ferramental especial':'Economies of scale · quality dictates · JIT · shorter lead times · time-to-market critical · special tooling'}</div>
+        </div>
+        <div style="background:#FEF2F2;border-radius:6px;padding:7px 9px;">
+          <div style="font-size:8.5px;font-weight:800;color:#DC2626;margin-bottom:3px;">✓ ${pt?'Multiple quando…':'Multiple when…'}</div>
+          <div style="font-size:7.5px;color:#475569;line-height:1.5;">${pt?'Proteção contra escassez/greves · manter competição · exigências de volume · tecnologia incerta · mudança política (ex: Brexit)':'Protect against shortage/strikes · keep competition · volume needs · uncertain technology · political change (e.g. Brexit)'}</div>
+        </div>
+      </div>
+    </div>`;
+};
+
+// ─── WEEK 5: MULTI-ORGANIZATION ENTERPRISE TYPES (VE / EE / VIE) — Table 6.6 ─
+window.vis_enterpriseTypes = function(container, lang) {
+  const pt = lang === 'pt';
+  const cols = [
+    { key:'ve', color:'#7C3AED', icon:'⚡', title:'Virtual (VE)', philo: pt?'Ágil':'Agile (quick-adapt)',
+      rows:[[pt?'Filosofia':'Philosophy', pt?'Estratégia rápida e adaptável (ágil)':'Quickly adaptable strategy (agile)'],[pt?'Base da relação':'Relationship base', pt?'Competência técnica · alta inovação':'Technical competence · high innovation'],[pt?'Competências':'Competencies', pt?'Novas, especulativas, não testadas, alto risco':'New, speculative, untested, high risk'],[pt?'Longevidade':'Longevity', pt?'Curto prazo, temporário':'Short-term, temporary'],[pt?'Custos transação':'Transaction costs', pt?'Altos · alta especificidade de ativos':'High · high asset specificity'],[pt?'Exemplo':'Example', pt?'P&D, protótipo Bluetooth, criptomoedas':'R&D, Bluetooth prototype, cryptocurrencies']]},
+    { key:'ee', color:'#0284C7', icon:'🔗', title:'Extended (EE)', philo: pt?'Lean + Ágil':'Lean + Agile',
+      rows:[[pt?'Filosofia':'Philosophy', pt?'Adaptável e reduz desperdício (lean+ágil)':'Adaptable + reduce waste (lean & agile)'],[pt?'Base da relação':'Relationship base', pt?'Competência social · experiência de relação':'Social competence · relationship experience'],[pt?'Competências':'Competencies', pt?'Testadas em parte, risco médio':'Tested to some extent, medium risk'],[pt?'Longevidade':'Longevity', pt?'Médio a longo prazo':'Medium to long term'],[pt?'Custos transação':'Transaction costs', pt?'Médios · especificidade média':'Medium · medium asset specificity'],[pt?'Exemplo':'Example', pt?'eBay, chip Bluetooth pronto, transferência de conhecimento':'eBay, market-ready Bluetooth chip, knowledge transfer']]},
+    { key:'vie', color:'#059669', icon:'🏛', title:'Vert. Integ. (VIE)', philo: pt?'Lean':'Lean (waste cut)',
+      rows:[[pt?'Filosofia':'Philosophy', pt?'Redução de desperdício domina (lean)':'Waste reduction dominates (lean)'],[pt?'Base da relação':'Relationship base', pt?'Eficiência · custos de transação (preços)':'Efficiency · transaction costs (prices)'],[pt?'Competências':'Competencies', pt?'Maduras, testadas, amplamente usáveis':'Mature, tested, widely usable'],[pt?'Longevidade':'Longevity', pt?'Quase permanente (se competitivo)':'Foreseeable as permanent (if competitive)'],[pt?'Custos transação':'Transaction costs', pt?'Baixos · baixa especificidade':'Low · low asset specificity'],[pt?'Exemplo':'Example', pt?'Mercados estáveis, NAC compra MG Rover':'Stable markets, NAC buys MG Rover']]},
+  ];
+  container.innerHTML = `
+    <div style="font-family:sans-serif;padding:4px;">
+      <div style="position:relative;height:22px;margin-bottom:10px;">
+        <div style="position:absolute;left:0;right:0;top:8px;height:7px;border-radius:4px;background:linear-gradient(to right,#7C3AED,#0284C7,#059669);"></div>
+        <div style="position:absolute;left:0;top:-4px;font-size:7.5px;color:#7C3AED;font-weight:700;">${pt?'Temporário · Ágil':'Temporary · Agile'}</div>
+        <div style="position:absolute;right:0;top:-4px;font-size:7.5px;color:#059669;font-weight:700;text-align:right;">${pt?'Permanente · Integrado ▶':'Permanent · Integrated ▶'}</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;">
+        ${cols.map(c=>`
+          <div style="border:1.5px solid ${c.color};border-radius:8px;overflow:hidden;">
+            <div style="background:${c.color};padding:6px 8px;color:white;"><div style="font-size:10px;font-weight:800;">${c.icon} ${c.title}</div><div style="font-size:7.5px;opacity:.9;">${c.philo}</div></div>
+            ${c.rows.map(([k,v])=>`<div style="padding:4px 7px;border-bottom:1px solid ${c.color}22;"><div style="font-size:6.5px;color:#94A3B8;text-transform:uppercase;letter-spacing:.3px;">${k}</div><div style="font-size:8px;color:#1E293B;font-weight:600;line-height:1.3;">${v}</div></div>`).join('')}
+          </div>`).join('')}
+      </div>
+      <div style="margin-top:8px;background:#F1F5F9;border-radius:6px;padding:6px 9px;font-size:7.5px;color:#475569;line-height:1.55;">
+        <strong>${pt?'Não são estratégias diferentes':'Not different strategies'}</strong> — ${pt?'são fases da MESMA estratégia de colaboração ao longo do ciclo de vida. Há sempre um <strong>integrador (enterprise integrator/orchestrator)</strong> dominante que desenha a estrutura.':'they are phases of the SAME collaboration strategy across the life cycle. There is always a dominant <strong>enterprise integrator/orchestrator</strong> designing the structure.'}
+      </div>
+    </div>`;
+};
+
+// ─── WEEK 5: DYNAMIC ENTERPRISE REFERENCE GRID (DERG) — Fig 6.8 ──────────────
+window.vis_derg = function(container, lang) {
+  const pt = lang === 'pt';
+  let active = 'q2';
+  const quads = {
+    q1: { color:'#7C3AED', name:pt?'Q1 · Virtual (VE)':'Q1 · Virtual (VE)', pos:pt?'Engajabilidade atual BAIXA, futura ALTA':'Current engageability LOW, future HIGH',
+      desc:pt?'Competências emergentes ainda não testadas no mercado. Colaboração temporária para explorar oportunidades e dividir risco. Governança "virtual".':'Newly emerging competencies, untested in market. Temporary collaboration to exploit opportunities and spread risk. Governed "virtually".',
+      ex:pt?'Protótipo Bluetooth · criptomoedas em pagamentos online':'Bluetooth prototype · crypto in online payments' },
+    q2: { color:'#0284C7', name:pt?'Q2 · Extended (EE)':'Q2 · Extended (EE)', pos:pt?'Engajabilidade atual ALTA, futura ALTA':'Current engageability HIGH, future HIGH',
+      desc:pt?'Competências maduras e atrativas, baixo risco. Integrador busca estratégia de co-desenvolvimento de médio-longo prazo para minimizar oportunismo.':'Mature, attractive, low-risk competencies. Integrator seeks medium-long term co-developmental strategy to minimize opportunism.',
+      ex:pt?'eBay · chip Bluetooth pronto para o mercado':'eBay · market-ready Bluetooth chip' },
+    q3: { color:'#059669', name:pt?'Q3 · Vert. Integrada (VIE)':'Q3 · Vert. Integrated (VIE)', pos:pt?'Engajabilidade atual ALTA, futura BAIXA':'Current engageability HIGH, future LOW',
+      desc:pt?'Competências maduras mas margens encolhendo / tecnologia a obsolescer. Integrador busca posse total para minimizar custo de transação → fusão/aquisição.':'Mature competencies but eroding margins / obsoleting tech. Integrator seeks whole-ownership to minimize transaction cost → merger/acquisition.',
+      ex:pt?'NAC compra a fábrica MG Rover (Longbridge)':'NAC buys MG Rover\'s Longbridge plant' },
+    q4: { color:'#DC2626', name:pt?'Q4 · Desengajar':'Q4 · Disengage', pos:pt?'Engajabilidade atual BAIXA, futura BAIXA':'Current engageability LOW, future LOW',
+      desc:pt?'Módulos indesejáveis para o presente e o futuro. O integrador busca desengatar/vender antes de chegar a situação irrecuperável.':'Modules undesirable for now and future. Integrator seeks to disengage/sell before an unrecoverable situation.',
+      ex:pt?'IBM vende divisão de PCs à Lenovo (2004)':'IBM sells PC division to Lenovo (2004)' },
+  };
+  const render = () => {
+    const a = quads[active];
+    const cell = (id, cx, cy) => { const q=quads[id]; const on=active===id; return `
+      <g style="cursor:pointer" onclick="(function(){window._derga='${id}';window._dergr&&window._dergr();})()">
+        <rect x="${cx}" y="${cy}" width="118" height="72" rx="6" fill="${q.color}${on?'33':'12'}" stroke="${q.color}" stroke-width="${on?2.5:1.3}"/>
+        <text x="${cx+59}" y="${cy+30}" text-anchor="middle" font-size="9.5" fill="${q.color}" font-weight="800">${q.name.split('·')[0].trim()}</text>
+        <text x="${cx+59}" y="${cy+45}" text-anchor="middle" font-size="8.5" fill="${q.color}" font-weight="700">${q.name.split('·')[1].trim()}</text>
+      </g>`; };
+    container.innerHTML = `
+      <div style="font-family:sans-serif;padding:4px;">
+        <div style="display:flex;gap:10px;align-items:flex-start;">
+          <div style="flex-shrink:0;">
+            <svg width="290" height="200" viewBox="0 0 290 200">
+              <text x="150" y="11" text-anchor="middle" font-size="8" fill="#64748B" font-weight="700">${pt?'Engajabilidade FUTURA':'FUTURE engageability'}</text>
+              <text x="78" y="22" text-anchor="middle" font-size="7.5" fill="#94A3B8">${pt?'Alta':'High'}</text>
+              <text x="212" y="22" text-anchor="middle" font-size="7.5" fill="#94A3B8">${pt?'Alta':'High'}</text>
+              <text x="9" y="100" text-anchor="middle" font-size="8" fill="#64748B" font-weight="700" transform="rotate(-90,9,100)">${pt?'Engajabilidade ATUAL':'CURRENT engageability'}</text>
+              ${cell('q1',26,28)}${cell('q2',146,28)}${cell('q4',26,110)}${cell('q3',146,110)}
+              <!-- Smart Car path Q1->Q2->Q3 -->
+              <path d="M85,64 L205,64" stroke="#F59E0B" stroke-width="1.5" stroke-dasharray="4,2" fill="none" marker-end=""/>
+              <path d="M205,100 L205,110" stroke="#F59E0B" stroke-width="1.5" stroke-dasharray="4,2" fill="none"/>
+              <text x="145" y="58" text-anchor="middle" font-size="6.5" fill="#B45309" font-weight="700">${pt?'▶ jornada Smart Car':'▶ Smart Car journey'}</text>
+              <text x="40" y="192" font-size="7.5" fill="#94A3B8">${pt?'Atual baixa':'Current low'}</text>
+              <text x="200" y="192" font-size="7.5" fill="#94A3B8">${pt?'Atual alta':'Current high'}</text>
+            </svg>
+            <div style="margin-top:4px;display:flex;gap:3px;flex-wrap:wrap;">
+              ${['q1','q2','q3','q4'].map(id=>`<button onclick="(function(){window._derga='${id}';window._dergr&&window._dergr();})()" style="padding:3px 7px;border-radius:4px;border:1.5px solid ${quads[id].color};background:${active===id?quads[id].color:'white'};color:${active===id?'white':quads[id].color};font-size:8px;font-weight:700;cursor:pointer;font-family:sans-serif;">${quads[id].name.split('·')[0].trim()}</button>`).join('')}
+            </div>
+          </div>
+          <div style="flex:1;min-width:0;">
+            <div style="background:${a.color}15;border-left:3px solid ${a.color};border-radius:6px;padding:9px 11px;">
+              <div style="font-size:12px;font-weight:800;color:${a.color};margin-bottom:3px;">${a.name}</div>
+              <div style="font-size:8px;color:#64748B;font-weight:700;margin-bottom:6px;">${a.pos}</div>
+              <div style="font-size:8.5px;color:#1E293B;line-height:1.5;margin-bottom:7px;">${a.desc}</div>
+              <div style="background:white;border-radius:4px;padding:5px 8px;font-size:8px;color:#6B7280;">📍 ${a.ex}</div>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:8px;background:#FFFBEB;border-radius:6px;padding:6px 9px;font-size:7.5px;color:#475569;line-height:1.55;">
+          <strong>Smart Car:</strong> ${pt?'começou como colaboração temporária Daimler-Benz × Swatch (Q1 VE) → relação amadureceu para EE (Q2) → tensão levou Daimler a comprar a parte da Swatch, tornando-se VIE (Q3). Mostra a dinâmica do grid ao longo do ciclo de vida.':'started as a temporary Daimler-Benz × Swatch collaboration (Q1 VE) → relationship matured into EE (Q2) → tension led Daimler to buy out Swatch, becoming VIE (Q3). Shows the grid\'s dynamics across the life cycle.'}
+        </div>
+      </div>`;
+    window._derga = active; window._dergr = () => { active = window._derga; render(); };
+  };
+  window._derga = active; render(); window._dergr = () => { active = window._derga; render(); };
+};
+
+// ─── WEEK 5: TRANSACTION COST ECONOMICS — 4 ASSUMPTIONS (Coase/Williamson) ───
+window.vis_tceAssumptions = function(container, lang) {
+  const pt = lang === 'pt';
+  const items = [
+    { color:'#0284C7', icon:'🧠', name:pt?'Racionalidade Limitada':'Bounded Rationality', author:'Simon 1957',
+      desc:pt?'O comportamento humano tenta ser racional, mas é limitado por conhecimento, comportamento e linguagem. Não dá para checar todas as opções.':'Human behaviour intends to be rational but is limited by knowledge, behaviour and language. You can\'t check every option.' },
+    { color:'#DC2626', icon:'🎯', name:pt?'Oportunismo':'Opportunism', author:'Williamson 1975',
+      desc:pt?'Atores buscam melhorar a própria posição — "interesse próprio com astúcia" (self-interest seeking with guile). Mais pressão competitiva e desconfiança → mais oportunismo.':'Actors seek to improve their own standing — "self-interest seeking with guile". More competitive pressure and mistrust → more opportunism.' },
+    { color:'#7C3AED', icon:'🔧', name:pt?'Especificidade de Ativos':'Asset Specificity', author:'',
+      desc:pt?'Quão dedicado é um ativo a um produto/serviço. Alta especificidade = arriscado (não reaproveitável). 4 tipos: localização, propriedades físicas, humano, dedicação.':'How dedicated an asset is to a product/service. High specificity = risky (not reusable). 4 types: location, physical, human, dedication.' },
+    { color:'#D97706', icon:'🌫', name:pt?'Incerteza':'Uncertainty', author:'',
+      desc:pt?'Incerteza do ambiente de negócios. Alta incerteza → empresas internalizam recursos e buscam projetos de baixo risco (ex: hospital com gerador próprio).':'Business environment uncertainty. High uncertainty → firms internalize resources and seek low-risk projects (e.g. hospital with its own generator).' },
+  ];
+  container.innerHTML = `
+    <div style="font-family:sans-serif;padding:4px;">
+      <div style="text-align:center;margin-bottom:8px;background:#1E293B;border-radius:6px;padding:7px;">
+        <div style="font-size:10.5px;font-weight:800;color:white;">💰 ${pt?'Custos de Transação (TCE)':'Transaction Costs (TCE)'}</div>
+        <div style="font-size:7.5px;color:#94A3B8;margin-top:2px;">${pt?'Coase (1937): empresas existem porque o mercado tem custos de transação':'Coase (1937): firms exist because the open market has transaction costs'}</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+        ${items.map(it=>`
+          <div style="border:1px solid ${it.color}44;border-left:3px solid ${it.color};border-radius:6px;padding:7px 9px;background:${it.color}08;">
+            <div style="font-size:9.5px;font-weight:800;color:${it.color};margin-bottom:3px;">${it.icon} ${it.name}${it.author?` <span style="font-size:7px;color:#94A3B8;font-weight:600;">${it.author}</span>`:''}</div>
+            <div style="font-size:7.5px;color:#374151;line-height:1.5;">${it.desc}</div>
+          </div>`).join('')}
+      </div>
+      <div style="margin-top:8px;background:#ECFDF5;border-radius:6px;padding:6px 9px;font-size:7.5px;color:#065F46;line-height:1.55;">
+        <strong>${pt?'Regra de ouro:':'Key point:'}</strong> ${pt?'se os custos de transação EXTERNOS > internos → a empresa cresce/internaliza (faz in-house). Se INTERNOS > externos → vale terceirizar/encolher (outsourcing).':'if EXTERNAL transaction costs > internal → the firm grows/internalizes (in-house). If INTERNAL > external → outsource/downsize.'}
+      </div>
+    </div>`;
+};

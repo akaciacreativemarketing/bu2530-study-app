@@ -657,6 +657,12 @@ const VIS_DISPATCH = {
   'processMappingTools': true,
   'vsmConcept':          true,
   'facilityLayouts':     true,
+  // Week 5
+  'scmNetwork':          true,
+  'sourcingCompare':     true,
+  'enterpriseTypes':     true,
+  'derg':                true,
+  'tceAssumptions':      true,
 };
 
 function renderTheoryCard(th) {
