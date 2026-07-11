@@ -1,7 +1,7 @@
-window.WEEKS = window.WEEKS || {};
-window.WEEKS[4] = {
+window.WEEKS_DATA = window.WEEKS_DATA || {};
+window.WEEKS_DATA['operations-management'] = window.WEEKS_DATA['operations-management'] || {};
+window.WEEKS_DATA['operations-management'][4] = {
   week: 4,
-  part: 1,
   status: 'done',
   title: { pt: 'Design de Processos', en: 'Process Design' },
   overview: {

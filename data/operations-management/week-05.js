@@ -1,7 +1,7 @@
-window.WEEKS = window.WEEKS || {};
-window.WEEKS[5] = {
+window.WEEKS_DATA = window.WEEKS_DATA || {};
+window.WEEKS_DATA['operations-management'] = window.WEEKS_DATA['operations-management'] || {};
+window.WEEKS_DATA['operations-management'][5] = {
   week: 5,
-  part: 1,
   status: 'done',
   title: { pt: 'Design da Rede de Suprimentos', en: 'Supply Network Design' },
   overview: {

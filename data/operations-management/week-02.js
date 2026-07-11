@@ -1,7 +1,7 @@
-window.WEEKS = window.WEEKS || {};
-window.WEEKS[2] = {
+window.WEEKS_DATA = window.WEEKS_DATA || {};
+window.WEEKS_DATA['operations-management'] = window.WEEKS_DATA['operations-management'] || {};
+window.WEEKS_DATA['operations-management'][2] = {
   week: 2,
-  part: 1,
   status: 'done',
   title: {
     pt: 'Estratégia de Operações',

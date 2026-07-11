@@ -1,7 +1,7 @@
-window.WEEKS = window.WEEKS || {};
-window.WEEKS[3] = {
+window.WEEKS_DATA = window.WEEKS_DATA || {};
+window.WEEKS_DATA['operations-management'] = window.WEEKS_DATA['operations-management'] || {};
+window.WEEKS_DATA['operations-management'][3] = {
   week: 3,
-  part: 1,
   status: 'done',
   title: {
     pt: 'Inovação e Desenvolvimento de Novos Produtos',

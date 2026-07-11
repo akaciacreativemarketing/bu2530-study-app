@@ -1,36 +1,20 @@
 /* ─── State ─────────────────────────────────────────────── */
-window.WEEKS = window.WEEKS || {};
-let lang = localStorage.getItem('bu2530-lang') || 'en';
+window.WEEKS_DATA = window.WEEKS_DATA || {};
+window.SUBJECTS = window.SUBJECTS || [];
+let lang = localStorage.getItem('uol-lang') || 'en';
+let currentSubject = null; // matéria ativa, definida pelo router
 
-const WEEK_META = {
-  1:  { part: 1, titlePt: 'O que é Gestão de Operações?',       titleEn: 'What is Operations Management?' },
-  2:  { part: 1, titlePt: 'Estratégia de Operações',            titleEn: 'Operations Strategy' },
-  3:  { part: 1, titlePt: 'Projetando Produtos e Serviços',     titleEn: 'Designing Products and Services' },
-  4:  { part: 1, titlePt: 'Design de Processos',                titleEn: 'Process Design' },
-  5:  { part: 1, titlePt: 'Design de Rede de Suprimentos',      titleEn: 'Supply Network Design' },
-  6:  { part: 1, titlePt: 'Gestão da Cadeia e Relacionamentos', titleEn: 'Supply Chain & Relationship Management' },
-  7:  { part: 1, titlePt: 'Gestão de Estoque',                  titleEn: 'Inventory Management' },
-  8:  { part: 1, titlePt: 'Operações Enxutas',                  titleEn: 'Lean Operations' },
-  9:  { part: 1, titlePt: 'Gestão da Qualidade',                titleEn: 'Quality Management' },
-  10: { part: 1, titlePt: 'Futuro da Gestão de Operações',      titleEn: 'Future Directions in Operations Management' },
-  11: { part: 2, titlePt: 'Auditoria do Ambiente de Marketing', titleEn: 'The Marketing Environmental Audit' },
-  12: { part: 2, titlePt: 'Auditoria Macro e Micro Ambiental',  titleEn: 'Macro & Micro Marketing Environmental Audit' },
-  13: { part: 2, titlePt: 'Segmentação, Alvo e Posicionamento', titleEn: 'Segmenting, Targeting and Positioning (STP)' },
-  14: { part: 2, titlePt: 'Branding',                           titleEn: 'Branding' },
-  15: { part: 2, titlePt: 'Branding Interno e Externo',         titleEn: 'Internal and External Branding' },
-  16: { part: 2, titlePt: 'Mix de Marketing Tradicional — 4Ps', titleEn: 'The Traditional Marketing Mix — the 4Ps' },
-  17: { part: 2, titlePt: 'Mix de Marketing Estendido — 7Ps',   titleEn: 'The Extended Marketing Mix — the 7Ps' },
-  18: { part: 2, titlePt: 'Marketing na Era Digital',           titleEn: 'Marketing in the Digital Age' },
-  19: { part: 2, titlePt: 'Cadeia de Valor de Porter',          titleEn: "Porter's Value Chain" },
-  20: { part: 2, titlePt: 'Marketing Ético e RSC',              titleEn: 'Ethical Marketing and CSR' },
-};
+function getSubject(id) {
+  return window.SUBJECTS.find(s => s.id === id) || null;
+}
 
-const REVIEWS = [
-  { id: 'r1', range: [1,5],   labelPt: '📋 Revisão — Semanas 1–5',  labelEn: '📋 Review — Weeks 1–5',   after: 5  },
-  { id: 'r2', range: [6,10],  labelPt: '📋 Revisão — Semanas 6–10', labelEn: '📋 Review — Weeks 6–10',  after: 10 },
-  { id: 'r3', range: [11,15], labelPt: '📋 Revisão — Sem. 11–15',   labelEn: '📋 Review — Weeks 11–15', after: 15 },
-  { id: 'r4', range: [16,20], labelPt: '📋 Revisão — Sem. 16–20',   labelEn: '📋 Review — Weeks 16–20', after: 20 },
-];
+function getWeek(subjectId, num) {
+  return (window.WEEKS_DATA[subjectId] || {})[num];
+}
+
+function subjectWeekNums(subject) {
+  return Array.from({ length: subject.totalWeeks }, (_, i) => i + 1);
+}
 
 const SECTION_DEFS = [
   { key: 'overview',    icon: '📋', pt: 'Visão Geral',           en: 'Overview'               },
@@ -57,8 +41,8 @@ const XP_LEVELS = [
   { min:2200, name:{ pt:'CMO',                         en:'CMO'                } },
 ];
 
-function getXP() { return parseInt(localStorage.getItem('bu2530-xp') || '0'); }
-function setXP(v) { localStorage.setItem('bu2530-xp', String(Math.max(0, v))); }
+function getXP() { return parseInt(localStorage.getItem('uol-xp') || '0'); }
+function setXP(v) { localStorage.setItem('uol-xp', String(Math.max(0, v))); }
 function addXP(n) { setXP(getXP() + n); updateXPBar(); }
 
 function getLevelInfo(xp) {
@@ -109,23 +93,31 @@ function updateXPBar() {
 }
 
 /* ─── Achievements ──────────────────────────────────────── */
+function countDoneWeeks() {
+  let n = 0;
+  for (const s of window.SUBJECTS) {
+    for (const w of subjectWeekNums(s)) if (weekStatus(s.id, w) === 'done') n++;
+  }
+  return n;
+}
+
 const ACHIEVEMENTS = [
-  { id: 'first_step',  icon: '🚀', pt: 'Primeiro Passo',      en: 'First Step',        check: () => weekStatus(1) === 'done' },
-  { id: 'strategist',  icon: '♟️', pt: 'Estrategista',         en: 'Strategist',        check: () => weekStatus(2) === 'done' },
-  { id: 'ops_master',  icon: '⚙️', pt: 'Mestre de Operações', en: 'Ops Master',        check: () => [1,2,3,4,5,6,7,8,9,10].every(n => weekStatus(n) === 'done') },
-  { id: 'flashcard',   icon: '🃏', pt: 'Flashcard Pro',        en: 'Flashcard Pro',     check: () => parseInt(localStorage.getItem('bu2530-fc-count') || '0') >= 50 },
-  { id: 'bilingual',   icon: '🌍', pt: 'Bilíngue',             en: 'Bilingual',         check: () => parseInt(localStorage.getItem('bu2530-lang-toggle') || '0') >= 5 },
-  { id: 'cmo',         icon: '👑', pt: 'CMO',                  en: 'CMO',               check: () => getXP() >= 2200 },
+  { id: 'first_step',     icon: '🚀', pt: 'Primeiro Passo',    en: 'First Step',      check: () => countDoneWeeks() >= 1 },
+  { id: 'strategist',     icon: '♟️', pt: 'Estrategista',       en: 'Strategist',      check: () => countDoneWeeks() >= 5 },
+  { id: 'subject_master', icon: '🎓', pt: 'Matéria Completa',   en: 'Subject Master',  check: () => window.SUBJECTS.some(s => subjectWeekNums(s).every(n => weekStatus(s.id, n) === 'done')) },
+  { id: 'flashcard',      icon: '🃏', pt: 'Flashcard Pro',      en: 'Flashcard Pro',   check: () => parseInt(localStorage.getItem('uol-fc-count') || '0') >= 50 },
+  { id: 'bilingual',      icon: '🌍', pt: 'Bilíngue',           en: 'Bilingual',       check: () => parseInt(localStorage.getItem('uol-lang-toggle') || '0') >= 5 },
+  { id: 'cmo',            icon: '👑', pt: 'CMO',                en: 'CMO',             check: () => getXP() >= 2200 },
 ];
 
 function trackFcScore() {
-  const n = parseInt(localStorage.getItem('bu2530-fc-count') || '0') + 1;
-  localStorage.setItem('bu2530-fc-count', String(n));
+  const n = parseInt(localStorage.getItem('uol-fc-count') || '0') + 1;
+  localStorage.setItem('uol-fc-count', String(n));
 }
 
 function trackLangToggle() {
-  const n = parseInt(localStorage.getItem('bu2530-lang-toggle') || '0') + 1;
-  localStorage.setItem('bu2530-lang-toggle', String(n));
+  const n = parseInt(localStorage.getItem('uol-lang-toggle') || '0') + 1;
+  localStorage.setItem('uol-lang-toggle', String(n));
 }
 
 /* ─── Toast + Confetti ──────────────────────────────────── */
@@ -159,18 +151,19 @@ function t(obj) {
   return lang === 'en' ? (obj.en || obj.pt || '') : (obj.pt || obj.en || '');
 }
 
-function weekTitle(num) {
-  const w = window.WEEKS[num];
+function weekTitle(subjectId, num) {
+  const w = getWeek(subjectId, num);
   if (w && w.title) return t(w.title);
-  const m = WEEK_META[num];
-  if (!m) return `Week ${num}`;
-  return lang === 'en' ? m.titleEn : m.titlePt;
+  const s = getSubject(subjectId);
+  const meta = s && s.weekTitles && s.weekTitles[num];
+  return meta ? t(meta) : `Week ${num}`;
 }
 
-function weekStatus(num) {
-  const ls = localStorage.getItem(`bu2530-week-${num}-status`);
+function weekStatus(subjectId, num) {
+  const ls = localStorage.getItem(`uol-${subjectId}-week-${num}-status`);
   if (ls) return ls;
-  return (window.WEEKS[num] && window.WEEKS[num].status) || 'not-started';
+  const w = getWeek(subjectId, num);
+  return (w && w.status) || 'not-started';
 }
 
 function statusLabel(s) {
@@ -190,14 +183,14 @@ function initials(name) {
   return name.split(' ').filter(Boolean).map(p => p[0]).join('').slice(0, 2).toUpperCase();
 }
 
-function isWeekPopulated(num) {
-  const w = window.WEEKS[num];
+function isWeekPopulated(subjectId, num) {
+  const w = getWeek(subjectId, num);
   if (!w) return false;
   return !!(w.overview || w.concepts?.length || w.theories?.length || w.caseStudies?.length);
 }
 
-function getAvailableSections(num) {
-  const w = window.WEEKS[num];
+function getAvailableSections(subjectId, num) {
+  const w = getWeek(subjectId, num);
   if (!w) return [];
   const keys = [];
   if (w.overview)            keys.push('overview');
@@ -214,29 +207,29 @@ function getAvailableSections(num) {
 }
 
 /* ─── Section Progress ───────────────────────────────────── */
-function getSectionState(weekNum) {
-  try { return JSON.parse(localStorage.getItem(`bu2530-sections-${weekNum}`)) || {}; }
+function getSectionState(subjectId, weekNum) {
+  try { return JSON.parse(localStorage.getItem(`uol-${subjectId}-sections-${weekNum}`)) || {}; }
   catch { return {}; }
 }
 
-function checkWeekCompletion(weekNum, state) {
-  const available = getAvailableSections(weekNum);
+function checkWeekCompletion(subjectId, weekNum, state) {
+  const available = getAvailableSections(subjectId, weekNum);
   if (!available.length) return;
   const allDone = available.every(k => state[k]);
   const anyDone = available.some(k => state[k]);
   if (allDone) {
-    localStorage.setItem(`bu2530-week-${weekNum}-status`, 'done');
+    localStorage.setItem(`uol-${subjectId}-week-${weekNum}-status`, 'done');
   } else if (anyDone) {
-    localStorage.setItem(`bu2530-week-${weekNum}-status`, 'in-progress');
+    localStorage.setItem(`uol-${subjectId}-week-${weekNum}-status`, 'in-progress');
   } else {
-    localStorage.removeItem(`bu2530-week-${weekNum}-status`);
+    localStorage.removeItem(`uol-${subjectId}-week-${weekNum}-status`);
   }
 }
 
 /* ─── Language Toggle ───────────────────────────────────── */
 function toggleLang() {
   lang = lang === 'pt' ? 'en' : 'pt';
-  localStorage.setItem('bu2530-lang', lang);
+  localStorage.setItem('uol-lang', lang);
   trackLangToggle();
   document.getElementById('langFlag').textContent = lang === 'pt' ? '🇧🇷' : '🇬🇧';
   document.getElementById('langText').textContent = lang === 'pt' ? 'PT+EN' : 'EN';
@@ -247,45 +240,64 @@ function toggleLang() {
 /* ─── Sidebar ───────────────────────────────────────────── */
 function renderSidebar() {
   updateXPBar();
-  const hash = window.location.hash || '#dashboard';
+  const hash = window.location.hash || '#home';
   const nav = document.getElementById('sidebarNav');
   const footer = document.getElementById('sidebarFooter');
   const pt1 = lang === 'pt';
 
-  const ops = Object.keys(WEEK_META).map(Number).filter(n => WEEK_META[n].part === 1);
-  const mkt = Object.keys(WEEK_META).map(Number).filter(n => WEEK_META[n].part === 2);
+  if (currentSubject) {
+    const s = currentSubject;
 
-  function reviewAfter(n) {
-    const r = REVIEWS.find(r => r.after === n);
-    if (!r) return '';
-    const h = `#${r.id}`;
-    return `<a href="${h}" class="nav-review ${hash === h ? 'active' : ''}">${pt1 ? r.labelPt : r.labelEn}</a>`;
-  }
+    function reviewAfter(n) {
+      const r = (s.reviews || []).find(r => r.after === n);
+      if (!r) return '';
+      const h = `#${s.id}/${r.id}`;
+      return `<a href="${h}" class="nav-review ${hash === h ? 'active' : ''}">${pt1 ? r.labelPt : r.labelEn}</a>`;
+    }
 
-  function weekItem(n) {
-    const h = `#week-${n}`;
-    const status = weekStatus(n);
-    return `
-      <a href="${h}" class="nav-week-item status-${status} ${hash === h ? 'active' : ''}">
-        <span class="nav-status-dot"></span>
-        <span class="nav-week-num">W${n}</span>
-        <span class="nav-week-title">${weekTitle(n)}</span>
-      </a>
-      ${reviewAfter(n)}
+    function weekItem(n) {
+      const h = `#${s.id}/week-${n}`;
+      const status = weekStatus(s.id, n);
+      return `
+        <a href="${h}" class="nav-week-item status-${status} ${hash === h ? 'active' : ''}">
+          <span class="nav-status-dot"></span>
+          <span class="nav-week-num">W${n}</span>
+          <span class="nav-week-title">${weekTitle(s.id, n)}</span>
+        </a>
+        ${reviewAfter(n)}
+      `;
+    }
+
+    nav.innerHTML = `
+      <div class="nav-home">
+        <a href="#home">← ${pt1 ? 'Todas as matérias' : 'All subjects'}</a>
+      </div>
+      <div class="nav-section-header">${s.icon} ${t(s.name)}</div>
+      ${subjectWeekNums(s).map(weekItem).join('')}
+    `;
+  } else {
+    const items = window.SUBJECTS.map(s => {
+      const done = subjectWeekNums(s).filter(n => weekStatus(s.id, n) === 'done').length;
+      const h = `#${s.id}`;
+      return `
+        <a href="${h}" class="nav-week-item ${hash === h ? 'active' : ''}">
+          <span class="nav-week-num">${s.icon}</span>
+          <span class="nav-week-title">${t(s.name)}</span>
+          <span style="margin-left:auto;font-size:10px;opacity:.7;flex-shrink:0;">${done}/${s.totalWeeks}</span>
+        </a>
+      `;
+    }).join('');
+
+    nav.innerHTML = `
+      <div class="nav-home">
+        <a href="#home" class="${(hash === '#home' || hash === '' || hash === '#dashboard') ? 'active' : ''}">
+          🏠 Dashboard
+        </a>
+      </div>
+      <div class="nav-section-header">${pt1 ? 'Matérias' : 'Subjects'}</div>
+      ${items}
     `;
   }
-
-  nav.innerHTML = `
-    <div class="nav-home">
-      <a href="#dashboard" class="${(hash === '#dashboard' || hash === '') ? 'active' : ''}">
-        🏠 Dashboard
-      </a>
-    </div>
-    <div class="nav-section-header">${pt1 ? 'Gestão de Operações' : 'Operations Management'}</div>
-    ${ops.map(weekItem).join('')}
-    <div class="nav-section-header" style="margin-top:10px">${pt1 ? 'Estratégia de Marketing' : 'Marketing Strategy'}</div>
-    ${mkt.map(weekItem).join('')}
-  `;
 
   footer.innerHTML = pt1
     ? `Desenvolvido por João Rodrigues<br>Marketing BSc · University of London`
@@ -336,12 +348,12 @@ function toggleSection(e, key, weekNum) {
 
 function toggleOk(e, key, weekNum) {
   e.stopPropagation();
-  const state = getSectionState(weekNum);
+  const state = getSectionState(currentSubject.id, weekNum);
   const wasDone = !!state[key];
-  const prevStatus = weekStatus(weekNum);
+  const prevStatus = weekStatus(currentSubject.id, weekNum);
 
   state[key] = !state[key];
-  localStorage.setItem(`bu2530-sections-${weekNum}`, JSON.stringify(state));
+  localStorage.setItem(`uol-${currentSubject.id}-sections-${weekNum}`, JSON.stringify(state));
 
   const sec = document.getElementById(`sec-${weekNum}-${key}`);
   const btn = sec && sec.querySelector('.ok-btn');
@@ -364,11 +376,11 @@ function toggleOk(e, key, weekNum) {
     addXP(-10);
   }
 
-  checkWeekCompletion(weekNum, state);
+  checkWeekCompletion(currentSubject.id, weekNum, state);
   updateProgressRow(weekNum, state);
   renderSidebar();
 
-  const newStatus = weekStatus(weekNum);
+  const newStatus = weekStatus(currentSubject.id, weekNum);
   if (newStatus === 'done' && prevStatus !== 'done') {
     addXP(50);
     launchConfetti();
@@ -377,7 +389,7 @@ function toggleOk(e, key, weekNum) {
 }
 
 function updateProgressRow(weekNum, state) {
-  const available = getAvailableSections(weekNum);
+  const available = getAvailableSections(currentSubject.id, weekNum);
   const done = available.filter(k => state[k]).length;
   const el = document.getElementById(`prog-fill-${weekNum}`);
   const txt = document.getElementById(`prog-text-${weekNum}`);
@@ -385,41 +397,35 @@ function updateProgressRow(weekNum, state) {
   if (txt) txt.textContent = lang === 'pt' ? `${done}/${available.length} seções` : `${done}/${available.length} sections`;
 }
 
-/* ─── Dashboard ─────────────────────────────────────────── */
-function renderDashboard() {
-  const total = 20;
-  const done = Object.keys(WEEK_META).filter(n => weekStatus(+n) === 'done').length;
-  const inProg = Object.keys(WEEK_META).filter(n => weekStatus(+n) === 'in-progress').length;
-  const notStarted = total - done - inProg;
-  const ops = Object.keys(WEEK_META).map(Number).filter(n => WEEK_META[n].part === 1);
-  const mkt = Object.keys(WEEK_META).map(Number).filter(n => WEEK_META[n].part === 2);
+/* ─── Home (todas as matérias) ──────────────────────────── */
+function renderHome() {
   const pt1 = lang === 'pt';
+  const subjects = window.SUBJECTS;
+  const totalWeeks = subjects.reduce((a, s) => a + s.totalWeeks, 0);
+  const done = countDoneWeeks();
+  let inProg = 0;
+  for (const s of subjects) for (const n of subjectWeekNums(s)) if (weekStatus(s.id, n) === 'in-progress') inProg++;
+  const notStarted = totalWeeks - done - inProg;
 
-  const pct = Math.round((done / total) * 100);
+  const pct = totalWeeks ? Math.round((done / totalWeeks) * 100) : 0;
   const r = 28, sz = (r + 5) * 2;
   const circumference = 2 * Math.PI * r;
   const offset = circumference - (pct / 100) * circumference;
 
-  function weekCard(n) {
-    const status = weekStatus(n);
+  const subjectCards = subjects.map(s => {
+    const sDone = subjectWeekNums(s).filter(n => weekStatus(s.id, n) === 'done').length;
+    const sPct = Math.round((sDone / s.totalWeeks) * 100);
     return `
-      <div class="week-card status-${status}" onclick="navigate('#week-${n}')">
-        <div class="week-card-num">Week ${n}</div>
-        <div class="week-card-title">${weekTitle(n)}</div>
-        <div class="week-badge ${statusBadgeClass(status)}">${statusLabel(status)}</div>
-      </div>`;
-  }
-
-  function reviewCard(r) {
-    return `
-      <div class="week-card review-card" onclick="navigate('#${r.id}')">
-        <div class="week-card-num">📋 ${pt1 ? 'Revisão' : 'Review'}</div>
-        <div class="week-card-title">${(pt1 ? r.labelPt : r.labelEn).replace('📋 ', '')}</div>
-        <div class="week-badge" style="background:rgba(255,255,255,.15);color:#fff;font-size:10px;">
-          ${pt1 ? 'Semanas' : 'Weeks'} ${r.range[0]}–${r.range[1]}
+      <div class="week-card" onclick="navigate('#${s.id}')" style="border-top:3px solid ${s.color};">
+        <div class="week-card-num">${s.icon} ${s.code}</div>
+        <div class="week-card-title">${t(s.name)}</div>
+        <div style="font-size:11px;color:var(--text-mid);margin:6px 0 10px;line-height:1.5;">${t(s.description)}</div>
+        <div class="week-prog-bar" style="background:rgba(0,0,0,.08);">
+          <div class="week-prog-fill" style="width:${sPct}%;background:${s.color};"></div>
         </div>
+        <div style="font-size:11px;font-weight:700;color:var(--text-mid);margin-top:6px;">${sDone}/${s.totalWeeks} ${pt1 ? 'semanas' : 'weeks'} · ${sPct}%</div>
       </div>`;
-  }
+  }).join('');
 
   const achievementsHtml = ACHIEVEMENTS.map(a => {
     const unlocked = a.check();
@@ -433,11 +439,102 @@ function renderDashboard() {
   document.getElementById('mainContent').innerHTML = `
     <div class="dash-hero">
       <div class="dash-eyebrow">University of London · Coursera</div>
-      <div class="dash-title">BU2530</div>
+      <div class="dash-title">${pt1 ? 'Central de Estudos' : 'Study Hub'}</div>
       <div class="dash-desc">${pt1
-        ? 'Gestão de Operações e Estratégia de Marketing. Explore cada semana no seu ritmo — conceitos, teorias, casos e flashcards.'
-        : 'Operations Management and Marketing Strategy. Explore each week at your own pace — concepts, theories, cases and flashcards.'
+        ? 'Todas as suas matérias num só lugar. Escolha uma matéria e explore cada semana no seu ritmo — conceitos, teorias, casos e flashcards.'
+        : 'All your subjects in one place. Pick a subject and explore each week at your own pace — concepts, theories, cases and flashcards.'
       }</div>
+    </div>
+
+    <div class="dash-stats">
+      <div class="stat-card">
+        <div class="stat-num">${subjects.length}</div>
+        <div class="stat-label">${pt1 ? 'Matérias' : 'Subjects'}</div>
+      </div>
+      <div class="stat-card green">
+        <div class="stat-num">${done}</div>
+        <div class="stat-label">${pt1 ? 'Semanas concluídas' : 'Weeks completed'}</div>
+      </div>
+      <div class="stat-card amber">
+        <div class="stat-num">${inProg}</div>
+        <div class="stat-label">${pt1 ? 'Em andamento' : 'In progress'}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">${notStarted}</div>
+        <div class="stat-label">${pt1 ? 'Não iniciadas' : 'Not started'}</div>
+      </div>
+    </div>
+
+    <div style="display:flex;align-items:center;gap:24px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:20px 24px;margin-bottom:32px;box-shadow:var(--shadow);">
+      <svg width="${sz}" height="${sz}" viewBox="0 0 ${sz} ${sz}">
+        <circle cx="${r+5}" cy="${r+5}" r="${r}" fill="none" stroke="var(--border)" stroke-width="5"/>
+        <circle cx="${r+5}" cy="${r+5}" r="${r}" fill="none" stroke="var(--blue)" stroke-width="5"
+          stroke-dasharray="${circumference}" stroke-dashoffset="${offset}"
+          stroke-linecap="round" transform="rotate(-90 ${r+5} ${r+5})"
+          style="transition:stroke-dashoffset 1s cubic-bezier(.4,0,.2,1)"/>
+        <text x="${r+5}" y="${r+5}" text-anchor="middle" dominant-baseline="central"
+          fill="var(--blue)" font-size="12" font-weight="900" font-family="-apple-system,sans-serif">${pct}%</text>
+      </svg>
+      <div>
+        <div style="font-size:13px;font-weight:800;color:var(--blue);margin-bottom:4px;">${pt1 ? 'Progresso Geral' : 'Overall Progress'}</div>
+        <div style="font-size:12px;color:var(--text-mid);">${done}/${totalWeeks} ${pt1 ? 'semanas concluídas' : 'weeks completed'}</div>
+      </div>
+      <div style="margin-left:auto;">
+        <div style="font-size:11px;font-weight:700;color:var(--text-lt);text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px;">${pt1 ? 'Conquistas' : 'Achievements'}</div>
+        <div class="achievement-grid" style="margin-top:0;">${achievementsHtml}</div>
+      </div>
+    </div>
+
+    <div class="part-header">
+      <div class="part-title">${pt1 ? 'Matérias' : 'Subjects'}</div>
+      <div class="part-line"></div>
+      <div class="part-badge">${subjects.length}</div>
+    </div>
+    <div class="week-grid">${subjectCards}</div>
+  `;
+  document.getElementById('mainContent').scrollTop = 0;
+}
+
+/* ─── Dashboard da matéria ──────────────────────────────── */
+function renderSubjectDashboard(s) {
+  const pt1 = lang === 'pt';
+  const nums = subjectWeekNums(s);
+  const total = nums.length;
+  const done = nums.filter(n => weekStatus(s.id, n) === 'done').length;
+  const inProg = nums.filter(n => weekStatus(s.id, n) === 'in-progress').length;
+  const notStarted = total - done - inProg;
+
+  const pct = Math.round((done / total) * 100);
+  const r = 28, sz = (r + 5) * 2;
+  const circumference = 2 * Math.PI * r;
+  const offset = circumference - (pct / 100) * circumference;
+
+  function weekCard(n) {
+    const status = weekStatus(s.id, n);
+    return `
+      <div class="week-card status-${status}" onclick="navigate('#${s.id}/week-${n}')">
+        <div class="week-card-num">Week ${n}</div>
+        <div class="week-card-title">${weekTitle(s.id, n)}</div>
+        <div class="week-badge ${statusBadgeClass(status)}">${statusLabel(status)}</div>
+      </div>`;
+  }
+
+  function reviewCard(rv) {
+    return `
+      <div class="week-card review-card" onclick="navigate('#${s.id}/${rv.id}')">
+        <div class="week-card-num">📋 ${pt1 ? 'Revisão' : 'Review'}</div>
+        <div class="week-card-title">${(pt1 ? rv.labelPt : rv.labelEn).replace('📋 ', '')}</div>
+        <div class="week-badge" style="background:rgba(255,255,255,.15);color:#fff;font-size:10px;">
+          ${pt1 ? 'Semanas' : 'Weeks'} ${rv.range[0]}–${rv.range[1]}
+        </div>
+      </div>`;
+  }
+
+  document.getElementById('mainContent').innerHTML = `
+    <div class="dash-hero">
+      <div class="dash-eyebrow">${s.code} · University of London</div>
+      <div class="dash-title">${t(s.name)}</div>
+      <div class="dash-desc">${t(s.description)}</div>
     </div>
 
     <div class="dash-stats">
@@ -462,54 +559,42 @@ function renderDashboard() {
     <div style="display:flex;align-items:center;gap:24px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:20px 24px;margin-bottom:32px;box-shadow:var(--shadow);">
       <svg width="${sz}" height="${sz}" viewBox="0 0 ${sz} ${sz}">
         <circle cx="${r+5}" cy="${r+5}" r="${r}" fill="none" stroke="var(--border)" stroke-width="5"/>
-        <circle cx="${r+5}" cy="${r+5}" r="${r}" fill="none" stroke="var(--blue)" stroke-width="5"
+        <circle cx="${r+5}" cy="${r+5}" r="${r}" fill="none" stroke="${s.color || 'var(--blue)'}" stroke-width="5"
           stroke-dasharray="${circumference}" stroke-dashoffset="${offset}"
           stroke-linecap="round" transform="rotate(-90 ${r+5} ${r+5})"
           style="transition:stroke-dashoffset 1s cubic-bezier(.4,0,.2,1)"/>
         <text x="${r+5}" y="${r+5}" text-anchor="middle" dominant-baseline="central"
-          fill="var(--blue)" font-size="12" font-weight="900" font-family="-apple-system,sans-serif">${pct}%</text>
+          fill="${s.color || 'var(--blue)'}" font-size="12" font-weight="900" font-family="-apple-system,sans-serif">${pct}%</text>
       </svg>
       <div>
-        <div style="font-size:13px;font-weight:800;color:var(--blue);margin-bottom:4px;">${pt1 ? 'Progresso do Curso' : 'Course Progress'}</div>
+        <div style="font-size:13px;font-weight:800;color:${s.color || 'var(--blue)'};margin-bottom:4px;">${pt1 ? 'Progresso da Matéria' : 'Subject Progress'}</div>
         <div style="font-size:12px;color:var(--text-mid);">${done}/${total} ${pt1 ? 'semanas concluídas' : 'weeks completed'}</div>
       </div>
-      <div style="margin-left:auto;">
-        <div style="font-size:11px;font-weight:700;color:var(--text-lt);text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px;">${pt1 ? 'Conquistas' : 'Achievements'}</div>
-        <div class="achievement-grid" style="margin-top:0;">${achievementsHtml}</div>
-      </div>
     </div>
 
     <div class="part-header">
-      <div class="part-title">${pt1 ? 'Parte 1 — Gestão de Operações' : 'Part 1 — Operations Management'}</div>
+      <div class="part-title">${pt1 ? 'Semanas' : 'Weeks'}</div>
       <div class="part-line"></div>
-      <div class="part-badge">${pt1 ? 'Semanas 1–10' : 'Weeks 1–10'}</div>
+      <div class="part-badge">${pt1 ? `Semanas 1–${total}` : `Weeks 1–${total}`}</div>
     </div>
-    <div class="week-grid">${ops.map(weekCard).join('')}${reviewCard(REVIEWS[0])}${reviewCard(REVIEWS[1])}</div>
-
-    <div class="part-header">
-      <div class="part-title">${pt1 ? 'Parte 2 — Estratégia de Marketing' : 'Part 2 — Marketing Strategy'}</div>
-      <div class="part-line"></div>
-      <div class="part-badge">${pt1 ? 'Semanas 11–20' : 'Weeks 11–20'}</div>
-    </div>
-    <div class="week-grid">${mkt.map(weekCard).join('')}${reviewCard(REVIEWS[2])}${reviewCard(REVIEWS[3])}</div>
+    <div class="week-grid">${nums.map(weekCard).join('')}${(s.reviews || []).map(reviewCard).join('')}</div>
   `;
+  document.getElementById('mainContent').scrollTop = 0;
 }
 
 /* ─── Week Page ─────────────────────────────────────────── */
 function renderWeek(num) {
-  const w = window.WEEKS[num];
-  const meta = WEEK_META[num];
-  const title = weekTitle(num);
-  const status = weekStatus(num);
+  const sid = currentSubject.id;
+  const w = getWeek(sid, num);
+  const title = weekTitle(sid, num);
+  const status = weekStatus(sid, num);
   const pt1 = lang === 'pt';
-  const state = getSectionState(num);
-  const available = getAvailableSections(num);
+  const state = getSectionState(sid, num);
+  const available = getAvailableSections(sid, num);
   const doneCount = available.filter(k => state[k]).length;
   const pct = available.length ? Math.round((doneCount / available.length) * 100) : 0;
 
-  const partLabel = pt1
-    ? (meta?.part === 1 ? 'Gestão de Operações' : 'Estratégia de Marketing')
-    : (meta?.part === 1 ? 'Operations Management' : 'Marketing Strategy');
+  const partLabel = t(currentSubject.name);
 
   let html = `
     <div class="week-hero">
@@ -529,7 +614,7 @@ function renderWeek(num) {
     </div>
   `;
 
-  if (!w || !isWeekPopulated(num)) {
+  if (!w || !isWeekPopulated(sid, num)) {
     html += `
       <div class="empty-week">
         <div class="empty-icon">📭</div>
@@ -593,7 +678,7 @@ function renderConceptsBody(concepts, weekNum) {
 }
 
 function selectConcept(weekNum, idx) {
-  const w = window.WEEKS[weekNum];
+  const w = getWeek(currentSubject.id, weekNum);
   if (!w?.concepts) return;
   const isSame = currentConcept[weekNum] === idx;
   currentConcept[weekNum] = isSame ? -1 : idx;
@@ -939,7 +1024,7 @@ function renderConnectionsBody(connections) {
   return `
     <div class="connection-list">
       ${connections.map(c => `
-        <div class="connection-item" onclick="navigate('#week-${c.week}')">
+        <div class="connection-item" onclick="navigate('#${c.subject || currentSubject.id}/week-${c.week}')">
           <span class="connection-week-badge">Week ${c.week}</span>
           <span class="connection-reason">${t(c.reason)}</span>
           <span class="connection-arrow">→</span>
@@ -1048,22 +1133,21 @@ function renderNotesBody(notes) {
 }
 
 /* ─── Review Pages ──────────────────────────────────────── */
-const REVIEW_FC_NUMS = { r1: 101, r2: 102, r3: 103, r4: 104 };
-
 function renderReview(reviewId) {
-  const r = REVIEWS.find(x => x.id === reviewId);
+  const s = currentSubject;
+  const r = (s.reviews || []).find(x => x.id === reviewId);
   if (!r) return;
   const pt1 = lang === 'pt';
   const [from, to] = r.range;
   const weeks = Array.from({ length: to - from + 1 }, (_, i) => from + i);
-  const fakeWeekNum = REVIEW_FC_NUMS[reviewId] || 100;
+  const fakeWeekNum = 100 + window.SUBJECTS.indexOf(s) * 10 + s.reviews.indexOf(r);
   let allFlashcards = [];
 
   const weekBlocks = weeks.map(n => {
-    const w = window.WEEKS[n];
-    const title = weekTitle(n);
+    const w = getWeek(s.id, n);
+    const title = weekTitle(s.id, n);
     if (w?.flashcards) allFlashcards.push(...w.flashcards);
-    if (!isWeekPopulated(n)) {
+    if (!isWeekPopulated(s.id, n)) {
       return `<div class="review-week-block">
         <div class="review-week-label">Week ${n} — ${title}</div>
         <div class="review-empty">${pt1 ? 'Conteúdo não adicionado ainda' : 'Content not yet added'}</div>
@@ -1110,22 +1194,80 @@ function navigate(hash) { window.location.hash = hash; }
 
 /* ─── Router ────────────────────────────────────────────── */
 function route() {
-  const hash = window.location.hash || '#dashboard';
-  renderSidebar();
-  if (hash === '#dashboard' || hash === '') {
-    renderDashboard();
-  } else if (hash.startsWith('#week-')) {
-    const num = parseInt(hash.replace('#week-', ''));
-    if (!isNaN(num)) renderWeek(num);
-  } else if (hash.startsWith('#r')) {
-    renderReview(hash.replace('#', ''));
-  } else {
-    renderDashboard();
+  let hash = (window.location.hash || '#home').replace(/^#/, '');
+
+  // Hashes do formato antigo mono-matéria (#week-N, #rN) → redireciona
+  const legacyWeek = hash.match(/^week-(\d+)$/);
+  const legacyReview = hash.match(/^r(\d)$/);
+  if (legacyWeek) {
+    const n = parseInt(legacyWeek[1]);
+    window.location.hash = n <= 10
+      ? `#operations-management/week-${n}`
+      : `#marketing-strategy/week-${n - 10}`;
+    return;
   }
+  if (legacyReview) {
+    const n = parseInt(legacyReview[1]);
+    window.location.hash = n <= 2
+      ? `#operations-management/r${n}`
+      : `#marketing-strategy/r${n - 2}`;
+    return;
+  }
+
+  const [first, second] = hash.split('/');
+  const subject = getSubject(first);
+
+  if (!subject) {
+    currentSubject = null;
+    renderSidebar();
+    renderHome();
+    return;
+  }
+
+  currentSubject = subject;
+  renderSidebar();
+  if (!second) {
+    renderSubjectDashboard(subject);
+  } else if (second.startsWith('week-')) {
+    const num = parseInt(second.replace('week-', ''));
+    if (!isNaN(num)) renderWeek(num);
+    else renderSubjectDashboard(subject);
+  } else if (second.startsWith('r')) {
+    renderReview(second);
+  } else {
+    renderSubjectDashboard(subject);
+  }
+}
+
+/* ─── Migração de dados antigos (formato mono-matéria) ──── */
+function migrateLegacyStorage() {
+  if (localStorage.getItem('uol-migrated')) return;
+  const simple = {
+    'bu2530-lang':        'uol-lang',
+    'bu2530-xp':          'uol-xp',
+    'bu2530-fc-count':    'uol-fc-count',
+    'bu2530-lang-toggle': 'uol-lang-toggle',
+  };
+  for (const [oldKey, newKey] of Object.entries(simple)) {
+    const v = localStorage.getItem(oldKey);
+    if (v !== null && localStorage.getItem(newKey) === null) localStorage.setItem(newKey, v);
+  }
+  // Semanas 1–10 = operations-management · 11–20 = marketing-strategy (renumeradas 1–10)
+  for (let n = 1; n <= 20; n++) {
+    const subj = n <= 10 ? 'operations-management' : 'marketing-strategy';
+    const wk = n <= 10 ? n : n - 10;
+    const st = localStorage.getItem(`bu2530-week-${n}-status`);
+    if (st !== null) localStorage.setItem(`uol-${subj}-week-${wk}-status`, st);
+    const sec = localStorage.getItem(`bu2530-sections-${n}`);
+    if (sec !== null) localStorage.setItem(`uol-${subj}-sections-${wk}`, sec);
+  }
+  localStorage.setItem('uol-migrated', '1');
+  lang = localStorage.getItem('uol-lang') || lang;
 }
 
 /* ─── Init ──────────────────────────────────────────────── */
 function init() {
+  migrateLegacyStorage();
   document.getElementById('langFlag').textContent = lang === 'pt' ? '🇧🇷' : '🇬🇧';
   document.getElementById('langText').textContent = lang === 'pt' ? 'PT+EN' : 'EN';
   updateXPBar();

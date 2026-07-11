@@ -1,7 +1,7 @@
-window.WEEKS = window.WEEKS || {};
-window.WEEKS[1] = {
+window.WEEKS_DATA = window.WEEKS_DATA || {};
+window.WEEKS_DATA['operations-management'] = window.WEEKS_DATA['operations-management'] || {};
+window.WEEKS_DATA['operations-management'][1] = {
   week: 1,
-  part: 1,
   status: 'done',
   title: {
     pt: 'O que é Gestão de Operações?',
