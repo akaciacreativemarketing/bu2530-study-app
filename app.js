@@ -757,6 +757,11 @@ const VIS_DISPATCH = {
   'qpSystems':           true,
   'mrpTree':             true,
   'abcAnalysis':         true,
+  // Week 8
+  'leanElements':        true,
+  'sevenWastes':         true,
+  'fiveS':               true,
+  'kanbanPull':          true,
 };
 
 function renderTheoryCard(th) {

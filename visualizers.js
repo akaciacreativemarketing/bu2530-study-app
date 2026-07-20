@@ -2273,3 +2273,134 @@ window.vis_abcAnalysis = function(container, lang) {
       <div style="margin-top:7px;font-size:7.5px;color:#64748B;line-height:1.5;">${pt?'Poucos itens vitais (A) valem quase tudo. Foque o esforço de controle onde o dinheiro está.':'A vital few items (A) are worth almost everything. Focus control effort where the money is.'}</div>
     </div>`;
 };
+
+/* ─── WEEK 8: Elements of the Lean System (Figure 10.4) ─────────── */
+window.vis_leanElements = function(container, lang) {
+  const pt = lang === 'pt';
+  const id = 'lean-' + Math.random().toString(36).substr(2,5);
+  const els = [
+    { icon:'🌊', color:'#0891B2', name:pt?'Fluxo':'Flow', detail:pt?'JIT, kanban, produção balanceada. O material flui sem paradas nem acúmulo.':'JIT, kanban, balanced production. Material flows without stops or build-up.' },
+    { icon:'✅', color:'#15803D', name:pt?'Controle de Qualidade':'Quality Control', detail:pt?'Altos níveis de qualidade + kaizen (melhoria contínua). É a base do cone de areia.':'High quality levels + kaizen (continuous improvement). The base of the sand cone.' },
+    { icon:'📦', color:'#B45309', name:pt?'Cuidado com o Produto':'Product Stewardship', detail:pt?'Design adequado e marketing conforme os planos de produção.':'Suitable design and marketing to production plans.' },
+    { icon:'👥', color:'#7C3AED', name:pt?'Envolvimento dos Funcionários':'Employee Involvement', detail:pt?'Senioridade, trabalho em equipe e organização de trabalho adequada.':'Seniority, teamwork and suitable work organization.' },
+    { icon:'🤝', color:'#DC2626', name:pt?'Trabalho com Fornecedores':'Working With Suppliers', detail:pt?'Lead times curtos e relações de longo prazo com os fornecedores.':'Short supplier lead times and long-term relationships.' },
+    { icon:'⚡', color:'#0369A1', name:pt?'Foco em Set-ups':'Focus On Set-ups', detail:pt?'Baixo custo e tempo de preparação (SMED, Shingo) → viabiliza lotes pequenos.':'Low set-up cost and time (SMED, Shingo) → makes small batches viable.' }
+  ];
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#003865;margin-bottom:3px;">
+        ${pt?'Elementos do Sistema Lean (Fig. 10.4)':'Elements of the Lean System (Fig. 10.4)'}
+      </div>
+      <div style="font-size:7.5px;color:#64748B;margin-bottom:8px;">${pt?'Todos são necessários e só funcionam JUNTOS. Clique para ver.':'All are needed and only work TOGETHER. Click to see.'}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;">
+        ${els.map((e,i)=>`
+          <div onclick="var b=document.getElementById('${id}-body');var was=b.getAttribute('data-i')=='${i}';document.querySelectorAll('.${id}-c').forEach(function(c){c.style.outline='none';});if(was){b.style.display='none';b.setAttribute('data-i','');}else{this.style.outline='2px solid ${e.color}';b.style.display='block';b.setAttribute('data-i','${i}');document.getElementById('${id}-t').textContent='${e.icon} '+'${e.name.replace(/'/g,"\\'")}';document.getElementById('${id}-t').style.color='${e.color}';document.getElementById('${id}-d').textContent='${e.detail.replace(/'/g,"\\'")}';}"
+            class="${id}-c" style="background:${e.color}0D;border:1px solid ${e.color}33;border-radius:6px;padding:7px 8px;cursor:pointer;transition:outline .12s;">
+            <div style="font-size:13px;">${e.icon}</div>
+            <div style="font-size:8px;font-weight:800;color:${e.color};line-height:1.25;margin-top:2px;">${e.name}</div>
+          </div>`).join('')}
+      </div>
+      <div style="text-align:center;margin:7px 0;">
+        <span style="display:inline-block;background:#FEE2E2;border:1px solid #FCA5A5;border-radius:20px;padding:5px 14px;font-size:9px;font-weight:800;color:#B91C1C;">🎯 ${pt?'SISTEMA LEAN':'LEAN SYSTEM'}</span>
+        <div style="font-size:7px;color:#94A3B8;margin-top:3px;">${pt?'no centro, sustentando tudo: a QUALIDADE (cone de areia)':'at the centre, holding it all up: QUALITY (sand cone)'}</div>
+      </div>
+      <div id="${id}-body" data-i="" style="display:none;background:#fff;border:1px solid #E5E7EB;border-radius:7px;padding:9px 11px;">
+        <div id="${id}-t" style="font-size:10px;font-weight:800;margin-bottom:3px;"></div>
+        <div id="${id}-d" style="font-size:8.5px;color:#374151;line-height:1.6;"></div>
+      </div>
+    </div>`;
+};
+
+/* ─── WEEK 8: The 7 Wastes / Muda (Ohno) ────────────────────────── */
+window.vis_sevenWastes = function(container, lang) {
+  const pt = lang === 'pt';
+  const id = 'muda-' + Math.random().toString(36).substr(2,5);
+  const wastes = [
+    { L:'T', color:'#DC2626', name:pt?'Transporte':'Transport', ex:pt?'Mover produtos pela fábrica não agrega valor (exceto a entrega final).':'Moving products around adds no value (except final delivery).' },
+    { L:'I', color:'#EA580C', name:pt?'Estoque (Inventory)':'Inventory', ex:pt?'Produto parado esconde problemas e gera obsolescência.':'Idle product hides problems and causes obsolescence.' },
+    { L:'M', color:'#D97706', name:pt?'Movimento (Motion)':'Motion', ex:pt?'Pessoas ou equipamentos se movendo à toa.':'People or equipment moving needlessly.' },
+    { L:'W', color:'#65A30D', name:pt?'Espera (Waiting)':'Waiting', ex:pt?'Tempo ocioso esperando material, máquina ou informação.':'Idle time waiting for material, machine or information.' },
+    { L:'O', color:'#0891B2', name:pt?'Superprodução':'Overproduction', ex:pt?'⚠️ O PIOR: produzir antes do necessário gera os outros desperdícios.':'⚠️ THE WORST: making before it is needed generates the other wastes.' },
+    { L:'O', color:'#2563EB', name:pt?'Superprocessamento':'Overprocessing', ex:pt?'Equipamento complexo/caro demais para a tarefa. Toyota usa a máquina mais simples que serve.':'Equipment too complex/expensive for the task. Toyota uses the simplest machine that works.' },
+    { L:'D', color:'#7C3AED', name:pt?'Defeitos':'Defects', ex:pt?'Inspecionar e corrigir defeitos não agrega valor.':'Inspecting and fixing defects adds no value.' }
+  ];
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#003865;margin-bottom:2px;">
+        ${pt?'Os 7 Desperdícios (Muda) — Ohno':'The 7 Wastes (Muda) — Ohno'}
+      </div>
+      <div style="font-size:7.5px;color:#64748B;margin-bottom:8px;">${pt?'Mnemônico: <b>TIMWOOD</b>. Clique em cada letra.':'Mnemonic: <b>TIMWOOD</b>. Click each letter.'}</div>
+      <div style="display:flex;gap:3px;margin-bottom:8px;">
+        ${wastes.map((w,i)=>`
+          <div onclick="var b=document.getElementById('${id}-b');document.querySelectorAll('.${id}-l').forEach(function(x){x.style.transform='none';x.style.boxShadow='none';});this.style.transform='translateY(-2px)';this.style.boxShadow='0 3px 8px '+'${w.color}55';document.getElementById('${id}-n').textContent='${w.name.replace(/'/g,"\\'")}';document.getElementById('${id}-n').style.color='${w.color}';document.getElementById('${id}-e').textContent='${w.ex.replace(/'/g,"\\'")}';b.style.display='block';"
+            class="${id}-l" style="flex:1;background:${w.color};color:#fff;border-radius:6px;padding:9px 2px;text-align:center;font-size:14px;font-weight:900;cursor:pointer;transition:all .12s;">${w.L}</div>`).join('')}
+      </div>
+      <div id="${id}-b" style="display:none;background:#F8FAFC;border:1px solid #E5E7EB;border-radius:7px;padding:9px 11px;">
+        <div id="${id}-n" style="font-size:10px;font-weight:800;margin-bottom:3px;"></div>
+        <div id="${id}-e" style="font-size:8.5px;color:#374151;line-height:1.6;"></div>
+      </div>
+      <div style="margin-top:8px;background:#EEF2FF;border-radius:6px;padding:6px 9px;font-size:7.5px;color:#3730A3;line-height:1.55;">
+        💡 ${pt?'3 tipos de desperdício (Ohno): <b>muda</b> (não agrega valor), <b>muri</b> (sobrecarga), <b>mura</b> (desnivelamento). + 8º de Womack: subutilizar o talento das pessoas.':'3 types of waste (Ohno): <b>muda</b> (non-value-adding), <b>muri</b> (overburden), <b>mura</b> (unevenness). + Womack\'s 8th: underusing people\'s talent.'}
+      </div>
+    </div>`;
+};
+
+/* ─── WEEK 8: 5S Framework ──────────────────────────────────────── */
+window.vis_fiveS = function(container, lang) {
+  const pt = lang === 'pt';
+  const steps = [
+    { jp:'Seiri', en:'Sort', pt:'Utilização', color:'#DC2626', desc:pt?'Remover do local tudo que é desnecessário.':'Remove everything unnecessary from the workplace.' },
+    { jp:'Seiton', en:'Set in order', pt:'Organização', color:'#EA580C', desc:pt?'Lugar demarcado para cada coisa (chão pintado, áreas marcadas).':'A marked place for everything (painted floors, marked areas).' },
+    { jp:'Seiso', en:'Shine', pt:'Limpeza', color:'#CA8A04', desc:pt?'Manter o local limpo; gera ordem e orgulho no trabalho.':'Keep the place clean; it creates order and pride in the work.' },
+    { jp:'Seiketsu', en:'Standardize', pt:'Padronização', color:'#16A34A', desc:pt?'Compartilhar e desenvolver as melhores práticas padronizadas.':'Share and develop standardized best practices.' },
+    { jp:'Shitsuke', en:'Sustain', pt:'Disciplina', color:'#2563EB', desc:pt?'⭐ Manter os outros 4 — o passo mais difícil e o mais importante.':'⭐ Keep the other 4 going — the hardest and most important step.' }
+  ];
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#003865;margin-bottom:8px;">
+        ${pt?'Framework 5S — organização enxuta':'5S Framework — lean organization'}
+      </div>
+      <div style="display:flex;flex-direction:column;gap:5px;">
+        ${steps.map((s,i)=>`
+          <div style="display:flex;align-items:center;gap:9px;background:${s.color}0D;border-left:3px solid ${s.color};border-radius:6px;padding:7px 10px;">
+            <div style="width:20px;height:20px;flex-shrink:0;border-radius:50%;background:${s.color};color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:900;">${i+1}</div>
+            <div style="flex:1;">
+              <div style="font-size:9.5px;font-weight:800;color:${s.color};">${s.jp} <span style="font-weight:600;color:#475569;font-size:8px;">— ${s.en}${pt?' / '+s.pt:''}</span></div>
+              <div style="font-size:8px;color:#374151;line-height:1.45;margin-top:1px;">${s.desc}</div>
+            </div>
+          </div>`).join('')}
+      </div>
+      <div style="margin-top:7px;font-size:7.5px;color:#64748B;line-height:1.5;">${pt?'Aplica-se a produção E serviços (fábrica, escritório, hospital). Sem o 5º S (Disciplina), tudo volta ao caos.':'Applies to production AND services (factory, office, hospital). Without the 5th S (Sustain), everything returns to chaos.'}</div>
+    </div>`;
+};
+
+/* ─── WEEK 8: Push vs Pull & Kanban (Figures 10.2/10.3) ─────────── */
+window.vis_kanbanPull = function(container, lang) {
+  const pt = lang === 'pt';
+  const id = 'kb-' + Math.random().toString(36).substr(2,5);
+  const stations = pt ? ['Fornecedor','Estação A','Estação B','Montagem','Cliente'] : ['Supplier','Station A','Station B','Assembly','Customer'];
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#003865;margin-bottom:8px;">
+        ${pt?'Empurrar (push) vs Puxar (pull)':'Push vs Pull'}
+      </div>
+      <div style="margin-bottom:9px;">
+        <div style="font-size:8px;font-weight:800;color:#DC2626;margin-bottom:3px;">⬛ PUSH ${pt?'— plano central (MRP) empurra por previsão':'— central plan (MRP) pushes from forecast'}</div>
+        <div style="display:flex;align-items:center;gap:1px;">
+          ${stations.map((s,i)=>`<div style="flex:1;text-align:center;"><div style="background:#FCA5A5;color:#7F1D1D;font-size:6.5px;font-weight:700;border-radius:3px;padding:5px 1px;line-height:1.15;">${s}</div>${i<stations.length-1?'<div style="color:#DC2626;font-size:11px;font-weight:900;">▶</div>':''}</div>`).join('<div style="align-self:center;"></div>')}
+        </div>
+        <div style="font-size:6.5px;color:#94A3B8;text-align:center;margin-top:2px;">${pt?'material empurrado adiante → pode acumular estoque':'material pushed forward → can pile up stock'}</div>
+      </div>
+      <div>
+        <div style="font-size:8px;font-weight:800;color:#15803D;margin-bottom:3px;">🟩 PULL ${pt?'— demanda real puxa; a última estação responde primeiro':'— real demand pulls; last station responds first'}</div>
+        <div style="display:flex;align-items:center;gap:1px;">
+          ${stations.map((s,i)=>`<div style="flex:1;text-align:center;"><div style="background:#86EFAC;color:#14532D;font-size:6.5px;font-weight:700;border-radius:3px;padding:5px 1px;line-height:1.15;">${s}</div>${i<stations.length-1?'<div style="color:#15803D;font-size:11px;font-weight:900;">◀</div>':''}</div>`).join('<div style="align-self:center;"></div>')}
+        </div>
+        <div style="font-size:6.5px;color:#94A3B8;text-align:center;margin-top:2px;">${pt?'o pedido puxa para trás, via kanban → estoque quase zero':'the order pulls backwards, via kanban → near-zero stock'}</div>
+      </div>
+      <div style="margin-top:9px;background:#FFFBEB;border:1px solid #FDE68A;border-radius:7px;padding:8px 10px;">
+        <div style="font-size:8.5px;font-weight:800;color:#B45309;margin-bottom:2px;">🚩 ${pt?'Kanban — o sinal que puxa':'Kanban — the pulling signal'}</div>
+        <div style="font-size:8px;color:#78350F;line-height:1.55;">${pt?'Caixa vazia / cartão = "produza mais". Caixa cheia = pare. No McDonald\'s: a bandeirinha metálica na fila de lanches — ao chegar à frente, volta à cozinha pedindo mais.':'Empty box / card = "make more". Full box = stop. At McDonald\'s: the metal flag in the row of burgers — on reaching the front, it goes back to the kitchen for more.'}</div>
+      </div>
+    </div>`;
+};
