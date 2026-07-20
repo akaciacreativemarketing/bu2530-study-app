@@ -2404,3 +2404,156 @@ window.vis_kanbanPull = function(container, lang) {
       </div>
     </div>`;
 };
+
+/* ─── WEEK 9: Garvin's Dimensions of Quality ────────────────────── */
+window.vis_qualityDimensions = function(container, lang) {
+  const pt = lang === 'pt';
+  const id = 'qd-' + Math.random().toString(36).substr(2,5);
+  const dims = [
+    { icon:'⚙️', name:pt?'Desempenho':'Performance', ex:pt?'As características operacionais primárias. Ex num carro: aceleração, consumo, conforto.':'The primary operating characteristics. E.g. in a car: acceleration, fuel economy, comfort.' },
+    { icon:'✨', name:pt?'Características':'Features', ex:pt?'Os "extras" que complementam o básico. Ex: teto solar, som premium, assistentes.':'The "extras" that complement the basics. E.g. sunroof, premium sound, driver aids.' },
+    { icon:'🔁', name:pt?'Confiabilidade':'Reliability', ex:pt?'Probabilidade de NÃO falhar num período. Ex: o carro não quebra nem dá defeito.':'Probability of NOT failing over a period. E.g. the car doesn\'t break down.' },
+    { icon:'📐', name:pt?'Conformidade':'Conformance', ex:pt?'O quanto o produto bate com a especificação de projeto. Ex: todos os componentes eletrônicos dentro da tolerância.':'How far the product matches the design spec. E.g. all electronic components within tolerance.' },
+    { icon:'🛡️', name:pt?'Durabilidade':'Durability', ex:pt?'Vida útil antes de precisar substituir. Ex: quantos km o carro aguenta.':'Useful life before replacement. E.g. how many km the car lasts.' },
+    { icon:'🔧', name:pt?'Atendibilidade':'Serviceability', ex:pt?'Rapidez, cortesia e facilidade de reparo. Ex: assistência técnica boa e rápida.':'Speed, courtesy and ease of repair. E.g. good, fast after-sales service.' },
+    { icon:'🎨', name:pt?'Estética':'Aesthetics', ex:pt?'Como parece, soa, sente-se — subjetivo. Ex: o design e o som da porta ao fechar.':'How it looks, sounds, feels — subjective. E.g. the design and the sound of the door closing.' },
+    { icon:'💎', name:pt?'Qualidade Percebida':'Perceived Quality', ex:pt?'A reputação e a "sensação". Ex: a Apple — alumínio pesado passa solidez vs plástico dos rivais.':'Reputation and the "feel". E.g. Apple — heavy aluminium conveys solidity vs rivals\' plastic.' }
+  ];
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#003865;margin-bottom:2px;">
+        ${pt?'8 Dimensões da Qualidade — Garvin (1987)':'8 Dimensions of Quality — Garvin (1987)'}
+      </div>
+      <div style="font-size:7.5px;color:#64748B;margin-bottom:8px;">${pt?'Exemplos num carro. Clique em cada dimensão.':'Examples in a car. Click each dimension.'}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;">
+        ${dims.map((d,i)=>`
+          <div onclick="var b=document.getElementById('${id}-b');document.querySelectorAll('.${id}-c').forEach(function(c){c.style.background='#F8FAFC';});this.style.background='#DBEAFE';document.getElementById('${id}-n').textContent='${d.icon} '+'${d.name.replace(/'/g,"\\'")}';document.getElementById('${id}-e').textContent='${d.ex.replace(/'/g,"\\'")}';b.style.display='block';"
+            class="${id}-c" style="background:#F8FAFC;border:1px solid #E2E8F0;border-radius:6px;padding:6px 7px;cursor:pointer;transition:background .12s;">
+            <div style="font-size:12px;">${d.icon}</div>
+            <div style="font-size:8px;font-weight:700;color:#334155;line-height:1.2;margin-top:1px;">${d.name}</div>
+          </div>`).join('')}
+      </div>
+      <div id="${id}-b" style="display:none;margin-top:8px;background:#EFF6FF;border:1px solid #BFDBFE;border-radius:7px;padding:9px 11px;">
+        <div id="${id}-n" style="font-size:10px;font-weight:800;color:#1E40AF;margin-bottom:3px;"></div>
+        <div id="${id}-e" style="font-size:8.5px;color:#374151;line-height:1.6;"></div>
+      </div>
+      <div style="margin-top:8px;background:#F1F5F9;border-radius:6px;padding:6px 9px;font-size:7.5px;color:#475569;line-height:1.55;">
+        💡 ${pt?'<b>5 abordagens</b> p/ definir qualidade: transcendente (excelência inata), do produto, do usuário, do valor, e da <b>manufatura</b> (conformidade à spec — a mais útil p/ operações).':'<b>5 approaches</b> to define quality: transcendent (innate excellence), product-based, user-based, value-based, and <b>manufacturing-based</b> (conformance to spec — the most useful for operations).'}
+      </div>
+    </div>`;
+};
+
+/* ─── WEEK 9: Evolution of Quality (nested levels, Figure 13.4) ──── */
+window.vis_qualityEvolution = function(container, lang) {
+  const pt = lang === 'pt';
+  const id = 'qev-' + Math.random().toString(36).substr(2,5);
+  const levels = [
+    { k:'Inspeção', ke:'Inspection', color:'#F59E0B', desc:pt?'Nível 1. Checagem RETROSPECTIVA do produto acabado: acha o defeito depois de pronto. Reativo.':'Level 1. RETROSPECTIVE checking of the finished product: finds the defect after it is made. Reactive.' },
+    { k:'QC', ke:'QC', color:'#84CC16', desc:pt?'Controle de Qualidade. Sistema para DETECTAR defeitos: auto-inspeção, teste de produto. Ainda foca no produto.':'Quality Control. A system to DETECT defects: self-inspection, product testing. Still product-focused.' },
+    { k:'QA', ke:'QA', color:'#10B981', desc:pt?'Garantia da Qualidade. PROATIVO: previne o defeito antes que aconteça, com procedimentos e sistemas.':'Quality Assurance. PROACTIVE: prevents the defect before it happens, with procedures and systems.' },
+    { k:'TQM', ke:'TQM', color:'#06B6D4', desc:pt?'Gestão da Qualidade Total. TODOS na organização, em todos os níveis, se responsabilizam pela qualidade.':'Total Quality Management. EVERYONE in the organization, at all levels, takes responsibility for quality.' },
+    { k:'Six Sigma', ke:'Six Sigma', color:'#3B82F6', desc:pt?'Rigor estatístico: apenas 3,4 defeitos por milhão. Usa o ciclo DMAIC. Reduz a variação ao mínimo.':'Statistical rigour: only 3.4 defects per million. Uses the DMAIC cycle. Reduces variation to a minimum.' },
+    { k:'Lean Six Sigma', ke:'Lean Six Sigma', color:'#7C3AED', desc:pt?'Une o lean (eliminar desperdício, Semana 8) com o Six Sigma (reduzir variação). O nível mais avançado.':'Unites lean (eliminate waste, Week 8) with Six Sigma (reduce variation). The most advanced level.' }
+  ];
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#003865;margin-bottom:2px;">
+        ${pt?'Evolução da Qualidade (Fig. 13.4)':'Evolution of Quality (Fig. 13.4)'}
+      </div>
+      <div style="font-size:7.5px;color:#64748B;margin-bottom:8px;">${pt?'Cada nível ENGLOBA o anterior. Clique para ver.':'Each level SUBSUMES the previous. Click to see.'}</div>
+      <div style="display:flex;flex-direction:column;gap:3px;">
+        ${levels.map((l,i)=>`
+          <div onclick="var b=document.getElementById('${id}-b');document.querySelectorAll('.${id}-l').forEach(function(x){x.style.outline='none';});this.style.outline='2px solid ${l.color}';document.getElementById('${id}-n').textContent='${(i+1)}. '+'${(pt?l.k:l.ke).replace(/'/g,"\\'")}';document.getElementById('${id}-n').style.color='${l.color}';document.getElementById('${id}-d').textContent='${l.desc.replace(/'/g,"\\'")}';b.style.display='block';"
+            class="${id}-l" style="margin-left:${i*10}px;background:${l.color};color:#fff;border-radius:5px;padding:6px 10px;cursor:pointer;font-size:9px;font-weight:800;display:flex;align-items:center;gap:6px;transition:outline .12s;">
+            <span style="opacity:.8;font-size:8px;">${i+1}</span> ${pt?l.k:l.ke} <span style="margin-left:auto;font-size:11px;">↗</span>
+          </div>`).join('')}
+      </div>
+      <div style="text-align:center;font-size:7px;color:#94A3B8;margin-top:4px;">${pt?'↑ mais avançado · cada caixa contém as anteriores':'↑ more advanced · each box contains the previous ones'}</div>
+      <div id="${id}-b" style="display:none;margin-top:8px;background:#F8FAFC;border:1px solid #E5E7EB;border-radius:7px;padding:9px 11px;">
+        <div id="${id}-n" style="font-size:10px;font-weight:800;margin-bottom:3px;"></div>
+        <div id="${id}-d" style="font-size:8.5px;color:#374151;line-height:1.6;"></div>
+      </div>
+    </div>`;
+};
+
+/* ─── WEEK 9: The 7 Tools of Quality ────────────────────────────── */
+window.vis_sevenTools = function(container, lang) {
+  const pt = lang === 'pt';
+  const id = 'q7t-' + Math.random().toString(36).substr(2,5);
+  const tools = [
+    { icon:'🔀', color:'#2563EB', name:pt?'Fluxograma':'Flow chart', desc:pt?'Mapeia o processo passo a passo — expõe onde as coisas dão errado.':'Maps the process step by step — exposes where things go wrong.' },
+    { icon:'✔️', color:'#0891B2', name:pt?'Folha de Verificação':'Check sheet', desc:pt?'Conta ocorrências de forma estruturada (quantas vezes cada problema aparece).':'Counts occurrences in a structured way (how often each problem appears).' },
+    { icon:'📊', color:'#16A34A', name:pt?'Histograma':'Histogram', desc:pt?'Mostra a DISTRIBUIÇÃO de uma medida — como os valores se espalham.':'Shows the DISTRIBUTION of a measure — how values spread.' },
+    { icon:'📉', color:'#CA8A04', name:pt?'Diagrama de Pareto':'Pareto diagram', desc:pt?'Barras ordenadas: o 80/20. Quais POUCAS causas geram a MAIORIA dos problemas.':'Ordered bars: the 80/20. Which FEW causes generate MOST problems.' },
+    { icon:'🔵', color:'#DC2626', name:pt?'Dispersão':'Scatter diagram', desc:pt?'Testa a CORRELAÇÃO entre duas variáveis (ex: satisfação × tempo de espera).':'Tests the CORRELATION between two variables (e.g. satisfaction × wait time).' },
+    { icon:'🐟', color:'#7C3AED', name:pt?'Causa-e-Efeito (Ishikawa)':'Cause-effect (Ishikawa)', desc:pt?'"Espinha de peixe": organiza as CAUSAS-RAIZ de um problema em categorias.':'"Fishbone": organizes the ROOT CAUSES of a problem into categories.' },
+    { icon:'📈', color:'#DB2777', name:pt?'Gráfico de Controle':'Control chart', desc:pt?'Monitora a variação ao longo do tempo com limites — a base do SPC.':'Monitors variation over time with limits — the basis of SPC.' }
+  ];
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#003865;margin-bottom:2px;">
+        ${pt?'Os 7 Tools da Qualidade (Ishikawa)':'The 7 Tools of Quality (Ishikawa)'}
+      </div>
+      <div style="font-size:7.5px;color:#64748B;margin-bottom:8px;">${pt?'Simples, visuais, qualquer um usa. Clique.':'Simple, visual, anyone uses them. Click.'}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;">
+        ${tools.map((tl,i)=>`
+          <div onclick="var b=document.getElementById('${id}-b');document.querySelectorAll('.${id}-c').forEach(function(c){c.style.outline='none';});this.style.outline='2px solid ${tl.color}';document.getElementById('${id}-n').textContent='${tl.icon} '+'${tl.name.replace(/'/g,"\\'")}';document.getElementById('${id}-n').style.color='${tl.color}';document.getElementById('${id}-d').textContent='${tl.desc.replace(/'/g,"\\'")}';b.style.display='block';"
+            class="${id}-c" style="background:${tl.color}0D;border:1px solid ${tl.color}33;border-radius:6px;padding:6px 7px;cursor:pointer;transition:outline .12s;display:flex;align-items:center;gap:6px;">
+            <span style="font-size:13px;">${tl.icon}</span>
+            <span style="font-size:7.5px;font-weight:700;color:${tl.color};line-height:1.2;">${tl.name}</span>
+          </div>`).join('')}
+      </div>
+      <div id="${id}-b" style="display:none;margin-top:8px;background:#F8FAFC;border:1px solid #E5E7EB;border-radius:7px;padding:9px 11px;">
+        <div id="${id}-n" style="font-size:10px;font-weight:800;margin-bottom:3px;"></div>
+        <div id="${id}-d" style="font-size:8.5px;color:#374151;line-height:1.6;"></div>
+      </div>
+    </div>`;
+};
+
+/* ─── WEEK 9: SPC Control Chart (animated) ──────────────────────── */
+window.vis_spcChart = function(container, lang) {
+  const pt = lang === 'pt';
+  const id = 'spc-' + Math.random().toString(36).substr(2,5);
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#003865;margin-bottom:2px;">
+        ${pt?'Gráfico de Controle (SPC)':'Control Chart (SPC)'}
+      </div>
+      <div style="font-size:7.5px;color:#64748B;margin-bottom:6px;">${pt?'Mede o processo no tempo. Ponto fora dos limites = causa especial.':'Measures the process over time. Point outside limits = special cause.'}</div>
+      <svg id="${id}-svg" viewBox="0 0 300 150" style="width:100%;height:auto;background:#FAFBFC;border:1px solid #E2E8F0;border-radius:7px;"></svg>
+      <div style="display:flex;gap:10px;font-size:7px;font-weight:700;margin:5px 0 7px;flex-wrap:wrap;">
+        <span style="color:#DC2626;">— UCL/LCL ${pt?'(limites)':'(limits)'}</span>
+        <span style="color:#64748B;">— ${pt?'média':'mean'}</span>
+        <span style="color:#16A34A;">● ${pt?'sob controle (causa comum)':'in control (common cause)'}</span>
+        <span style="color:#DC2626;">● ${pt?'fora! (causa especial)':'out! (special cause)'}</span>
+      </div>
+      <button onclick="window['${id}_draw']()" style="width:100%;background:#1E3A5F;color:#fff;border:none;border-radius:6px;padding:7px;font-size:8.5px;font-weight:700;cursor:pointer;">🔄 ${pt?'Gerar nova amostra':'Generate new sample'}</button>
+    </div>`;
+  let seed = 7;
+  const rnd = () => { seed = (seed*9301 + 49297) % 233280; return seed/233280; };
+  window[id+'_draw'] = function() {
+    const svg = document.getElementById(id+'-svg'); if (!svg) return;
+    const W=300,H=150, x0=8, x1=W-8, yTop=16, yBot=H-16;
+    const mean=(yTop+yBot)/2, ucl=yTop+14, lcl=yBot-14;
+    const N=16; let pts=[];
+    for(let i=0;i<N;i++){
+      const x = x0 + (x1-x0)*i/(N-1);
+      let y = mean + (rnd()-0.5)*((lcl-ucl)*0.55);
+      let special=false;
+      // ~15% de chance de um ponto de causa especial estourar
+      if(rnd()<0.13){ y = rnd()<0.5 ? ucl-6-(rnd()*8) : lcl+6+(rnd()*8); special=true; }
+      pts.push({x,y,special});
+    }
+    const line = pts.map((p,i)=>(i?'L':'M')+p.x.toFixed(1)+','+p.y.toFixed(1)).join(' ');
+    svg.innerHTML = `
+      <line x1="${x0}" y1="${ucl}" x2="${x1}" y2="${ucl}" stroke="#DC2626" stroke-width="1" stroke-dasharray="4 2"/>
+      <line x1="${x0}" y1="${lcl}" x2="${x1}" y2="${lcl}" stroke="#DC2626" stroke-width="1" stroke-dasharray="4 2"/>
+      <line x1="${x0}" y1="${mean}" x2="${x1}" y2="${mean}" stroke="#64748B" stroke-width="1"/>
+      <text x="${x1}" y="${ucl-2}" font-size="6.5" fill="#DC2626" text-anchor="end">UCL</text>
+      <text x="${x1}" y="${lcl+7}" font-size="6.5" fill="#DC2626" text-anchor="end">LCL</text>
+      <path d="${line}" fill="none" stroke="#94A3B8" stroke-width="1.2"/>
+      ${pts.map(p=>`<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${p.special?3.2:2.4}" fill="${p.special?'#DC2626':'#16A34A'}" stroke="#fff" stroke-width="0.8"/>`).join('')}
+      ${pts.filter(p=>p.special).map(p=>`<text x="${p.x.toFixed(1)}" y="${(p.y<mean?p.y-5:p.y+9).toFixed(1)}" font-size="7" fill="#DC2626" font-weight="800" text-anchor="middle">⚠</text>`).join('')}`;
+  };
+  window[id+'_draw']();
+};

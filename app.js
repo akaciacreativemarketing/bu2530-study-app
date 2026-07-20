@@ -762,6 +762,11 @@ const VIS_DISPATCH = {
   'sevenWastes':         true,
   'fiveS':               true,
   'kanbanPull':          true,
+  // Week 9
+  'qualityDimensions':   true,
+  'qualityEvolution':    true,
+  'sevenTools':          true,
+  'spcChart':            true,
 };
 
 function renderTheoryCard(th) {
