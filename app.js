@@ -748,6 +748,10 @@ const VIS_DISPATCH = {
   'enterpriseTypes':     true,
   'derg':                true,
   'tceAssumptions':      true,
+  // Week 6
+  'kraljicMatrix':       true,
+  'armsVsPartnership':   true,
+  'decouplingPoint':     true,
 };
 
 function renderTheoryCard(th) {

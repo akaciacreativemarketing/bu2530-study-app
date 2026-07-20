@@ -1901,3 +1901,191 @@ window.vis_tceAssumptions = function(container, lang) {
       </div>
     </div>`;
 };
+
+/* ─── WEEK 6: Kraljic's Tactical Procurement Matrix (2×2) ────────── */
+window.vis_kraljicMatrix = function(container, lang) {
+  const pt = lang === 'pt';
+  const id = 'krlj-' + Math.random().toString(36).substr(2,5);
+  // ordem visual: top-left, top-right, bottom-left, bottom-right
+  const quads = [
+    { key:'leverage', color:'#1D4ED8', bg:'#EFF6FF',
+      title: pt?'Alavancagem':'Leverage', tag: pt?'Melhor Negócio':'Best Deal',
+      pos: pt?'Alto impacto · Baixo risco':'High impact · Low risk',
+      tactic: pt?'Usar o poder de compra e a concorrência entre vários fornecedores capazes para conseguir o melhor preço. Pode-se juntar (pool) pedidos para ganhar barganha.':'Use buyer power and competition among several capable suppliers to get the best price. Orders can be pooled to increase bargaining power.',
+      chars: pt?['Custo unitário importa (volume)','Substituição é possível','Mercado competitivo, vários fornecedores']:['Unit cost matters (volume)','Substitution possible','Competitive market, several suppliers'],
+      ex: pt?'Ex: bancos de carro, logística de e-commerce':'E.g. car seats, e-commerce logistics' },
+    { key:'critical', color:'#B91C1C', bg:'#FEF2F2',
+      title: pt?'Crítico':'Critical', tag: pt?'Cooperação':'Cooperation',
+      pos: pt?'Alto impacto · Alto risco':'High impact · High risk',
+      tactic: pt?'Parceria de longo prazo, fonte única (single-source) e dependência mútua. Foco em colaboração, não em espremer preço de curto prazo.':'Long-term partnership, single-sourcing and mutual dependence. Focus on collaboration, not short-term price squeezing.',
+      chars: pt?['Design sob medida / especificação única','Tecnologia do fornecedor é vital','Trocar de fonte é difícil/caro','Substituição difícil']:['Custom design / unique spec','Supplier technology is vital','Changing source is hard/costly','Substitution difficult'],
+      ex: pt?'Ex: motores de avião, TI de bancos':'E.g. aircraft engines, bank IT' },
+    { key:'routine', color:'#4B5563', bg:'#F9FAFB',
+      title: pt?'Rotina':'Routine', tag: pt?'Eficiência':'Efficiency',
+      pos: pt?'Baixo impacto · Baixo risco':'Low impact · Low risk',
+      tactic: pt?'Emphasar a competição entre MUITOS fornecedores para reduzir custos de transação e unitários. Alto poder de compra, disputa por custo.':'Emphasize competition among MANY suppliers to cut transaction and unit costs. High buyer power, cost-based contest.',
+      chars: pt?['Especificação padrão / commodity','Substitutos prontamente disponíveis','Mercado competitivo, muitos fornecedores']:['Standard spec / commodity','Substitutes readily available','Competitive market, many suppliers'],
+      ex: pt?'Ex: parafusos, porcas, papelaria':'E.g. bolts, nuts, stationery' },
+    { key:'bottleneck', color:'#B45309', bg:'#FFFBEB',
+      title: pt?'Gargalo':'Bottleneck', tag: pt?'Continuidade':'Supply Continuity',
+      pos: pt?'Baixo impacto · Alto risco':'Low impact · High risk',
+      tactic: pt?'Garantir DISPONIBILIDADE constante com contrato de longo prazo e fornecedor único que entrega com frequência e confiabilidade. Falta = para a produção.':'Ensure constant AVAILABILITY with a long-term contract and a single supplier that delivers frequently and reliably. Shortage = production stops.',
+      chars: pt?['Especificação única','Tecnologia do fornecedor importa','Escassez (baixa demanda / poucas fontes)','Uso imprevisível · risco de armazenagem']:['Unique specification','Supplier technology matters','Scarcity (low demand / few sources)','Unpredictable usage · storage risk'],
+      ex: pt?'Ex: chips de PC, combustível (← Nissan)':'E.g. PC chips, fuel (← Nissan)' }
+  ];
+
+  const cell = (q) => `
+    <div onclick="var b=document.getElementById('${id}-body');var was=b.getAttribute('data-q')==='${q.key}';document.querySelectorAll('.${id}-cell').forEach(function(c){c.style.outline='none';c.style.transform='none';});if(was){b.style.display='none';b.setAttribute('data-q','');}else{this.style.outline='2.5px solid ${q.color}';this.style.transform='translateY(-1px)';b.style.display='block';b.setAttribute('data-q','${q.key}');document.getElementById('${id}-t').textContent='${q.title.replace(/'/g,"\\'")} — ${q.tag.replace(/'/g,"\\'")}';document.getElementById('${id}-t').style.color='${q.color}';document.getElementById('${id}-pos').textContent='${q.pos.replace(/'/g,"\\'")}';document.getElementById('${id}-tac').textContent='${q.tactic.replace(/'/g,"\\'")}';document.getElementById('${id}-ex').textContent='${q.ex.replace(/'/g,"\\'")}';document.getElementById('${id}-chars').innerHTML='${q.chars.map(c=>'• '+c.replace(/'/g,"\\'")).join('<br>')}';}"
+      class="${id}-cell" style="background:${q.bg};border:1px solid ${q.color}33;border-radius:7px;padding:9px 8px;cursor:pointer;transition:all .15s;min-height:78px;">
+      <div style="font-size:10px;font-weight:800;color:${q.color};">${q.title}</div>
+      <div style="font-size:7.5px;font-weight:700;color:${q.color};opacity:.75;text-transform:uppercase;letter-spacing:.4px;margin-top:1px;">${q.tag}</div>
+      <div style="font-size:7px;color:#6B7280;margin-top:5px;line-height:1.4;">${q.pos}</div>
+      <div style="font-size:7px;color:#9CA3AF;margin-top:4px;">${pt?'clique ↗':'click ↗'}</div>
+    </div>`;
+
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#003865;margin-bottom:8px;">
+        ${pt?'Matriz de Kraljic (1983) — clique nos quadrantes':'Kraljic\'s Matrix (1983) — click the quadrants'}
+      </div>
+      <div style="display:flex;gap:6px;">
+        <div style="display:flex;flex-direction:column;justify-content:center;align-items:center;">
+          <div style="writing-mode:vertical-rl;transform:rotate(180deg);font-size:8px;font-weight:700;color:#374151;letter-spacing:.5px;white-space:nowrap;">
+            ${pt?'◀ Impacto no lucro (interno) ▶':'◀ Profit impact (internal) ▶'}
+          </div>
+        </div>
+        <div style="flex:1;">
+          <div style="display:flex;justify-content:space-between;font-size:7px;font-weight:700;color:#9CA3AF;padding:0 2px 3px;"><span>${pt?'ALTO':'HIGH'}</span></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+            ${cell(quads[0])}${cell(quads[1])}${cell(quads[2])}${cell(quads[3])}
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:7px;font-weight:700;color:#9CA3AF;padding:3px 2px 0;"><span>${pt?'BAIXO':'LOW'}</span></div>
+          <div style="text-align:center;font-size:8px;font-weight:700;color:#374151;letter-spacing:.5px;margin-top:4px;">
+            ${pt?'◀ baixo · Risco de suprimento (externo) · alto ▶':'◀ low · Supply risk (external) · high ▶'}
+          </div>
+        </div>
+      </div>
+      <div id="${id}-body" data-q="" style="display:none;margin-top:9px;background:#fff;border:1px solid #E5E7EB;border-radius:7px;padding:10px 11px;">
+        <div id="${id}-t" style="font-size:11px;font-weight:800;margin-bottom:2px;"></div>
+        <div id="${id}-pos" style="font-size:7.5px;font-weight:700;color:#9CA3AF;text-transform:uppercase;letter-spacing:.4px;margin-bottom:7px;"></div>
+        <div id="${id}-tac" style="font-size:8.5px;color:#374151;line-height:1.6;margin-bottom:7px;"></div>
+        <div id="${id}-chars" style="font-size:8px;color:#4B5563;line-height:1.7;margin-bottom:6px;"></div>
+        <div id="${id}-ex" style="font-size:8px;font-style:italic;color:#6B7280;"></div>
+      </div>
+    </div>`;
+};
+
+/* ─── WEEK 6: Arm's Length vs Strategic Partnership (Table 8.1) ──── */
+window.vis_armsVsPartnership = function(container, lang) {
+  const pt = lang === 'pt';
+  const rows = [
+    { d: pt?'Tipo de produto':'Product type',
+      a: pt?'Commodity / padronizado':'Commodity / standardized',
+      b: pt?'Customizado / não-padrão':'Customized / non-standard' },
+    { d: pt?'Arquitetura':'Architecture',
+      a: pt?'Aberta (open)':'Open architecture',
+      b: pt?'Fechada (closed)':'Closed architecture' },
+    { d: pt?'Interações c/ outros insumos':'Interactions with other inputs',
+      a: pt?'Poucas ou nenhuma':'Few or none',
+      b: pt?'Múltiplas':'Multiple' },
+    { d: pt?'Interdependência':'Interdependence',
+      a: pt?'Baixa':'Low',
+      b: pt?'Alta':'High' },
+    { d: pt?'Valor do insumo':'Input value',
+      a: pt?'Baixo':'Low value',
+      b: pt?'Alto':'High value' },
+    { d: pt?'Interface funcional':'Functional interface',
+      a: pt?'Única':'Single',
+      b: pt?'Múltiplas':'Multiple' },
+    { d: pt?'Benchmarking':'Benchmarking',
+      a: pt?'De preço':'Of price',
+      b: pt?'De capacidades':'Of capabilities' },
+    { d: pt?'Assistência ao fornecedor':'Supplier assistance',
+      a: pt?'Mínima':'Minimal',
+      b: pt?'Substancial (troca de conhecimento)':'Substantial (knowledge-sharing)' }
+  ];
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;overflow-x:auto;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#003865;margin-bottom:8px;">
+        ${pt?'Relação Comprador–Fornecedor (Tabela 8.1)':'Buyer–Supplier Relationship (Table 8.1)'}
+      </div>
+      <table style="width:100%;border-collapse:collapse;table-layout:fixed;min-width:330px;font-size:8.5px;">
+        <thead>
+          <tr>
+            <th style="width:26%;background:#1E293B;color:#94A3B8;padding:6px 5px;text-align:left;font-size:8px;font-weight:700;"></th>
+            <th style="width:37%;background:#E0E7FF;color:#3730A3;padding:6px 6px;text-align:left;font-size:8.5px;font-weight:800;border:1px solid rgba(0,0,0,.06);">${pt?'🤝 Braço Estendido':'🤝 Arm\'s Length'}</th>
+            <th style="width:37%;background:#DCFCE7;color:#166534;padding:6px 6px;text-align:left;font-size:8.5px;font-weight:800;border:1px solid rgba(0,0,0,.06);">${pt?'🔗 Parceria Estratégica':'🔗 Strategic Partnership'}</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rows.map((r,i)=>`<tr>
+            <td style="background:#1E293B;color:#E2E8F0;padding:6px 5px;font-size:7.5px;font-weight:700;vertical-align:top;">${r.d}</td>
+            <td style="background:${i%2?'#F8FAFF':'#fff'};padding:6px 6px;color:#374151;line-height:1.45;border:1px solid rgba(0,0,0,.05);vertical-align:top;">${r.a}</td>
+            <td style="background:${i%2?'#F6FEF9':'#fff'};padding:6px 6px;color:#374151;line-height:1.45;border:1px solid rgba(0,0,0,.05);vertical-align:top;">${r.b}</td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+      <div style="margin-top:8px;background:#FFF7ED;border-radius:6px;padding:6px 9px;font-size:7.5px;color:#9A3412;line-height:1.55;">
+        <strong>Walmart:</strong> ${pt?'exige cortes de preço ano após ano (adversarial) MAS ajuda o fornecedor a ganhar eficiência (cooperativo) — os dois lados coexistem.':'demands year-on-year price cuts (adversarial) BUT helps the supplier gain efficiency (cooperative) — both coexist.'}
+      </div>
+    </div>`;
+};
+
+/* ─── WEEK 6: Decoupling Point (push vs pull) ────────────────────── */
+window.vis_decouplingPoint = function(container, lang) {
+  const pt = lang === 'pt';
+  const id = 'dcp-' + Math.random().toString(36).substr(2,5);
+  // 4 estratégias, ponto de desacoplamento migrando da direita (tarde) p/ esquerda (cedo)
+  const strategies = [
+    { key:'mts', name:pt?'Make-to-Stock':'Make-to-Stock', dp:4,
+      note:pt?'Ponto TARDE (perto do cliente). Quase tudo é empurrado por previsão; estoque de produto acabado pronto na prateleira. Ex: bens de consumo.':'LATE point (near the customer). Almost everything is pushed to forecast; finished-goods stock ready on the shelf. E.g. consumer goods.' },
+    { key:'ato', name:pt?'Assemble-to-Order':'Assemble-to-Order', dp:3,
+      note:pt?'Componentes feitos por previsão; montagem final só após o pedido. A diferenciação acontece na montadora.':'Components made to forecast; final assembly only after the order. Differentiation happens at the assembler.' },
+    { key:'mto', name:pt?'Make-to-Order':'Make-to-Order', dp:2,
+      note:pt?'Produção começa só com o pedido real. Ponto CEDO. Pouco estoque de acabado, muita customização. Ex: Dell.':'Production starts only with the real order. EARLY point. Little finished stock, lots of customization. E.g. Dell.' },
+    { key:'bto', name:pt?'Buy-to-Order':'Buy-to-Order', dp:1,
+      note:pt?'Até a compra da matéria-prima espera o pedido. Ponto o mais cedo possível — máximo pull, mínimo estoque.':'Even raw-material purchasing waits for the order. Earliest possible point — maximum pull, minimum stock.' }
+  ];
+  const stages = pt
+    ? ['Matéria-prima','Componentes','Montagem','Distribuição','Cliente']
+    : ['Raw material','Components','Assembly','Distribution','Customer'];
+
+  const bar = (dp) => {
+    // dp = índice (1..4) da fronteira; à esquerda = push (previsão), à direita = pull (pedido)
+    return `<div style="display:flex;gap:2px;margin:6px 0;">
+      ${stages.map((s,i)=>{
+        const isPush = i < dp;
+        const isDP = i === dp; // marcador do buffer entre push e pull
+        return `<div style="flex:1;text-align:center;">
+          <div style="height:7px;background:${isPush?'#3B82F6':'#10B981'};border-radius:2px;position:relative;">
+            ${isDP?`<div style="position:absolute;left:-3px;top:-4px;width:0;height:15px;border-left:2px dashed #B45309;"></div><div style="position:absolute;left:-14px;top:-16px;font-size:11px;">📦</div>`:''}
+          </div>
+          <div style="font-size:6.5px;color:#6B7280;margin-top:2px;line-height:1.2;">${s}</div>
+        </div>`;
+      }).join('')}
+    </div>`;
+  };
+
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#003865;margin-bottom:6px;">
+        ${pt?'Ponto de Desacoplamento — Empurrar vs Puxar':'Decoupling Point — Push vs Pull'}
+      </div>
+      <div style="display:flex;gap:10px;font-size:7.5px;font-weight:700;margin-bottom:2px;">
+        <span style="color:#3B82F6;">🔵 ${pt?'PUSH (previsão)':'PUSH (forecast)'}</span>
+        <span style="color:#10B981;">🟢 ${pt?'PULL (pedido real)':'PULL (real order)'}</span>
+        <span style="color:#B45309;">📦 ${pt?'buffer / desacopl.':'buffer / decoupling'}</span>
+      </div>
+      <div style="display:flex;gap:3px;margin:8px 0 4px;">
+        ${strategies.map((s,i)=>`<button onclick="document.querySelectorAll('.${id}-b').forEach(function(x){x.style.background='#F1F5F9';x.style.color='#475569';});this.style.background='#1E3A5F';this.style.color='#fff';document.getElementById('${id}-bar').innerHTML=window['${id}_bars'][${i}];document.getElementById('${id}-note').textContent=window['${id}_notes'][${i}];document.getElementById('${id}-name').textContent=window['${id}_names'][${i}];"
+          class="${id}-b" style="flex:1;background:${i===2?'#1E3A5F':'#F1F5F9'};color:${i===2?'#fff':'#475569'};border:none;border-radius:5px;padding:6px 2px;font-size:7.5px;font-weight:700;cursor:pointer;line-height:1.2;">${s.name}</button>`).join('')}
+      </div>
+      <div id="${id}-name" style="font-size:9.5px;font-weight:800;color:#1E3A5F;margin-top:6px;">${strategies[2].name}</div>
+      <div id="${id}-bar">${bar(strategies[2].dp)}</div>
+      <div id="${id}-note" style="font-size:8px;color:#374151;line-height:1.6;background:#F8FAFC;border-radius:6px;padding:7px 9px;margin-top:4px;">${strategies[2].note}</div>
+      <div style="font-size:7px;color:#9CA3AF;margin-top:6px;line-height:1.5;">${pt?'Quanto mais cedo (à esquerda) o ponto, mais o cliente "puxa" e menos estoque — mas maior lead time. Postponement = adiar a diferenciação até esse ponto.':'The earlier (left) the point, the more the customer "pulls" and the less stock — but the longer the lead time. Postponement = delaying differentiation until this point.'}</div>
+    </div>`;
+  window[id+'_bars'] = strategies.map(s=>bar(s.dp));
+  window[id+'_notes'] = strategies.map(s=>s.note);
+  window[id+'_names'] = strategies.map(s=>s.name);
+};
