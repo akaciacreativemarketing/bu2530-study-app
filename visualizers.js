@@ -2557,3 +2557,122 @@ window.vis_spcChart = function(container, lang) {
   };
   window[id+'_draw']();
 };
+
+/* ─── WEEK 10: Industry 4.0 technologies ────────────────────────── */
+window.vis_industry40 = function(container, lang) {
+  const pt = lang === 'pt';
+  const id = 'i40-' + Math.random().toString(36).substr(2,5);
+  const techs = [
+    { icon:'🤖', color:'#2563EB', name:pt?'Robótica Avançada':'Advanced Robotics', desc:pt?'Robôs com sensores que interagem com o ambiente e "sentem" os produtos — não os robôs "burros" de antes.':'Robots with sensors that interact with the environment and "feel" products — not the old "dumb" robots.' },
+    { icon:'📊', color:'#0891B2', name:'Big Data', desc:pt?'Achar padrões úteis em dados NÃO-estruturados de muitas fontes. Não é só ter um banco de dados maior.':'Finding useful patterns in UNstructured data from many sources. Not just having a bigger database.' },
+    { icon:'🖨️', color:'#16A34A', name:pt?'Impressão 3D':'3D Printing', desc:pt?'Manufatura aditiva em camadas (metal, plástico, comida). Produtos customizados; tecnologia genérica.':'Additive manufacturing in layers (metal, plastic, food). Customized products; generic technology.' },
+    { icon:'🧠', color:'#DC2626', name:pt?'IA / Machine Learning':'AI / Machine Learning', desc:pt?'Resolve problemas, mas é uma "caixa-preta": não explica como/por quê. Perigo de confiar cego.':'Solves problems, but is a "black box": doesn\'t explain how/why. Danger of blind trust.' },
+    { icon:'🌐', color:'#7C3AED', name:pt?'Internet das Coisas (IoT)':'Internet of Things (IoT)', desc:pt?'Muitos dispositivos conectados conversando entre si em alta velocidade.':'Many connected devices talking to each other at high speed.' },
+    { icon:'📡', color:'#DB2777', name:'5G', desc:pt?'Não é filme rápido no celular — é a velocidade de conexão entre MUITOS dispositivos. Habilita a IoT.':'Not a fast movie on your phone — it is the connection speed between MANY devices. Enables IoT.' }
+  ];
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#003865;margin-bottom:2px;">
+        ${pt?'Indústria 4.0 — 6 tecnologias integradas':'Industry 4.0 — 6 integrated technologies'}
+      </div>
+      <div style="font-size:7.5px;color:#64748B;margin-bottom:8px;">${pt?'A ideia: fazer as ilhas de tecnologia conversarem. Clique.':'The idea: make the islands of technology talk. Click.'}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;">
+        ${techs.map((tc,i)=>`
+          <div onclick="var b=document.getElementById('${id}-b');document.querySelectorAll('.${id}-c').forEach(function(c){c.style.outline='none';});this.style.outline='2px solid ${tc.color}';document.getElementById('${id}-n').textContent='${tc.icon} '+'${tc.name.replace(/'/g,"\\'")}';document.getElementById('${id}-n').style.color='${tc.color}';document.getElementById('${id}-d').textContent='${tc.desc.replace(/'/g,"\\'")}';b.style.display='block';"
+            class="${id}-c" style="background:${tc.color}0D;border:1px solid ${tc.color}33;border-radius:6px;padding:7px;cursor:pointer;transition:outline .12s;">
+            <div style="font-size:15px;">${tc.icon}</div>
+            <div style="font-size:7.5px;font-weight:700;color:${tc.color};line-height:1.2;margin-top:2px;">${tc.name}</div>
+          </div>`).join('')}
+      </div>
+      <div id="${id}-b" style="display:none;margin-top:8px;background:#F8FAFC;border:1px solid #E5E7EB;border-radius:7px;padding:9px 11px;">
+        <div id="${id}-n" style="font-size:10px;font-weight:800;margin-bottom:3px;"></div>
+        <div id="${id}-d" style="font-size:8.5px;color:#374151;line-height:1.6;"></div>
+      </div>
+    </div>`;
+};
+
+/* ─── WEEK 10: Digitization vs Digitalization ───────────────────── */
+window.vis_digitizationVsDigital = function(container, lang) {
+  const pt = lang === 'pt';
+  const cols = [
+    { color:'#94A3B8', bg:'#F1F5F9', title:pt?'Digitização (superficial)':'Digitization (superficial)', tag:pt?'"habilitado por internet"':'"internet-enabled"',
+      rows: pt?['Usa a internet como novo CANAL','Vende online o mesmo de sempre','Processos e papéis NÃO mudam','Ex: e-commerce da loja tradicional']:['Uses the internet as a new CHANNEL','Sells the same old thing online','Processes and roles do NOT change','E.g. a traditional shop\'s e-commerce'] },
+    { color:'#16A34A', bg:'#F0FDF4', title:pt?'Digitalização (real)':'Digitalization (true)', tag:pt?'transforma o negócio':'transforms the business',
+      rows: pt?['Muda COMO a empresa opera','Repensa produtos e processos','Tecnologia no centro do modelo','Ex: Indústria 4.0 integrando tudo']:['Changes HOW the firm operates','Rethinks products and processes','Technology at the centre of the model','E.g. Industry 4.0 integrating everything'] }
+  ];
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#003865;margin-bottom:8px;">
+        ${pt?'Digitização ≠ Digitalização (Pilkington)':'Digitization ≠ Digitalization (Pilkington)'}
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        ${cols.map(c=>`
+          <div style="background:${c.bg};border:1px solid ${c.color}44;border-radius:8px;overflow:hidden;">
+            <div style="background:${c.color};color:#fff;padding:7px 9px;">
+              <div style="font-size:9.5px;font-weight:800;">${c.title}</div>
+              <div style="font-size:7px;opacity:.9;font-weight:600;">${c.tag}</div>
+            </div>
+            <div style="padding:7px 9px;">
+              ${c.rows.map(r=>`<div style="font-size:8px;color:#374151;line-height:1.4;margin-bottom:5px;display:flex;gap:4px;"><span style="color:${c.color};">•</span>${r}</div>`).join('')}
+            </div>
+          </div>`).join('')}
+      </div>
+      <div style="margin-top:8px;background:#FEF9C3;border-radius:6px;padding:6px 9px;font-size:7.5px;color:#854D0E;line-height:1.55;">
+        ⚠️ ${pt?'Cuidado com o rótulo "negócio digital" — muitas vezes significa apenas "vendemos pela internet", não uma transformação real.':'Beware the "digital business" label — it often means only "we sell online", not a real transformation.'}
+      </div>
+    </div>`;
+};
+
+/* ─── WEEK 10: 3D printing vs traditional supply chain ──────────── */
+window.vis_printing3dSupply = function(container, lang) {
+  const pt = lang === 'pt';
+  const trad = pt ? ['🏭 Fábrica central','📦 Fornecedores','🚚 Distribuição','🏬 Armazéns','🙋 Cliente'] : ['🏭 Central factory','📦 Suppliers','🚚 Distribution','🏬 Warehouses','🙋 Customer'];
+  const p3d = pt ? ['💾 Arquivo digital','🖨️ Impressora local','🙋 Cliente'] : ['💾 Digital file','🖨️ Local printer','🙋 Customer'];
+  const chain = (arr,color) => arr.map((s,i)=>`<div style="display:flex;align-items:center;gap:3px;"><span style="background:${color}1A;border:1px solid ${color}44;border-radius:5px;padding:4px 6px;font-size:7.5px;font-weight:600;color:#334155;white-space:nowrap;">${s}</span>${i<arr.length-1?`<span style="color:${color};font-size:10px;font-weight:900;">→</span>`:''}</div>`).join('');
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#003865;margin-bottom:8px;">
+        ${pt?'Impressão 3D vira a cadeia do avesso':'3D printing turns the chain inside out'}
+      </div>
+      <div style="margin-bottom:10px;">
+        <div style="font-size:8px;font-weight:800;color:#64748B;margin-bottom:4px;">${pt?'🔵 TRADICIONAL — planta central + distribuição':'🔵 TRADITIONAL — central plant + distribution'}</div>
+        <div style="display:flex;flex-wrap:wrap;gap:2px;align-items:center;">${chain(trad,'#64748B')}</div>
+      </div>
+      <div>
+        <div style="font-size:8px;font-weight:800;color:#16A34A;margin-bottom:4px;">${pt?'🟢 IMPRESSÃO 3D — fabricação local/no cliente':'🟢 3D PRINTING — local/at-customer manufacture'}</div>
+        <div style="display:flex;flex-wrap:wrap;gap:2px;align-items:center;">${chain(p3d,'#16A34A')}</div>
+      </div>
+      <div style="margin-top:9px;background:#F0FDF4;border:1px solid #86EFAC;border-radius:7px;padding:8px 10px;font-size:8px;color:#166534;line-height:1.55;">
+        ${pt?'Se o produto é impresso localmente (tecnologia genérica, "qualquer um faz"): some a fábrica dedicada, fecham armazéns físicos, o cliente assume o controle. Toda a lógica de SCM (Semanas 5-8) é jogada para o alto.':'If the product is printed locally (generic tech, "anyone can make it"): the dedicated factory disappears, physical warehouses close, the customer takes charge. The whole SCM logic (Weeks 5-8) is thrown up in the air.'}
+      </div>
+    </div>`;
+};
+
+/* ─── WEEK 10: Amazon vs Walmart ────────────────────────────────── */
+window.vis_amazonVsWalmart = function(container, lang) {
+  const pt = lang === 'pt';
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#003865;margin-bottom:8px;">
+        ${pt?'Amazon vs Walmart — os gigantes convergem':'Amazon vs Walmart — the giants converge'}
+      </div>
+      <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:6px;align-items:center;">
+        <div style="background:#EFF6FF;border:1px solid #BFDBFE;border-radius:8px;padding:9px;text-align:center;">
+          <div style="font-size:11px;font-weight:900;color:#1D4ED8;">AMAZON</div>
+          <div style="font-size:7.5px;color:#475569;margin-top:2px;line-height:1.4;">${pt?'Mestra do e-commerce. Nasceu online, cadeia enxuta e tecnológica.':'E-commerce master. Born online, lean and tech-driven chain.'}</div>
+          <div style="font-size:14px;margin-top:4px;">💻</div>
+          <div style="font-size:7px;font-weight:800;color:#1D4ED8;margin-top:2px;">→ ${pt?'entra no FÍSICO':'moves into PHYSICAL'}</div>
+        </div>
+        <div style="font-size:16px;color:#94A3B8;font-weight:900;">⚔️</div>
+        <div style="background:#FFF7ED;border:1px solid #FED7AA;border-radius:8px;padding:9px;text-align:center;">
+          <div style="font-size:11px;font-weight:900;color:#C2410C;">WALMART</div>
+          <div style="font-size:7.5px;color:#475569;margin-top:2px;line-height:1.4;">${pt?'Domina o varejo físico. Milhares de lojas, poder de compra colossal (Semana 6).':'Dominates physical retail. Thousands of stores, colossal buying power (Week 6).'}</div>
+          <div style="font-size:14px;margin-top:4px;">🏬</div>
+          <div style="font-size:7px;font-weight:800;color:#C2410C;margin-top:2px;">← ${pt?'investe em ONLINE':'invests in ONLINE'}</div>
+        </div>
+      </div>
+      <div style="margin-top:9px;background:#F1F5F9;border-radius:7px;padding:8px 10px;font-size:8px;color:#334155;line-height:1.55;text-align:center;">
+        ${pt?'A fronteira entre <b>online</b> e <b>físico</b> está desaparecendo. Quem vence? Quem tiver a melhor <b>excelência operacional</b> — tudo o que este curso ensinou.':'The line between <b>online</b> and <b>physical</b> is vanishing. Who wins? Whoever has the best <b>operational excellence</b> — everything this course taught.'}
+      </div>
+    </div>`;
+};

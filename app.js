@@ -767,6 +767,11 @@ const VIS_DISPATCH = {
   'qualityEvolution':    true,
   'sevenTools':          true,
   'spcChart':            true,
+  // Week 10
+  'industry40':          true,
+  'digitizationVsDigital': true,
+  'printing3dSupply':    true,
+  'amazonVsWalmart':     true,
 };
 
 function renderTheoryCard(th) {
