@@ -2411,13 +2411,13 @@ window.vis_qualityDimensions = function(container, lang) {
   const id = 'qd-' + Math.random().toString(36).substr(2,5);
   const dims = [
     { icon:'⚙️', name:pt?'Desempenho':'Performance', ex:pt?'As características operacionais primárias. Ex num carro: aceleração, consumo, conforto.':'The primary operating characteristics. E.g. in a car: acceleration, fuel economy, comfort.' },
-    { icon:'✨', name:pt?'Características':'Features', ex:pt?'Os "extras" que complementam o básico. Ex: teto solar, som premium, assistentes.':'The "extras" that complement the basics. E.g. sunroof, premium sound, driver aids.' },
+    { icon:'✨', name:pt?'Características':'Features', ex:pt?'Os “extras” que complementam o básico. Ex: teto solar, som premium, assistentes.':'The “extras” that complement the basics. E.g. sunroof, premium sound, driver aids.' },
     { icon:'🔁', name:pt?'Confiabilidade':'Reliability', ex:pt?'Probabilidade de NÃO falhar num período. Ex: o carro não quebra nem dá defeito.':'Probability of NOT failing over a period. E.g. the car doesn\'t break down.' },
     { icon:'📐', name:pt?'Conformidade':'Conformance', ex:pt?'O quanto o produto bate com a especificação de projeto. Ex: todos os componentes eletrônicos dentro da tolerância.':'How far the product matches the design spec. E.g. all electronic components within tolerance.' },
     { icon:'🛡️', name:pt?'Durabilidade':'Durability', ex:pt?'Vida útil antes de precisar substituir. Ex: quantos km o carro aguenta.':'Useful life before replacement. E.g. how many km the car lasts.' },
     { icon:'🔧', name:pt?'Atendibilidade':'Serviceability', ex:pt?'Rapidez, cortesia e facilidade de reparo. Ex: assistência técnica boa e rápida.':'Speed, courtesy and ease of repair. E.g. good, fast after-sales service.' },
     { icon:'🎨', name:pt?'Estética':'Aesthetics', ex:pt?'Como parece, soa, sente-se — subjetivo. Ex: o design e o som da porta ao fechar.':'How it looks, sounds, feels — subjective. E.g. the design and the sound of the door closing.' },
-    { icon:'💎', name:pt?'Qualidade Percebida':'Perceived Quality', ex:pt?'A reputação e a "sensação". Ex: a Apple — alumínio pesado passa solidez vs plástico dos rivais.':'Reputation and the "feel". E.g. Apple — heavy aluminium conveys solidity vs rivals\' plastic.' }
+    { icon:'💎', name:pt?'Qualidade Percebida':'Perceived Quality', ex:pt?'A reputação e a “sensação”. Ex: a Apple — alumínio pesado passa solidez vs plástico dos rivais.':'Reputation and the “feel”. E.g. Apple — heavy aluminium conveys solidity vs rivals\' plastic.' }
   ];
   container.innerHTML = `
     <div style="padding:4px;font-family:sans-serif;">
@@ -2486,7 +2486,7 @@ window.vis_sevenTools = function(container, lang) {
     { icon:'📊', color:'#16A34A', name:pt?'Histograma':'Histogram', desc:pt?'Mostra a DISTRIBUIÇÃO de uma medida — como os valores se espalham.':'Shows the DISTRIBUTION of a measure — how values spread.' },
     { icon:'📉', color:'#CA8A04', name:pt?'Diagrama de Pareto':'Pareto diagram', desc:pt?'Barras ordenadas: o 80/20. Quais POUCAS causas geram a MAIORIA dos problemas.':'Ordered bars: the 80/20. Which FEW causes generate MOST problems.' },
     { icon:'🔵', color:'#DC2626', name:pt?'Dispersão':'Scatter diagram', desc:pt?'Testa a CORRELAÇÃO entre duas variáveis (ex: satisfação × tempo de espera).':'Tests the CORRELATION between two variables (e.g. satisfaction × wait time).' },
-    { icon:'🐟', color:'#7C3AED', name:pt?'Causa-e-Efeito (Ishikawa)':'Cause-effect (Ishikawa)', desc:pt?'"Espinha de peixe": organiza as CAUSAS-RAIZ de um problema em categorias.':'"Fishbone": organizes the ROOT CAUSES of a problem into categories.' },
+    { icon:'🐟', color:'#7C3AED', name:pt?'Causa-e-Efeito (Ishikawa)':'Cause-effect (Ishikawa)', desc:pt?'“Espinha de peixe”: organiza as CAUSAS-RAIZ de um problema em categorias.':'“Fishbone”: organizes the ROOT CAUSES of a problem into categories.' },
     { icon:'📈', color:'#DB2777', name:pt?'Gráfico de Controle':'Control chart', desc:pt?'Monitora a variação ao longo do tempo com limites — a base do SPC.':'Monitors variation over time with limits — the basis of SPC.' }
   ];
   container.innerHTML = `
@@ -2563,10 +2563,10 @@ window.vis_industry40 = function(container, lang) {
   const pt = lang === 'pt';
   const id = 'i40-' + Math.random().toString(36).substr(2,5);
   const techs = [
-    { icon:'🤖', color:'#2563EB', name:pt?'Robótica Avançada':'Advanced Robotics', desc:pt?'Robôs com sensores que interagem com o ambiente e "sentem" os produtos — não os robôs "burros" de antes.':'Robots with sensors that interact with the environment and "feel" products — not the old "dumb" robots.' },
+    { icon:'🤖', color:'#2563EB', name:pt?'Robótica Avançada':'Advanced Robotics', desc:pt?'Robôs com sensores que interagem com o ambiente e “sentem” os produtos — não os robôs “burros” de antes.':'Robots with sensors that interact with the environment and “feel” products — not the old “dumb” robots.' },
     { icon:'📊', color:'#0891B2', name:'Big Data', desc:pt?'Achar padrões úteis em dados NÃO-estruturados de muitas fontes. Não é só ter um banco de dados maior.':'Finding useful patterns in UNstructured data from many sources. Not just having a bigger database.' },
     { icon:'🖨️', color:'#16A34A', name:pt?'Impressão 3D':'3D Printing', desc:pt?'Manufatura aditiva em camadas (metal, plástico, comida). Produtos customizados; tecnologia genérica.':'Additive manufacturing in layers (metal, plastic, food). Customized products; generic technology.' },
-    { icon:'🧠', color:'#DC2626', name:pt?'IA / Machine Learning':'AI / Machine Learning', desc:pt?'Resolve problemas, mas é uma "caixa-preta": não explica como/por quê. Perigo de confiar cego.':'Solves problems, but is a "black box": doesn\'t explain how/why. Danger of blind trust.' },
+    { icon:'🧠', color:'#DC2626', name:pt?'IA / Machine Learning':'AI / Machine Learning', desc:pt?'Resolve problemas, mas é uma “caixa-preta”: não explica como/por quê. Perigo de confiar cego.':'Solves problems, but is a “black box”: doesn\'t explain how/why. Danger of blind trust.' },
     { icon:'🌐', color:'#7C3AED', name:pt?'Internet das Coisas (IoT)':'Internet of Things (IoT)', desc:pt?'Muitos dispositivos conectados conversando entre si em alta velocidade.':'Many connected devices talking to each other at high speed.' },
     { icon:'📡', color:'#DB2777', name:'5G', desc:pt?'Não é filme rápido no celular — é a velocidade de conexão entre MUITOS dispositivos. Habilita a IoT.':'Not a fast movie on your phone — it is the connection speed between MANY devices. Enables IoT.' }
   ];
