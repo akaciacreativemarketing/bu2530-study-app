@@ -2089,3 +2089,187 @@ window.vis_decouplingPoint = function(container, lang) {
   window[id+'_notes'] = strategies.map(s=>s.note);
   window[id+'_names'] = strategies.map(s=>s.name);
 };
+
+/* ─── WEEK 7: EOQ interactive calculator + cost curve (Figure 9.2) ── */
+window.vis_eoqModel = function(container, lang) {
+  const pt = lang === 'pt';
+  const id = 'eoq-' + Math.random().toString(36).substr(2,5);
+  // defaults = exemplo do livro (CCS): D em caixas/ano, Cs=$25, Ch=$0.12/caixa/ano → EOQ≈3864
+  const inp = (key, val, label) => `
+    <label style="display:flex;flex-direction:column;gap:2px;font-size:7.5px;font-weight:700;color:#475569;">
+      ${label}
+      <input id="${id}-${key}" type="number" value="${val}" step="any" min="0"
+        oninput="window['${id}_calc']()"
+        style="width:100%;box-sizing:border-box;padding:5px 6px;border:1px solid #CBD5E1;border-radius:5px;font-size:11px;font-weight:700;color:#0F172A;">
+    </label>`;
+  const out = (key, label, unit) => `
+    <div style="background:#F8FAFC;border:1px solid #E2E8F0;border-radius:6px;padding:6px 8px;">
+      <div style="font-size:7px;color:#64748B;font-weight:700;text-transform:uppercase;letter-spacing:.3px;">${label}</div>
+      <div style="font-size:13px;font-weight:800;color:#0369A1;"><span id="${id}-${key}">–</span> <span style="font-size:8px;font-weight:600;color:#94A3B8;">${unit}</span></div>
+    </div>`;
+
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#003865;margin-bottom:2px;">
+        ${pt?'Calculadora EOQ — mexa nos números':'EOQ Calculator — play with the numbers'}
+      </div>
+      <div style="font-size:7.5px;color:#64748B;margin-bottom:8px;">Q = √(2·D·Cs / Ch)</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:9px;">
+        ${inp('D', 35833, pt?'D — demanda/ano':'D — demand/year')}
+        ${inp('Cs', 25, pt?'Cs — custo/pedido':'Cs — cost/order')}
+        ${inp('Ch', 0.12, pt?'Ch — manut./unid./ano':'Ch — hold/unit/year')}
+      </div>
+      <svg id="${id}-svg" viewBox="0 0 300 150" style="width:100%;height:auto;background:#FAFBFC;border:1px solid #E2E8F0;border-radius:7px;"></svg>
+      <div style="display:flex;gap:10px;font-size:7px;font-weight:700;margin:5px 0 8px;">
+        <span style="color:#DC2626;">— ${pt?'Custo total':'Total cost'}</span>
+        <span style="color:#0891B2;">— ${pt?'Manutenção':'Holding'}</span>
+        <span style="color:#1E40AF;">— ${pt?'Pedido':'Ordering'}</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+        ${out('Q', pt?'EOQ (quanto pedir)':'EOQ (how much)', pt?'unid.':'units')}
+        ${out('N', pt?'Pedidos por ano':'Orders per year', '×')}
+        ${out('avg', pt?'Estoque médio (Q/2)':'Average stock (Q/2)', pt?'unid.':'units')}
+        ${out('TC', pt?'Custo total/ano':'Total cost/year', '$')}
+      </div>
+    </div>`;
+
+  window[id+'_calc'] = function() {
+    const g = k => parseFloat((document.getElementById(id+'-'+k)||{}).value) || 0;
+    const D = g('D'), Cs = g('Cs'), Ch = g('Ch');
+    const set = (k,v) => { const e = document.getElementById(id+'-'+k); if (e) e.textContent = v; };
+    if (D<=0 || Cs<=0 || Ch<=0) { ['Q','N','avg','TC'].forEach(k=>set(k,'–')); return; }
+    const Q = Math.sqrt(2*D*Cs/Ch);
+    const N = D/Q, avg = Q/2, TC = (Q/2)*Ch + (D/Q)*Cs;
+    const fmt = n => n>=1000 ? Math.round(n).toLocaleString('en-US') : (Math.round(n*100)/100);
+    set('Q', fmt(Q)); set('N', Math.round(N*10)/10); set('avg', fmt(avg)); set('TC', '$'+fmt(TC));
+    // desenha as 3 curvas de custo em função do tamanho do pedido q
+    const svg = document.getElementById(id+'-svg'); if (!svg) return;
+    const W=300,H=150,pad=8, x0=18, y0=H-18, plotW=W-x0-8, plotH=y0-8;
+    const qMax = Q*3, N2=60;
+    let hold=[],ord=[],tot=[];
+    for(let i=1;i<=N2;i++){ const q=qMax*i/N2; hold.push([q,(q/2)*Ch]); ord.push([q,(D/q)*Cs]); tot.push([q,(q/2)*Ch+(D/q)*Cs]); }
+    const tcMax = Math.max(...tot.map(p=>p[1]), (qMax/2)*Ch);
+    const sx = q => x0 + (q/qMax)*plotW;
+    const sy = c => y0 - Math.min(c/tcMax,1)*plotH;
+    const path = arr => 'M'+arr.map(p=>sx(p[0]).toFixed(1)+','+sy(p[1]).toFixed(1)).join(' L');
+    const eoqX = sx(Q);
+    svg.innerHTML = `
+      <line x1="${x0}" y1="8" x2="${x0}" y2="${y0}" stroke="#CBD5E1" stroke-width="1"/>
+      <line x1="${x0}" y1="${y0}" x2="${W-8}" y2="${y0}" stroke="#CBD5E1" stroke-width="1"/>
+      <line x1="${eoqX.toFixed(1)}" y1="8" x2="${eoqX.toFixed(1)}" y2="${y0}" stroke="#B45309" stroke-width="1" stroke-dasharray="3 2"/>
+      <text x="${eoqX.toFixed(1)}" y="${y0+11}" font-size="7" font-weight="800" fill="#B45309" text-anchor="middle">EOQ</text>
+      <path d="${path(hold)}" fill="none" stroke="#0891B2" stroke-width="1.5"/>
+      <path d="${path(ord)}" fill="none" stroke="#1E40AF" stroke-width="1.5"/>
+      <path d="${path(tot)}" fill="none" stroke="#DC2626" stroke-width="2"/>
+      <text x="2" y="14" font-size="6.5" fill="#94A3B8">$</text>
+      <text x="${W-8}" y="${y0+11}" font-size="6.5" fill="#94A3B8" text-anchor="end">${pt?'qtd. pedido':'order qty'}</text>`;
+  };
+  window[id+'_calc']();
+};
+
+/* ─── WEEK 7: Q-System vs P-System ──────────────────────────────── */
+window.vis_qpSystems = function(container, lang) {
+  const pt = lang === 'pt';
+  const cols = [
+    { key:'Q', color:'#1D4ED8', bg:'#EFF6FF', title:pt?'Sistema Q':'Q-System',
+      sub:pt?'Quantidade fixa · ROL':'Fixed quantity · ROL',
+      rows: pt
+        ? [['O que é fixo?','A QUANTIDADE (sempre o EOQ)'],['O que decide?','QUANDO pedir'],['Gatilho','Estoque cai ao ponto de ressuprimento (ROL)'],['Intervalos','Irregulares'],['Monitoramento','Contínuo (caro) — código de barras, two-bin'],['Bom para','Itens classe A, alto valor']]
+        : [['What is fixed?','The QUANTITY (always the EOQ)'],['What is decided?','WHEN to order'],['Trigger','Stock drops to the reorder level (ROL)'],['Intervals','Irregular'],['Monitoring','Continuous (costly) — barcodes, two-bin'],['Good for','Class A items, high value']] },
+    { key:'P', color:'#B45309', bg:'#FFFBEB', title:pt?'Sistema P':'P-System',
+      sub:pt?'Período fixo · revisão cíclica':'Fixed period · cyclical review',
+      rows: pt
+        ? [['O que é fixo?','O PERÍODO (ex: toda segunda)'],['O que decide?','QUANTO pedir'],['Gatilho','Chegou a data de revisão'],['Intervalos','Regulares'],['Monitoramento','Só na data (barato)'],['Bom para','Muitos itens, valor menor']]
+        : [['What is fixed?','The PERIOD (e.g. every Monday)'],['What is decided?','HOW MUCH to order'],['Trigger','Review date arrives'],['Intervals','Regular'],['Monitoring','Only on the date (cheap)'],['Good for','Many items, lower value']] }
+  ];
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#003865;margin-bottom:8px;">
+        ${pt?'Quando pedir? Sistema Q vs Sistema P':'When to order? Q-System vs P-System'}
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        ${cols.map(c=>`
+          <div style="background:${c.bg};border:1px solid ${c.color}33;border-radius:8px;overflow:hidden;">
+            <div style="background:${c.color};color:#fff;padding:7px 9px;">
+              <div style="font-size:11px;font-weight:800;">${c.title}</div>
+              <div style="font-size:7.5px;opacity:.9;font-weight:600;">${c.sub}</div>
+            </div>
+            <div style="padding:6px 8px;">
+              ${c.rows.map(r=>`<div style="margin-bottom:5px;"><div style="font-size:7px;color:${c.color};font-weight:700;text-transform:uppercase;letter-spacing:.3px;">${r[0]}</div><div style="font-size:8.5px;color:#374151;line-height:1.4;">${r[1]}</div></div>`).join('')}
+            </div>
+          </div>`).join('')}
+      </div>
+      <div style="margin-top:8px;background:#F1F5F9;border-radius:6px;padding:6px 9px;font-size:8px;color:#334155;line-height:1.55;">
+        💡 ${pt?'<b>Memória:</b> Q = Quantidade fixa · P = Período fixo. O estoque de segurança (safety stock) protege os DOIS contra atrasos e variação da demanda.':'<b>Memory:</b> Q = fixed Quantity · P = fixed Period. Safety stock protects BOTH against delays and demand variation.'}
+      </div>
+    </div>`;
+};
+
+/* ─── WEEK 7: MRP — 3 inputs → plan (+ mini BOM) ─────────────────── */
+window.vis_mrpTree = function(container, lang) {
+  const pt = lang === 'pt';
+  const inputs = [
+    { icon:'📅', color:'#1D4ED8', name:'MPS', full:pt?'Plano Mestre de Produção':'Master Production Schedule', desc:pt?'O que produzir e quando':'What to make and when' },
+    { icon:'🌳', color:'#15803D', name:'BOM', full:pt?'Lista de Materiais':'Bill of Materials', desc:pt?'A "receita"/árvore do produto':'The product "recipe"/tree' },
+    { icon:'📦', color:'#B45309', name:pt?'Estoque':'Inventory', full:pt?'Registros de Estoque':'Inventory Records', desc:pt?'O que já temos':'What we already have' }
+  ];
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#003865;margin-bottom:8px;">
+        ${pt?'MRP — 3 entradas geram o plano':'MRP — 3 inputs generate the plan'}
+      </div>
+      <div style="display:flex;flex-direction:column;gap:5px;">
+        ${inputs.map(i=>`
+          <div style="display:flex;align-items:center;gap:8px;background:${i.color}0D;border:1px solid ${i.color}33;border-left:3px solid ${i.color};border-radius:6px;padding:6px 9px;">
+            <span style="font-size:15px;">${i.icon}</span>
+            <div style="flex:1;"><div style="font-size:9.5px;font-weight:800;color:${i.color};">${i.name} — <span style="font-weight:600;color:#475569;font-size:8px;">${i.full}</span></div><div style="font-size:7.5px;color:#64748B;">${i.desc}</div></div>
+          </div>`).join('')}
+      </div>
+      <div style="text-align:center;font-size:16px;color:#94A3B8;line-height:1;margin:3px 0;">↓</div>
+      <div style="background:#1E293B;border-radius:7px;padding:9px 11px;text-align:center;">
+        <div style="font-size:10px;font-weight:800;color:#fff;">⚙️ MRP</div>
+        <div style="font-size:7.5px;color:#94A3B8;margin-top:2px;">${pt?'"explode" o produto de trás pra frente e desconta o estoque atual':'"explodes" the product backwards and subtracts current stock'}</div>
+      </div>
+      <div style="text-align:center;font-size:16px;color:#94A3B8;line-height:1;margin:3px 0;">↓</div>
+      <div style="background:#DCFCE7;border:1px solid #86EFAC;border-radius:7px;padding:8px 11px;text-align:center;">
+        <div style="font-size:9.5px;font-weight:800;color:#166534;">📋 ${pt?'Plano de Materiais':'Material Plan'}</div>
+        <div style="font-size:8px;color:#15803D;margin-top:1px;">${pt?'o que pedir · quanto · quando':'what to order · how much · when'}</div>
+      </div>
+      <div style="margin-top:8px;background:#F8FAFC;border-radius:6px;padding:6px 9px;font-size:7.5px;color:#475569;line-height:1.55;">
+        <b>${pt?'Mini-BOM (chaleira):':'Mini-BOM (kettle):'}</b> ${pt?'chaleira = 1 corpo + 1 resistência + 1 tampa + 1 cabo + 2 parafusos. Se o MPS pede 100 chaleiras e há 30 tampas em estoque, o MRP pede 70 tampas.':'kettle = 1 body + 1 element + 1 lid + 1 handle + 2 screws. If the MPS asks for 100 kettles and 30 lids are in stock, MRP orders 70 lids.'}
+      </div>
+    </div>`;
+};
+
+/* ─── WEEK 7: ABC Analysis (Pareto) ─────────────────────────────── */
+window.vis_abcAnalysis = function(container, lang) {
+  const pt = lang === 'pt';
+  const classes = [
+    { k:'A', color:'#DC2626', items:10, value:80, ctrl:pt?'Controle rígido e preciso (ROL tempo real, código de barras)':'Tight, precise control (real-time ROL, barcodes)', ex:pt?'Itens caros / muito usados':'Expensive / heavily used items' },
+    { k:'B', color:'#F59E0B', items:30, value:15, ctrl:pt?'Controle intermediário':'Intermediate control', ex:pt?'Valor moderado':'Moderate value' },
+    { k:'C', color:'#0891B2', items:60, value:5, ctrl:pt?'Controle superficial (basta conferir de vez em quando)':'Cursory control (occasional checks)', ex:pt?'Parafusos, porcas, itens baratos':'Bolts, nuts, cheap items' }
+  ];
+  const barRow = (label, field) => `
+    <div style="margin-bottom:7px;">
+      <div style="font-size:7.5px;font-weight:700;color:#475569;margin-bottom:2px;">${label}</div>
+      <div style="display:flex;height:20px;border-radius:4px;overflow:hidden;">
+        ${classes.map(c=>`<div style="width:${c[field]}%;background:${c.color};display:flex;align-items:center;justify-content:center;color:#fff;font-size:8px;font-weight:800;">${c.k} ${c[field]}%</div>`).join('')}
+      </div>
+    </div>`;
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#003865;margin-bottom:8px;">
+        ${pt?'Análise ABC — o 80/20 do estoque':'ABC Analysis — the 80/20 of inventory'}
+      </div>
+      ${barRow(pt?'% dos ITENS':'% of ITEMS','items')}
+      ${barRow(pt?'% do VALOR (gasto anual)':'% of VALUE (annual spend)','value')}
+      <div style="display:flex;flex-direction:column;gap:5px;margin-top:8px;">
+        ${classes.map(c=>`
+          <div style="display:flex;gap:8px;align-items:flex-start;background:${c.color}0D;border-left:3px solid ${c.color};border-radius:5px;padding:5px 8px;">
+            <div style="font-size:12px;font-weight:900;color:${c.color};line-height:1.2;">${c.k}</div>
+            <div style="flex:1;"><div style="font-size:8px;color:#374151;line-height:1.4;"><b>${c.ctrl}</b></div><div style="font-size:7px;color:#94A3B8;">${c.ex}</div></div>
+          </div>`).join('')}
+      </div>
+      <div style="margin-top:7px;font-size:7.5px;color:#64748B;line-height:1.5;">${pt?'Poucos itens vitais (A) valem quase tudo. Foque o esforço de controle onde o dinheiro está.':'A vital few items (A) are worth almost everything. Focus control effort where the money is.'}</div>
+    </div>`;
+};

@@ -752,6 +752,11 @@ const VIS_DISPATCH = {
   'kraljicMatrix':       true,
   'armsVsPartnership':   true,
   'decouplingPoint':     true,
+  // Week 7
+  'eoqModel':            true,
+  'qpSystems':           true,
+  'mrpTree':             true,
+  'abcAnalysis':         true,
 };
 
 function renderTheoryCard(th) {
