@@ -2676,3 +2676,131 @@ window.vis_amazonVsWalmart = function(container, lang) {
       </div>
     </div>`;
 };
+
+/* ═══════════ MARKETING STRATEGY (Parte 2) ═══════════ */
+
+/* ─── MKT W1: The Marketing Environment (Figure 5.1, concentric) ── */
+window.vis_marketingEnvironment = function(container, lang) {
+  const pt = lang === 'pt';
+  const id = 'menv-' + Math.random().toString(36).substr(2,5);
+  // micro (anel interno) + macro (anel externo). Padrão índice: sem texto no onclick.
+  const micro = [
+    { x:160, y:88,  name:pt?'Organização':'Organisation', desc:pt?'A própria empresa: missão/visão, recursos e estilo de liderança (ex: Branson, empreendedor). Molda a estratégia de dentro.':'The firm itself: mission/vision, resources and leadership style (e.g. Branson, entrepreneurial). Shapes strategy from within.' },
+    { x:118, y:118, name:pt?'Fornecedores':'Suppliers', desc:pt?'Velocidade e confiabilidade do fornecimento = parte do valor. Relações B2B, regulação e CSR.':'Speed and reliability of supply = part of the value. B2B relationships, regulation and CSR.' },
+    { x:203, y:118, name:pt?'Concorrentes':'Competitors', desc:pt?'Quem compete pelo mesmo negócio. Difícil identificar: diretos (óbvios) vs indiretos (museu vs qualquer lazer).':'Who competes for the same business. Hard to identify: direct (obvious) vs indirect (museum vs any leisure).' },
+    { x:118, y:150, name:pt?'Clientes':'Customers', desc:pt?'O coração do marketing. 3 mercados: consumidor (B2C), empresarial (B2B) e governamental.':'The heart of marketing. 3 markets: consumer (B2C), business (B2B) and government.' },
+    { x:203, y:150, name:pt?'Intermediários':'Intermediaries', desc:pt?'Atacadistas, varejistas, transportadoras: levam o produto ao consumidor. Refletem na reputação da marca.':'Wholesalers, retailers, transport: bring the product to the consumer. Reflect on the brand\'s reputation.' },
+    { x:160, y:180, name:pt?'Públicos':'Publics', desc:pt?'Grupos com interesse (stakeholders): governo, comunidade financeira, grupos de pressão (Greenpeace), acionistas.':'Groups with an interest (stakeholders): government, financial community, pressure groups (Greenpeace), shareholders.' }
+  ];
+  const macro = [
+    { x:52, y:70,   name:pt?'Demográfica':'Demographic', desc:pt?'Tamanho, idade e estrutura da população — quem e quantos são os clientes.':'Size, age and structure of the population — who and how many the customers are.' },
+    { x:268, y:70,  name:pt?'Cultural':'Cultural', desc:pt?'Valores, mores e crenças da sociedade que moldam o comportamento de compra.':'Society\'s values, mores and beliefs that shape buying behaviour.' },
+    { x:32, y:135,  name:pt?'Econômica':'Economic', desc:pt?'Renda, emprego, inflação e ciclos econômicos — afetam o poder de compra.':'Income, employment, inflation and economic cycles — affect purchasing power.' },
+    { x:288, y:135, name:pt?'Política':'Political', desc:pt?'Níveis de governo, leis, regulação e políticas públicas.':'Levels of government, laws, regulation and public policy.' },
+    { x:60, y:205,  name:pt?'Natural':'Natural', desc:pt?'Recursos naturais, sustentabilidade, clima e regulação ambiental.':'Natural resources, sustainability, climate and environmental regulation.' },
+    { x:262, y:205, name:pt?'Tecnológica':'Technological', desc:pt?'Inovações que criam e destroem mercados (ex: smartphone mudando o consumo de notícias).':'Innovations that create and destroy markets (e.g. smartphone changing news consumption).' }
+  ];
+  const data = micro.map(m => ({ ...m, ring:'micro' })).concat(macro.map(m => ({ ...m, ring:'macro' })));
+  window[id+'_data'] = data;
+  window[id+'_sel'] = function(i) {
+    const d = window[id+'_data'][i];
+    const box = document.getElementById(id+'-box'); if (!box) return;
+    const isMicro = d.ring === 'micro';
+    box.style.display = 'block';
+    document.getElementById(id+'-n').textContent = d.name;
+    document.getElementById(id+'-n').style.color = isMicro ? '#0369A1' : '#0C4A6E';
+    document.getElementById(id+'-tag').textContent = isMicro ? (pt?'MICRO · influenciável':'MICRO · influenceable') : (pt?'MACRO · incontrolável':'MACRO · uncontrollable');
+    document.getElementById(id+'-tag').style.background = isMicro ? '#0EA5E9' : '#0C4A6E';
+    document.getElementById(id+'-d').textContent = d.desc;
+  };
+  const label = (d, i, fill) => `<text x="${d.x}" y="${d.y}" text-anchor="middle" font-size="8.5" font-weight="700" fill="${fill}" style="cursor:pointer" onclick="window['${id}_sel'](${i})">${d.name}</text>`;
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#0C4A6E;margin-bottom:2px;">
+        ${pt?'O Ambiente de Marketing (Sharp, Fig. 5.1)':'The Marketing Environment (Sharp, Fig. 5.1)'}
+      </div>
+      <div style="font-size:7.5px;color:#64748B;margin-bottom:4px;">${pt?'Clique em qualquer elemento. Centro = você influencia; borda = você só reage.':'Click any element. Centre = you influence; edge = you only react.'}</div>
+      <svg viewBox="0 0 320 250" style="width:100%;height:auto;">
+        <circle cx="160" cy="135" r="118" fill="#E0F2FE" stroke="#7DD3FC" stroke-width="1"/>
+        <circle cx="160" cy="135" r="72" fill="#BAE6FD" stroke="#38BDF8" stroke-width="1"/>
+        <text x="160" y="30" text-anchor="middle" font-size="8" font-weight="800" fill="#0C4A6E" letter-spacing="0.5">${pt?'MACRO-AMBIENTE':'MACRO-ENVIRONMENT'}</text>
+        <text x="160" y="72" text-anchor="middle" font-size="7.5" font-weight="800" fill="#075985" letter-spacing="0.3">${pt?'MICRO-AMBIENTE':'MICRO-ENVIRONMENT'}</text>
+        ${micro.map((d,i)=>label(d,i,'#075985')).join('')}
+        ${macro.map((d,i)=>label(d,i+6,'#0C4A6E')).join('')}
+      </svg>
+      <div id="${id}-box" style="display:none;background:#F0F9FF;border:1px solid #BAE6FD;border-radius:7px;padding:9px 11px;margin-top:2px;">
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;">
+          <span id="${id}-n" style="font-size:10.5px;font-weight:800;"></span>
+          <span id="${id}-tag" style="font-size:6.5px;font-weight:700;color:#fff;padding:2px 6px;border-radius:10px;"></span>
+        </div>
+        <div id="${id}-d" style="font-size:8.5px;color:#374151;line-height:1.55;"></div>
+      </div>
+    </div>`;
+};
+
+/* ─── MKT W1: Micro vs Macro comparison ─────────────────────────── */
+window.vis_microMacroCompare = function(container, lang) {
+  const pt = lang === 'pt';
+  const cols = [
+    { color:'#0EA5E9', bg:'#F0F9FF', title:pt?'MICRO-ambiente':'MICRO-environment', tag:pt?'perto · influenciável':'close · influenceable',
+      rows: pt?[['Distância','Próximo — a empresa lida direto'],['Controle','"Controlável"/influenciável (constrói relações)'],['Alcance','Afeta o dia a dia do negócio'],['Elementos','Organização, fornecedores, clientes, concorrentes, intermediários, públicos'],['Ação','Construir relações, responder']]:[['Distance','Close — the firm deals directly'],['Control','"Controllable"/influenceable (builds relationships)'],['Reach','Affects the day-to-day business'],['Elements','Organisation, suppliers, customers, competitors, intermediaries, publics'],['Action','Build relationships, respond']] },
+    { color:'#0C4A6E', bg:'#EFF6FF', title:pt?'MACRO-ambiente':'MACRO-environment', tag:pt?'longe · incontrolável':'far · uncontrollable',
+      rows: pt?[['Distância','Distante — forças amplas'],['Controle','INCONTROLÁVEL (só monitorar/adaptar)'],['Alcance','Afeta a empresa E o micro-ambiente dela'],['Elementos','Demográfica, cultural, econômica, política, tecnológica, natural'],['Ação','Monitorar, prever, adaptar']]:[['Distance','Distant — wide forces'],['Control','UNCONTROLLABLE (only monitor/adapt)'],['Reach','Affects the firm AND its micro-environment'],['Elements','Demographic, cultural, economic, political, technological, natural'],['Action','Monitor, forecast, adapt']] }
+  ];
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#0C4A6E;margin-bottom:8px;">
+        ${pt?'Micro vs Macro-ambiente':'Micro vs Macro-environment'}
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        ${cols.map(c=>`
+          <div style="background:${c.bg};border:1px solid ${c.color}44;border-radius:8px;overflow:hidden;">
+            <div style="background:${c.color};color:#fff;padding:7px 9px;">
+              <div style="font-size:9.5px;font-weight:800;">${c.title}</div>
+              <div style="font-size:7px;opacity:.9;font-weight:600;">${c.tag}</div>
+            </div>
+            <div style="padding:6px 8px;">
+              ${c.rows.map(r=>`<div style="margin-bottom:5px;"><div style="font-size:6.5px;color:${c.color};font-weight:700;text-transform:uppercase;letter-spacing:.3px;">${r[0]}</div><div style="font-size:8px;color:#374151;line-height:1.4;">${r[1]}</div></div>`).join('')}
+            </div>
+          </div>`).join('')}
+      </div>
+      <div style="margin-top:8px;background:#F1F5F9;border-radius:6px;padding:6px 9px;font-size:8px;color:#334155;line-height:1.55;">
+        💡 ${pt?'<b>Memória:</b> MICRO = perto + controlável + dia a dia. MACRO = longe + incontrolável + tendências de fundo.':'<b>Memory:</b> MICRO = close + controllable + day-to-day. MACRO = far + uncontrollable + background trends.'}
+      </div>
+    </div>`;
+};
+
+/* ─── MKT W1: The 6 Macro forces (Sharp's PESTEL) ───────────────── */
+window.vis_macroForces = function(container, lang) {
+  const pt = lang === 'pt';
+  const id = 'macf-' + Math.random().toString(36).substr(2,5);
+  const forces = [
+    { icon:'👥', color:'#2563EB', name:pt?'Demográfica':'Demographic', desc:pt?'Tamanho, idade e estrutura da população — quem são e quantos são os clientes. Ex: envelhecimento, urbanização.':'Size, age and structure of the population — who and how many the customers are. E.g. ageing, urbanisation.' },
+    { icon:'🎭', color:'#7C3AED', name:pt?'Cultural':'Cultural', desc:pt?'Valores, mores e crenças da sociedade que moldam o comportamento de compra e o que é aceitável.':'Society\'s values, mores and beliefs that shape buying behaviour and what is acceptable.' },
+    { icon:'💰', color:'#16A34A', name:pt?'Econômica':'Economic', desc:pt?'Renda, emprego, inflação e ciclos econômicos — determinam o poder de compra dos clientes.':'Income, employment, inflation and economic cycles — determine customers\' purchasing power.' },
+    { icon:'🏛️', color:'#DC2626', name:pt?'Política':'Political', desc:pt?'Níveis de governo, leis, regulação e políticas públicas que restringem ou abrem mercados.':'Levels of government, laws, regulation and public policy that restrict or open markets.' },
+    { icon:'⚙️', color:'#0891B2', name:pt?'Tecnológica':'Technological', desc:pt?'Inovações que criam e destroem mercados. Ex: o smartphone mudou como as pessoas consomem notícias.':'Innovations that create and destroy markets. E.g. the smartphone changed how people consume news.' },
+    { icon:'🌱', color:'#65A30D', name:pt?'Natural':'Natural', desc:pt?'Recursos naturais, sustentabilidade, clima e regulação ambiental — pressão crescente sobre as empresas.':'Natural resources, sustainability, climate and environmental regulation — growing pressure on firms.' }
+  ];
+  window[id+'_data'] = forces;
+  window[id+'_sel'] = function(i){ const f=window[id+'_data'][i]; const b=document.getElementById(id+'-b'); if(!b)return; document.querySelectorAll('.'+id+'-c').forEach(function(c){c.style.outline='none';}); document.getElementById(id+'-c'+i).style.outline='2px solid '+f.color; document.getElementById(id+'-n').textContent=f.icon+' '+f.name; document.getElementById(id+'-n').style.color=f.color; document.getElementById(id+'-d').textContent=f.desc; b.style.display='block'; };
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#0C4A6E;margin-bottom:2px;">
+        ${pt?'As 6 Forças do Macro-ambiente':'The 6 Macro-environment Forces'}
+      </div>
+      <div style="font-size:7.5px;color:#64748B;margin-bottom:8px;">${pt?'A versão do Sharp para o PESTEL. Clique em cada força.':'Sharp\'s take on PESTEL. Click each force.'}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;">
+        ${forces.map((f,i)=>`
+          <div id="${id}-c${i}" class="${id}-c" onclick="window['${id}_sel'](${i})" style="background:${f.color}0D;border:1px solid ${f.color}33;border-radius:6px;padding:7px 4px;cursor:pointer;text-align:center;transition:outline .12s;">
+            <div style="font-size:15px;">${f.icon}</div>
+            <div style="font-size:7.5px;font-weight:700;color:${f.color};line-height:1.2;margin-top:2px;">${f.name}</div>
+          </div>`).join('')}
+      </div>
+      <div id="${id}-b" style="display:none;margin-top:8px;background:#F0F9FF;border:1px solid #BAE6FD;border-radius:7px;padding:9px 11px;">
+        <div id="${id}-n" style="font-size:10px;font-weight:800;margin-bottom:3px;"></div>
+        <div id="${id}-d" style="font-size:8.5px;color:#374151;line-height:1.6;"></div>
+      </div>
+      <div style="margin-top:7px;font-size:7px;color:#94A3B8;line-height:1.5;">${pt?'PESTEL clássico = Político, Econômico, Social, Tecnológico, Ambiental, Legal. O Sharp usa estas 6 equivalentes.':'Classic PESTEL = Political, Economic, Social, Technological, Environmental, Legal. Sharp uses these 6 equivalents.'}</div>
+    </div>`;
+};

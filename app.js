@@ -772,6 +772,10 @@ const VIS_DISPATCH = {
   'digitizationVsDigital': true,
   'printing3dSupply':    true,
   'amazonVsWalmart':     true,
+  // Marketing Strategy — Week 1
+  'marketingEnvironment': true,
+  'microMacroCompare':   true,
+  'macroForces':         true,
 };
 
 function renderTheoryCard(th) {
