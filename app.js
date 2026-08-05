@@ -784,6 +784,7 @@ const VIS_DISPATCH = {
   'stpFunnel':           true,
   'segmentationBases':   true,
   'targetingStrategies': true,
+  'damasTest':           true,
   'positioningMap':      true,
 };
 

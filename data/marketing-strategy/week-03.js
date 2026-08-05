@@ -98,6 +98,14 @@ window.WEEKS_DATA['marketing-strategy'][3] = {
       }
     },
     {
+      pt: 'Critérios DAMAS (avaliar o segmento)',
+      en: 'DAMAS Criteria (evaluating a segment)',
+      definition: {
+        pt: 'Um checklist de 5 critérios para pressionar-testar um segmento ANTES de comprometer orçamento — a ponte entre segmentar e escolher o alvo. DAMAS: Distinto (se comporta diferente), Acessível (dá pra alcançar), Mensurável (dá pra quantificar), Acionável (você tem capacidade + verba pra servir com lucro) e Substancial (grande ou valioso o bastante pra valer o investimento). Reprovou em qualquer um → repensa. Evita perseguir alvo bonito no papel, mas impossível de converter economicamente.',
+        en: 'A checklist of 5 criteria to pressure-test a segment BEFORE committing budget — the bridge between segmenting and choosing the target. DAMAS: Distinct (behaves differently), Accessible (you can reach it), Measurable (you can quantify it), Actionable (you have the capability + budget to serve it profitably) and Substantial (large or valuable enough to justify the investment). Fail any one → rethink. It prevents chasing a target that looks great on paper but is impossible to convert economically.'
+      }
+    },
+    {
       pt: 'Posicionamento (Positioning)',
       en: 'Positioning',
       definition: {
@@ -154,6 +162,16 @@ window.WEEKS_DATA['marketing-strategy'][3] = {
       }
     },
     {
+      name: { pt: 'O Teste DAMAS (avaliar o segmento)', en: 'The DAMAS Test (evaluating a segment)' },
+      authors: [],
+      year: '',
+      renderer: 'damasTest',
+      description: {
+        pt: 'Ok, você segmentou o mercado — mas qual segmento realmente vale a pena? Antes de gastar 1 real, passe cada candidato por 5 filtros (Investopedia e os textos clássicos convergem neles), resumidos como DAMAS. DISTINTO: se comporta diferente dos outros? ACESSÍVEL: você consegue alcançá-lo pelos canais disponíveis? MENSURÁVEL: dá pra quantificar tamanho e poder de compra? ACIONÁVEL: sua empresa tem capacidade E verba pra servir com lucro? (é a regra de ouro do SWOT: oportunidade só vale com força interna). SUBSTANCIAL: é grande — ou valioso por cliente — o bastante pra justificar o investimento? Reprovou em um → repensa. Clique em cada critério.',
+        en: 'OK, you sliced the market — but which segment is actually worth it? Before spending a cent, run each candidate through 5 filters (Investopedia and the classical texts converge on them), summarised as DAMAS. DISTINCT: does it behave differently from the others? ACCESSIBLE: can you reach it through available channels? MEASURABLE: can you quantify its size and purchasing power? ACTIONABLE: does your firm have the capability AND budget to serve it profitably? (it is the SWOT golden rule: an opportunity only counts with internal strength). SUBSTANTIAL: is it big — or valuable per customer — enough to justify the investment? Fail one → rethink. Click each criterion.'
+      }
+    },
+    {
       name: { pt: 'Posicionamento & Mapa Perceptual', en: 'Positioning & Perceptual Map' },
       authors: ['Ries', 'Trout'],
       year: '1981',
@@ -193,6 +211,11 @@ window.WEEKS_DATA['marketing-strategy'][3] = {
       lesson: { pt: 'Case prático da semana. O Premier Inn não fala a mesma mensagem para todos: serve dois grandes grupos com ofertas distintas — “Premium” (casais jovens e pessoas em viagem de negócios) e “Longer stays” (famílias com filhos, comodidades para férias longas que imitam o conforto de casa). É marketing DIFERENCIADO puro: cada segmento recebe um STP que fala com os desejos e necessidades específicos dele.', en: 'The week\'s practical case. Premier Inn does not send the same message to everyone: it serves two major groups with distinct offers — “Premium” (younger couples and people on business trips) and “Longer stays” (families with children, amenities for longer holidays that mirror the comforts of home). It is pure DIFFERENTIATED marketing: each segment gets an STP that speaks to its specific wants and needs.' }
     },
     {
+      company: 'Mapa de marcas por estratégia (IKEA · Nike · Lush · Groupon)',
+      sector: { pt: 'As 4 estratégias de targeting na prática (leitura Hurree)', en: 'The 4 targeting strategies in practice (Hurree reading)' },
+      lesson: { pt: 'A leitura de targeting do curso (Hugel, Hurree 2022) casa cada estratégia com uma marca real — um mapa mental pronto pra prova. MASSA → IKEA (uma oferta ampla pra quase todo mundo; 822 milhões de visitas às lojas em 2022). DIFERENCIADO → Nike (linhas separadas pra corredor, levantador, ciclista, golfista; US$ 47,7 bi em calçados em 2021). NICHO → Lush (cosmético ético; domina o nicho vegano/sustentável via boca a boca e redes sociais, quase sem propaganda tradicional). MICRO → Groupon (ofertas hiperlocais e personalizadas por usuário; 24 mi+ de usuários ativos em 2021). Obs: o marketing de massa vem perdendo força (concorrência, custo e o desejo do consumidor por personalização).', en: 'The course targeting reading (Hugel, Hurree 2022) matches each strategy to a real brand — a ready-made mental map for the exam. MASS → IKEA (one broad offer for almost everyone; 822 million store visits in 2022). DIFFERENTIATED → Nike (separate lines for runners, weightlifters, cyclists, golfers; $47.7bn in footwear in 2021). NICHE → Lush (ethical cosmetics; dominates the vegan/sustainable niche via word-of-mouth and social media, almost no traditional advertising). MICRO → Groupon (hyper-local, per-user personalised deals; 24m+ active users in 2021). Note: mass marketing is losing ground (competition, cost and consumers wanting personalisation).' }
+    },
+    {
       company: 'Amazon',
       sector: { pt: 'E-commerce — declaração de posicionamento', en: 'E-commerce — positioning statement' },
       lesson: { pt: 'O exemplo de declaração de posicionamento citado na aula: a visão da Amazon é “ser a empresa mais centrada no cliente da Terra; construir um lugar onde as pessoas possam encontrar e descobrir qualquer coisa que queiram comprar online”. Note como a frase aponta o conceito (centrada no cliente) e o diferencial (encontrar/descobrir qualquer coisa) — exatamente o formato da fórmula.', en: 'The positioning-statement example cited in the lecture: Amazon\'s vision is “to be earth\'s most customer-centric company; to build a place where people can come to find and discover anything they might want to buy online”. Note how the sentence points to the concept (customer-centric) and the differentiator (find/discover anything) — exactly the formula\'s format.' }
@@ -216,6 +239,8 @@ window.WEEKS_DATA['marketing-strategy'][3] = {
     { term: 'Differentiated', definition: { pt: 'Vários segmentos, uma oferta separada pra cada. Mais vendas, porém mais caro.', en: 'Several segments, a separate offer for each. Higher sales, but more expensive.' } },
     { term: 'Concentrated / Niche', definition: { pt: 'Grande fatia de um segmento pequeno. Domina o nicho.', en: 'Large share of one small segment. Dominates the niche.' } },
     { term: 'Micromarketing', definition: { pt: 'Sob medida para locais (local) e indivíduos (individual, 1-a-1).', en: 'Tailored to locations (local) and individuals (individual, 1-to-1).' } },
+    { term: 'DAMAS (critérios)', definition: { pt: 'Distinct, Accessible, Measurable, Actionable, Substantial. 5 filtros para avaliar se um segmento vale a pena antes de investir.', en: 'Distinct, Accessible, Measurable, Actionable, Substantial. 5 filters to assess whether a segment is worth it before investing.' } },
+    { term: 'Actionable (DAMAS)', definition: { pt: 'A empresa tem capacidade + verba pra servir o segmento com lucro. Espelha a regra de ouro do SWOT (força interna).', en: 'The firm has the capability + budget to serve the segment profitably. Mirrors the SWOT golden rule (internal strength).' } },
     { term: 'Positioning', definition: { pt: 'Como o produto é definido pelos consumidores em atributos importantes — o lugar dele na mente.', en: 'How the product is defined by consumers on important attributes — its place in the mind.' } },
     { term: 'Positioning statement', definition: { pt: '“Para [alvo] que [necessidade], a [marca] é a [conceito] que [diferencial].”', en: '“For [target] who [need], [brand] is the [concept] that [differentiator].”' } },
     { term: 'Perceptual map', definition: { pt: 'Diagrama de 2 eixos que mostra onde as marcas “moram” na mente do cliente.', en: '2-axis diagram showing where brands “live” in the customer\'s mind.' } },
@@ -235,6 +260,8 @@ window.WEEKS_DATA['marketing-strategy'][3] = {
     { q: { pt: 'O que é um mercado-alvo (target market)?', en: 'What is a target market?' }, a: { pt: 'Um conjunto de compradores com necessidades ou características em comum que a empresa decide servir, depois de avaliar os segmentos.', en: 'A set of buyers with common needs or characteristics that the firm decides to serve, after evaluating the segments.' } },
     { q: { pt: 'Cite as 4 estratégias de targeting, do mais amplo ao mais estreito.', en: 'Name the 4 targeting strategies, from broadest to narrowest.' }, a: { pt: 'Indiferenciado (massa) → Diferenciado (vários segmentos) → Concentrado (nicho) → Micromarketing (local/individual).', en: 'Undifferentiated (mass) → Differentiated (several segments) → Concentrated (niche) → Micromarketing (local/individual).' } },
     { q: { pt: 'Marketing diferenciado vs indiferenciado: vantagem e custo?', en: 'Differentiated vs undifferentiated marketing: advantage and cost?' }, a: { pt: 'Indiferenciado = uma oferta pra todos, mais barato. Diferenciado = oferta separada por segmento → mais vendas e posição mais forte, porém mais caro.', en: 'Undifferentiated = one offer for all, cheaper. Differentiated = a separate offer per segment → higher sales and stronger position, but more expensive.' } },
+    { q: { pt: 'Dê uma marca-exemplo pra cada estratégia de targeting.', en: 'Give an example brand for each targeting strategy.' }, a: { pt: 'Massa → IKEA. Diferenciado → Nike (linhas por esporte). Nicho → Lush (cosmético ético). Micro → Groupon (ofertas hiperlocais). (Exemplos da leitura Hurree.)', en: 'Mass → IKEA. Differentiated → Nike (lines by sport). Niche → Lush (ethical cosmetics). Micro → Groupon (hyper-local deals). (Examples from the Hurree reading.)' } },
+    { q: { pt: 'Quais os 5 critérios DAMAS pra avaliar um segmento?', en: 'What are the 5 DAMAS criteria to evaluate a segment?' }, a: { pt: 'Distinct (se comporta diferente), Accessible (dá pra alcançar), Measurable (dá pra quantificar), Actionable (você tem capacidade+verba pra servir com lucro) e Substantial (grande/valioso o bastante). Reprovou em um → repensa o segmento.', en: 'Distinct (behaves differently), Accessible (you can reach it), Measurable (you can quantify it), Actionable (you have capability+budget to serve it profitably) and Substantial (big/valuable enough). Fail one → rethink the segment.' } },
     { q: { pt: 'O que é posicionamento?', en: 'What is positioning?' }, a: { pt: 'A forma como o produto é definido pelos consumidores em atributos importantes — o lugar que ele ocupa na MENTE deles em relação aos concorrentes. A empresa escolhe a proposta de valor.', en: 'The way a product is defined by consumers on important attributes — the place it occupies in their MINDS relative to competitors. The firm chooses the value proposition.' } },
     { q: { pt: 'Qual a fórmula de uma declaração de posicionamento?', en: 'What is the formula of a positioning statement?' }, a: { pt: '“Para [público-alvo] que [necessidade], a [marca] é a [categoria/conceito] que [diferencial].” Ex: Amazon = a empresa mais centrada no cliente da Terra.', en: '“For [target] who [need], [brand] is the [category/concept] that [differentiator].” E.g. Amazon = earth\'s most customer-centric company.' } },
     { q: { pt: 'Por que a Lucozade é o caso clássico de reposicionamento?', en: 'Why is Lucozade the classic repositioning case?' }, a: { pt: 'Saiu de bebida dada a DOENTES para se recuperarem e virou bebida ESPORTIVA/energética para pessoas ativas e saudáveis — novo alvo e nova posição, mesma marca, acompanhando o ciclo de vida.', en: 'It went from a drink given to the SICK to recover into a SPORTS/energy drink for active, healthy people — new target and new position, same brand, following the lifecycle.' } }
@@ -242,7 +269,7 @@ window.WEEKS_DATA['marketing-strategy'][3] = {
   links: [
     { title: 'STP model — lecture (Coursera, Week 13)', url: '', type: 'video', description: { pt: 'A aula-vídeo (8 min) que estrutura toda a semana: bases de segmentação, estratégias de targeting e a declaração de posicionamento (com o exemplo da Amazon).', en: 'The lecture video (8 min) that structures the whole week: segmentation bases, targeting strategies and the positioning statement (with the Amazon example).' } },
     { title: 'Ng, C. — “Market segmentation – Nike case study” (2018)', url: '', type: 'article', description: { pt: 'Leitura do curso sobre as metodologias/técnicas de segmentação usadas pela Nike.', en: 'Course reading on the segmentation methodologies/techniques used by Nike.' } },
-    { title: 'Hugel, M. — “Market targeting: Why it pays to differentiate” (Huree, 2022)', url: '', type: 'article', description: { pt: 'Blog do curso sobre as estratégias-chave de targeting.', en: 'Course blog on the key targeting strategies.' } },
+    { title: 'Hugel, M. — “Market targeting: Why it pays to differentiate” (Hurree, 2022)', url: 'https://blog.hurree.co/market-targeting', type: 'article', description: { pt: 'Lido na íntegra: 4 estratégias com marcas (IKEA/Nike/Lush/Groupon), teste DAMAS, benefícios de diferenciar e targeting digital.', en: 'Read in full: 4 strategies with brands (IKEA/Nike/Lush/Groupon), DAMAS test, benefits of differentiation and digital targeting.' } },
     { title: 'Pratt, T. — “Afternoon tea and eccentric chic: the US still loves British brands” (The Guardian, 2015)', url: '', type: 'article', description: { pt: 'Leitura sobre posicionamento de marcas britânicas nos EUA (herança + excentricidade chique).', en: 'Reading on the positioning of British brands in the US (heritage + chic eccentricity).' } },
     { title: 'Suntory / Lucozade energy (n.d.) + “The rebranding of Lucozade” (vídeo)', url: '', type: 'video', description: { pt: 'Material do curso sobre o ciclo de vida e o reposicionamento da Lucozade (de remédio a bebida esportiva).', en: 'Course material on Lucozade\'s lifecycle and repositioning (from remedy to sports drink).' } }
   ],
@@ -265,6 +292,11 @@ Alvo = conjunto de compradores com necessidades/características comuns que a em
 • CONCENTRADO (nicho) — grande fatia de um segmento pequeno. Dominar o nicho.
 • MICROMARKETING — sob medida pra locais (local) e indivíduos (individual, 1-a-1).
 Regra: quanto mais estreito o alvo, mais relevante/personalizado — e mais caro por cliente.
+Diferença-chave: a segmentação responde "quem existe no mercado?"; o targeting responde "quem devo servir, e quão amplamente?".
+Marcas por estratégia (leitura Hurree): MASSA → IKEA (822 mi de visitas/2022) · DIFERENCIADO → Nike (linhas por esporte; US$47,7 bi calçados/2021) · NICHO → Lush (cosmético ético, boca a boca) · MICRO → Groupon (ofertas hiperlocais; 24 mi+ usuários/2021).
+Por que diferenciar compensa (Hugel): vantagem competitiva sustentável, mais lealdade e menos sensibilidade a preço, posição mais forte e crescimento de marca no longo prazo.
+COMO ESCOLHER O SEGMENTO — teste DAMAS (5 filtros antes de gastar 1 real): Distinct (se comporta diferente?), Accessible (dá pra alcançar?), Measurable (dá pra quantificar tamanho/poder de compra?), Actionable (você tem capacidade + verba pra servir com lucro? = regra de ouro do SWOT: só vale a oportunidade com força interna), Substantial (grande — ou valioso por cliente — o bastante?). Reprovou em um → repensa. Macete: DAMAS = "as damas" 👑.
+Targeting hoje (digital): dados comportamentais (páginas vistas, carrinho, frequência de compra), personalização em tempo real e IA (lookalike, propensão) permitem mirar em nível individual e em escala — mas exigem consentimento/privacidade (GDPR, CCPA, fim dos cookies de terceiros).
 
 ═══ 3) POSICIONAMENTO (plantar bandeira na mente) ═══
 Definição: a forma como o produto é definido pelos consumidores em atributos importantes — o lugar dele na MENTE, vs concorrentes (Ries & Trout: a batalha é na mente). A empresa decide a proposta de valor.
@@ -286,7 +318,7 @@ O STP é um dos modelos mais aplicados do marketing. Foca na eficácia comercial
 
 🎬 Aula-vídeo do curso (Coursera, Week 13 — “STP model”, 8 min): objetivos, definição de segmentação, 4 bases (geográfica/demográfica/psicográfica/comportamental), targeting (indiferenciado/diferenciado/concentrado/micromarketing) e posicionamento + declaração (exemplo Amazon). Transcrição enviada pelo usuário.
 📖 Ng, C. “Market segmentation – Nike case study” (2018) — metodologias de segmentação.
-📖 Hugel, M. “Market targeting: Why it pays to differentiate” (Huree, 2022) — estratégias de targeting.
+📖 Hugel, M. “Market targeting: Why it pays to differentiate” (Hurree, 2022) — LIDO na íntegra (blog.hurree.co/market-targeting): 4 estratégias com marcas reais (IKEA/Nike/Lush/Groupon), teste DAMAS, benefícios de diferenciar e targeting digital (comportamental/IA/privacidade).
 📖 Pratt, T. “Afternoon tea and eccentric chic: the US still loves British brands” (The Guardian, 2015) — posicionamento.
 📖 Suntory Beverage & Food GB&I / Lucozade energy (n.d.) + vídeo “The rebranding of Lucozade” — ciclo de vida e reposicionamento.
 🏨 Case Premier Inn (tela do curso): dois grupos — “Premium” (casais jovens + viagens de negócios) e “Longer stays” (famílias com filhos).
@@ -311,6 +343,11 @@ Target = set of buyers with common needs/characteristics the firm decides to ser
 • CONCENTRATED (niche) — large share of one small segment. Dominate the niche.
 • MICROMARKETING — tailored to locations (local) and individuals (individual, 1-to-1).
 Rule: the narrower the target, the more relevant/personalised — and the more costly per customer.
+Key distinction: segmentation answers "who exists in the market?"; targeting answers "who should we serve, and how broadly?".
+Brands by strategy (Hurree reading): MASS → IKEA (822m visits/2022) · DIFFERENTIATED → Nike (lines by sport; $47.7bn footwear/2021) · NICHE → Lush (ethical cosmetics, word-of-mouth) · MICRO → Groupon (hyper-local deals; 24m+ users/2021).
+Why differentiation pays (Hugel): sustainable competitive edge, more loyalty and less price sensitivity, stronger positioning and long-term brand growth.
+HOW TO CHOOSE THE SEGMENT — DAMAS test (5 filters before spending a cent): Distinct (behaves differently?), Accessible (can you reach it?), Measurable (can you quantify size/purchasing power?), Actionable (do you have the capability + budget to serve it profitably? = SWOT golden rule: an opportunity only counts with internal strength), Substantial (big — or valuable per customer — enough?). Fail one → rethink.
+Targeting today (digital): behavioural data (pages viewed, cart, purchase frequency), real-time personalisation and AI (lookalike, propensity) allow individual-level targeting at scale — but require consent/privacy (GDPR, CCPA, third-party cookie deprecation).
 
 ═══ 3) POSITIONING (plant a flag in the mind) ═══
 Definition: the way the product is defined by consumers on important attributes — its place in the MIND, vs competitors (Ries & Trout: the battle is in the mind). The firm decides the value proposition.
@@ -332,7 +369,7 @@ STP is one of marketing's most applied models. It focuses on commercial effectiv
 
 🎬 Course lecture video (Coursera, Week 13 — “STP model”, 8 min): objectives, definition of segmentation, 4 bases (geographic/demographic/psychographic/behavioural), targeting (undifferentiated/differentiated/concentrated/micromarketing) and positioning + statement (Amazon example). Transcript sent by the user.
 📖 Ng, C. “Market segmentation – Nike case study” (2018) — segmentation methodologies.
-📖 Hugel, M. “Market targeting: Why it pays to differentiate” (Huree, 2022) — targeting strategies.
+📖 Hugel, M. “Market targeting: Why it pays to differentiate” (Hurree, 2022) — READ in full (blog.hurree.co/market-targeting): 4 strategies with real brands (IKEA/Nike/Lush/Groupon), DAMAS test, benefits of differentiation and digital targeting (behavioural/AI/privacy).
 📖 Pratt, T. “Afternoon tea and eccentric chic: the US still loves British brands” (The Guardian, 2015) — positioning.
 📖 Suntory Beverage & Food GB&I / Lucozade energy (n.d.) + video “The rebranding of Lucozade” — lifecycle and repositioning.
 🏨 Premier Inn case (course screen): two groups — “Premium” (younger couples + business trips) and “Longer stays” (families with children).
