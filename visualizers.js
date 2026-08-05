@@ -2804,3 +2804,121 @@ window.vis_macroForces = function(container, lang) {
       <div style="margin-top:7px;font-size:7px;color:#94A3B8;line-height:1.5;">${pt?'PESTEL clássico = Político, Econômico, Social, Tecnológico, Ambiental, Legal. O Sharp usa estas 6 equivalentes.':'Classic PESTEL = Political, Economic, Social, Technological, Environmental, Legal. Sharp uses these 6 equivalents.'}</div>
     </div>`;
 };
+
+/* ─── MKT W2: SWOT matrix (2×2, internal×external) ──────────────── */
+window.vis_swotMatrix = function(container, lang) {
+  const pt = lang === 'pt';
+  const id = 'swot-' + Math.random().toString(36).substr(2,5);
+  const quads = [
+    { k:'S', color:'#16A34A', bg:'#F0FDF4', name:pt?'Forças':'Strengths', axis:pt?'INTERNO · ajuda':'INTERNAL · helps', ex:pt?'Ex (empresa de frango): marca reconhecida, boa rede de distribuição, base financeira forte. O que a empresa faz bem e controla.':'E.g. (chicken company): recognised brand, good distribution network, strong financial base. What the firm does well and controls.' },
+    { k:'W', color:'#DC2626', bg:'#FEF2F2', name:pt?'Fraquezas':'Weaknesses', axis:pt?'INTERNO · atrapalha':'INTERNAL · hurts', ex:pt?'Ex: linha de produtos estreita, falta de mão de obra na produção. Onde a empresa é vulnerável — também interno.':'E.g.: narrow product range, shortage of production staff. Where the firm is vulnerable — also internal.' },
+    { k:'O', color:'#2563EB', bg:'#EFF6FF', name:pt?'Oportunidades':'Opportunities', axis:pt?'EXTERNO · ajuda':'EXTERNAL · helps', ex:pt?'Ex: demanda por frango crescendo, renda subindo → refeições prontas. Tendências favoráveis do ambiente. Só valem se você tem força interna pra agarrá-las.':'E.g.: growing demand for chicken, rising income → ready meals. Favourable environmental trends. Only worth it if you have the internal strength to seize them.' },
+    { k:'T', color:'#B45309', bg:'#FFFBEB', name:pt?'Ameaças':'Threats', axis:pt?'EXTERNO · atrapalha':'EXTERNAL · hurts', ex:pt?'Ex: crises de saúde (health scares), marca própria dos supermercados, normas de segurança mais rígidas encarecendo. Piores quando batem numa fraqueza sua.':'E.g.: health scares, supermarkets\' own-label, tighter safety standards raising costs. Worse when they hit one of your weaknesses.' }
+  ];
+  window[id+'_data'] = quads;
+  window[id+'_sel'] = function(i){ const q=window[id+'_data'][i]; const b=document.getElementById(id+'-b'); if(!b)return; document.querySelectorAll('.'+id+'-c').forEach(function(c){c.style.outline='none';}); document.getElementById(id+'-c'+i).style.outline='2.5px solid '+q.color; document.getElementById(id+'-n').textContent=q.k+' · '+q.name; document.getElementById(id+'-n').style.color=q.color; document.getElementById(id+'-a').textContent=q.axis; document.getElementById(id+'-a').style.background=q.color; document.getElementById(id+'-d').textContent=q.ex; b.style.display='block'; };
+  const cell = (q,i) => `<div id="${id}-c${i}" class="${id}-c" onclick="window['${id}_sel'](${i})" style="background:${q.bg};border:1px solid ${q.color}33;border-radius:7px;padding:9px 8px;cursor:pointer;transition:outline .12s;min-height:56px;">
+    <div style="font-size:16px;font-weight:900;color:${q.color};line-height:1;">${q.k}</div>
+    <div style="font-size:9px;font-weight:800;color:${q.color};margin-top:2px;">${q.name}</div>
+    <div style="font-size:6.5px;color:#94A3B8;font-weight:700;margin-top:2px;">${q.axis}</div>
+  </div>`;
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#0C4A6E;margin-bottom:2px;">
+        ${pt?'Análise SWOT — clique nos quadrantes':'SWOT Analysis — click the quadrants'}
+      </div>
+      <div style="font-size:7.5px;color:#64748B;margin-bottom:8px;">${pt?'Colunas = ajuda vs atrapalha · Linhas = interno vs externo.':'Columns = helps vs hurts · Rows = internal vs external.'}</div>
+      <div style="display:flex;gap:6px;">
+        <div style="display:flex;flex-direction:column;justify-content:space-around;align-items:center;">
+          <div style="writing-mode:vertical-rl;transform:rotate(180deg);font-size:7px;font-weight:800;color:#16A34A;letter-spacing:.5px;">${pt?'INTERNO':'INTERNAL'}</div>
+          <div style="writing-mode:vertical-rl;transform:rotate(180deg);font-size:7px;font-weight:800;color:#2563EB;letter-spacing:.5px;">${pt?'EXTERNO':'EXTERNAL'}</div>
+        </div>
+        <div style="flex:1;">
+          <div style="display:flex;justify-content:space-around;font-size:7px;font-weight:800;color:#64748B;margin-bottom:3px;"><span>👍 ${pt?'AJUDA':'HELPS'}</span><span>👎 ${pt?'ATRAPALHA':'HURTS'}</span></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+            ${cell(quads[0],0)}${cell(quads[1],1)}${cell(quads[2],2)}${cell(quads[3],3)}
+          </div>
+        </div>
+      </div>
+      <div id="${id}-b" style="display:none;margin-top:8px;background:#F8FAFC;border:1px solid #E5E7EB;border-radius:7px;padding:9px 11px;">
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;">
+          <span id="${id}-n" style="font-size:10px;font-weight:800;"></span>
+          <span id="${id}-a" style="font-size:6.5px;font-weight:700;color:#fff;padding:2px 6px;border-radius:10px;"></span>
+        </div>
+        <div id="${id}-d" style="font-size:8.5px;color:#374151;line-height:1.55;"></div>
+      </div>
+      <div style="margin-top:7px;font-size:7px;color:#94A3B8;line-height:1.5;">💡 ${pt?'SWOT bom CRUZA os eixos: oportunidade só vale com força interna; ameaça é pior se bate numa fraqueza.':'A good SWOT CROSSES the axes: an opportunity only counts with internal strength; a threat is worse if it hits a weakness.'}</div>
+    </div>`;
+};
+
+/* ─── MKT W2: Porter's Five Forces (hub) ────────────────────────── */
+window.vis_portersForces = function(container, lang) {
+  const pt = lang === 'pt';
+  const id = 'p5f-' + Math.random().toString(36).substr(2,5);
+  const forces = [
+    { pos:'center', icon:'⚔️', color:'#DC2626', name:pt?'Rivalidade Competitiva':'Competitive Rivalry', desc:pt?'A força CENTRAL: intensidade da briga entre concorrentes já na indústria. Alta com muitos rivais parecidos, crescimento lento e pouca diferenciação (guerra de preço).':'The CENTRAL force: intensity of the fight among competitors already in the industry. High with many similar rivals, slow growth and little differentiation (price war).' },
+    { pos:'top', icon:'🚪', color:'#2563EB', name:pt?'Novos Entrantes':'New Entrants', desc:pt?'Ameaça de novas empresas entrarem e roubarem fatia. Alta quando as barreiras de entrada são baixas (pouco capital, sem patentes, sem escala).':'Threat of new firms entering and grabbing share. High when entry barriers are low (little capital, no patents, no scale).' },
+    { pos:'left', icon:'📦', color:'#B45309', name:pt?'Poder dos Fornecedores':'Supplier Power', desc:pt?'O quanto os fornecedores te espremem (preços, condições). Alto com poucos fornecedores, insumo único ou custo alto de trocar.':'How much suppliers squeeze you (prices, terms). High with few suppliers, a unique input or high switching cost.' },
+    { pos:'right', icon:'🛒', color:'#16A34A', name:pt?'Poder dos Clientes':'Customer Power', desc:pt?'O quanto os clientes forçam o preço pra baixo. Alto quando compram muito, o produto é padronizado ou há muitos vendedores.':'How much customers force prices down. High when they buy a lot, the product is standardized or there are many sellers.' },
+    { pos:'bottom', icon:'🔄', color:'#7C3AED', name:pt?'Substitutos':'Substitutes', desc:pt?'Produtos de OUTRA indústria que satisfazem a mesma necessidade. Ex: streaming vs locadora; videochamada vs viagem. O concorrente indireto virando força.':'Products from ANOTHER industry meeting the same need. E.g. streaming vs rental; video call vs travel. The indirect competitor turned into a force.' }
+  ];
+  window[id+'_data'] = forces;
+  window[id+'_sel'] = function(i){ const f=window[id+'_data'][i]; const b=document.getElementById(id+'-b'); if(!b)return; document.querySelectorAll('.'+id+'-c').forEach(function(c){c.style.outline='none';}); document.getElementById(id+'-c'+i).style.outline='2.5px solid '+f.color; document.getElementById(id+'-n').textContent=f.icon+' '+f.name; document.getElementById(id+'-n').style.color=f.color; document.getElementById(id+'-d').textContent=f.desc; b.style.display='block'; };
+  const box = (i,extra) => { const f=forces[i]; return `<div id="${id}-c${i}" class="${id}-c" onclick="window['${id}_sel'](${i})" style="background:${f.color}0D;border:1px solid ${f.color}44;border-radius:7px;padding:6px 4px;cursor:pointer;text-align:center;transition:outline .12s;${extra||''}">
+    <div style="font-size:14px;">${f.icon}</div><div style="font-size:7px;font-weight:700;color:${f.color};line-height:1.15;margin-top:1px;">${f.name}</div></div>`; };
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#0C4A6E;margin-bottom:2px;">
+        ${pt?'Cinco Forças de Porter (1979)':'Porter\'s Five Forces (1979)'}
+      </div>
+      <div style="font-size:7.5px;color:#64748B;margin-bottom:8px;">${pt?'Rivalidade no centro, 4 forças pressionando. Clique.':'Rivalry at the centre, 4 forces pressing in. Click.'}</div>
+      <div style="max-width:280px;margin:0 auto;">
+        <div style="display:flex;justify-content:center;margin-bottom:4px;">${box(1,'width:44%')}</div>
+        <div style="display:flex;align-items:center;gap:4px;">
+          ${box(2,'flex:1')}${box(0,'flex:1.3;border-width:2px;')}${box(3,'flex:1')}
+        </div>
+        <div style="display:flex;justify-content:center;margin-top:4px;">${box(4,'width:44%')}</div>
+      </div>
+      <div id="${id}-b" style="display:none;margin-top:8px;background:#F8FAFC;border:1px solid #E5E7EB;border-radius:7px;padding:9px 11px;">
+        <div id="${id}-n" style="font-size:10px;font-weight:800;margin-bottom:3px;"></div>
+        <div id="${id}-d" style="font-size:8.5px;color:#374151;line-height:1.55;"></div>
+      </div>
+      <div style="margin-top:7px;font-size:7px;color:#94A3B8;line-height:1.5;">💡 ${pt?'Forças FORTES = indústria pouco atrativa/lucrativa. Forças fracas = atrativa.':'STRONG forces = unattractive/unprofitable industry. Weak forces = attractive.'}</div>
+    </div>`;
+};
+
+/* ─── MKT W2: PESTLE (6 macro factors) ──────────────────────────── */
+window.vis_pestle = function(container, lang) {
+  const pt = lang === 'pt';
+  const id = 'pest-' + Math.random().toString(36).substr(2,5);
+  const factors = [
+    { L:'P', color:'#DC2626', name:pt?'Político':'Political', desc:pt?'Governo, estabilidade política, políticas públicas, comércio, impostos.':'Government, political stability, public policy, trade, taxes.' },
+    { L:'E', color:'#16A34A', name:pt?'Econômico':'Economic', desc:pt?'Crescimento, inflação, juros, renda, emprego — poder de compra.':'Growth, inflation, interest, income, employment — purchasing power.' },
+    { L:'S', color:'#7C3AED', name:pt?'Sociológico':'Sociological', desc:pt?'Demografia, cultura, estilos de vida, valores da sociedade.':'Demographics, culture, lifestyles, society\'s values.' },
+    { L:'T', color:'#0891B2', name:pt?'Tecnológico':'Technological', desc:pt?'Inovação, automação, novas plataformas — cria e destrói mercados.':'Innovation, automation, new platforms — creates and destroys markets.' },
+    { L:'L', color:'#B45309', name:pt?'Legal':'Legal', desc:pt?'Leis, regulação, normas trabalhistas e de defesa do consumidor.':'Laws, regulation, labour and consumer-protection rules.' },
+    { L:'E', color:'#65A30D', name:pt?'Ambiental':'Environmental', desc:pt?'Clima, sustentabilidade, recursos naturais, regulação ambiental.':'Climate, sustainability, natural resources, environmental regulation.' }
+  ];
+  window[id+'_data'] = factors;
+  window[id+'_sel'] = function(i){ const f=window[id+'_data'][i]; const b=document.getElementById(id+'-b'); if(!b)return; document.querySelectorAll('.'+id+'-c').forEach(function(c){c.style.transform='none';c.style.boxShadow='none';}); const el=document.getElementById(id+'-c'+i); el.style.transform='translateY(-2px)'; el.style.boxShadow='0 3px 8px '+f.color+'55'; document.getElementById(id+'-n').textContent=f.L+' · '+f.name; document.getElementById(id+'-n').style.color=f.color; document.getElementById(id+'-d').textContent=f.desc; b.style.display='block'; };
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#0C4A6E;margin-bottom:2px;">
+        ${pt?'Análise PESTLE — o macro-ambiente':'PESTLE Analysis — the macro-environment'}
+      </div>
+      <div style="font-size:7.5px;color:#64748B;margin-bottom:8px;">${pt?'6 fatores externos e incontroláveis. Clique em cada letra.':'6 external, uncontrollable factors. Click each letter.'}</div>
+      <div style="display:flex;gap:3px;margin-bottom:8px;">
+        ${factors.map((f,i)=>`<div id="${id}-c${i}" class="${id}-c" onclick="window['${id}_sel'](${i})" style="flex:1;background:${f.color};color:#fff;border-radius:6px;padding:9px 1px 6px;text-align:center;cursor:pointer;transition:all .12s;">
+          <div style="font-size:15px;font-weight:900;line-height:1;">${f.L}</div>
+          <div style="font-size:5.8px;font-weight:700;margin-top:3px;line-height:1.05;opacity:.95;">${f.name}</div>
+        </div>`).join('')}
+      </div>
+      <div id="${id}-b" style="display:none;background:#F8FAFC;border:1px solid #E5E7EB;border-radius:7px;padding:9px 11px;">
+        <div id="${id}-n" style="font-size:10px;font-weight:800;margin-bottom:3px;"></div>
+        <div id="${id}-d" style="font-size:8.5px;color:#374151;line-height:1.55;"></div>
+      </div>
+      <div style="margin-top:8px;background:#EFF6FF;border-radius:6px;padding:6px 9px;font-size:7.5px;color:#1E40AF;line-height:1.55;">
+        💡 ${pt?'Mesma família das 6 forças macro do Sharp (Sem. 11). O PESTLE separa o <b>Legal</b> do Político e usa <b>Sociológico</b> (no lugar de Demográfico+Cultural).':'Same family as Sharp\'s 6 macro forces (Week 11). PESTLE splits <b>Legal</b> from Political and uses <b>Sociological</b> (instead of Demographic+Cultural).'}
+      </div>
+    </div>`;
+};

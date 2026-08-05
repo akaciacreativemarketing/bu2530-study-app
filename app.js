@@ -776,6 +776,10 @@ const VIS_DISPATCH = {
   'marketingEnvironment': true,
   'microMacroCompare':   true,
   'macroForces':         true,
+  // Marketing Strategy — Week 2
+  'swotMatrix':          true,
+  'portersForces':       true,
+  'pestle':              true,
 };
 
 function renderTheoryCard(th) {
