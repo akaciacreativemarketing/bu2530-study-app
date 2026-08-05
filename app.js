@@ -780,6 +780,11 @@ const VIS_DISPATCH = {
   'swotMatrix':          true,
   'portersForces':       true,
   'pestle':              true,
+  // Marketing Strategy — Week 3 (STP)
+  'stpFunnel':           true,
+  'segmentationBases':   true,
+  'targetingStrategies': true,
+  'positioningMap':      true,
 };
 
 function renderTheoryCard(th) {

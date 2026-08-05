@@ -2922,3 +2922,158 @@ window.vis_pestle = function(container, lang) {
       </div>
     </div>`;
 };
+
+/* ═══════════════════════════════════════════════════════════════════
+   MARKETING STRATEGY — WEEK 3 (course Week 13): STP
+   Segmenting · Targeting · Positioning
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ─── MKT W3: STP model (funnel Segment → Target → Position) ─────── */
+window.vis_stpFunnel = function(container, lang) {
+  const pt = lang === 'pt';
+  const id = 'stp-' + Math.random().toString(36).substr(2,5);
+  const steps = [
+    { n:'S', w:100, color:'#0EA5E9', name:pt?'Segmentação':'Segmentation', q:pt?'RECORTAR o mercado':'SLICE the market', desc:pt?'Quebrar o mercado grande e heterogêneo em grupos menores e homogêneos (segmentos), cada um com desejos, recursos e hábitos parecidos. Não existe um único jeito de segmentar — testa-se variáveis sozinhas ou combinadas. Ex (pizzaria): universitários da madrugada, famílias no fim de semana, galera fitness, escritórios no almoço.':'Break the big, heterogeneous market into smaller, homogeneous groups (segments), each with similar wants, resources and habits. There is no single way to segment — you test variables alone or combined. E.g. (pizza place): late-night students, weekend families, the fitness crowd, lunchtime offices.' },
+    { n:'T', w:70, color:'#0284C7', name:pt?'Alvo (Targeting)':'Targeting', q:pt?'ESCOLHER os segmentos':'CHOOSE the segments', desc:pt?'Avaliar a atratividade de cada segmento e decidir QUAIS e QUANTOS servir. É a decisão comercial: onde vale a pena investir. O alvo é o conjunto de compradores com necessidades ou características em comum que a empresa decide atender. Ex: focar nos universitários da madrugada + escritórios no almoço.':'Assess each segment\'s attractiveness and decide WHICH and HOW MANY to serve. It is the commercial decision: where it is worth investing. The target is the set of buyers with shared needs or characteristics that the firm decides to serve. E.g. focus on late-night students + lunchtime offices.' },
+    { n:'P', w:44, color:'#0C4A6E', name:pt?'Posicionamento':'Positioning', q:pt?'PLANTAR bandeira na mente':'PLANT a flag in the mind', desc:pt?'Definir a proposta de valor e o lugar que o produto ocupa na MENTE do cliente-alvo, nos atributos que importam. É como o produto é definido pelos consumidores. Ex: a pizzaria que entrega quentinha até as 4h da manhã (âncora na cabeça: pizza da madrugada).':'Define the value proposition and the place the product occupies in the target customer\'s MIND, on the attributes that matter. It is how the product is defined by consumers. E.g. the pizza place that delivers piping hot until 4am (an anchor in the head: late-night pizza).' }
+  ];
+  window[id+'_data'] = steps;
+  window[id+'_sel'] = function(i){ const s=window[id+'_data'][i]; const b=document.getElementById(id+'-b'); if(!b)return; document.querySelectorAll('.'+id+'-c').forEach(function(c){c.style.outline='none';}); document.getElementById(id+'-c'+i).style.outline='3px solid '+s.color; document.getElementById(id+'-n').textContent=s.n+' · '+s.name; document.getElementById(id+'-n').style.color=s.color; document.getElementById(id+'-q').textContent=s.q; document.getElementById(id+'-q').style.background=s.color; document.getElementById(id+'-d').textContent=s.desc; b.style.display='block'; };
+  const bar = (s,i) => `<div id="${id}-c${i}" class="${id}-c" onclick="window['${id}_sel'](${i})" style="background:${s.color};color:#fff;border-radius:7px;padding:8px 6px;text-align:center;cursor:pointer;width:${s.w}%;margin:0 auto;transition:outline .12s;">
+    <div style="display:flex;align-items:center;justify-content:center;gap:7px;"><span style="font-size:16px;font-weight:900;">${s.n}</span><span style="font-size:9.5px;font-weight:800;">${s.name}</span></div>
+    <div style="font-size:7px;opacity:.9;font-weight:600;margin-top:1px;">${s.q}</div>
+  </div>`;
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#0C4A6E;margin-bottom:2px;">
+        ${pt?'O Modelo STP (o funil do marketing)':'The STP Model (the marketing funnel)'}
+      </div>
+      <div style="font-size:7.5px;color:#64748B;margin-bottom:8px;">${pt?'Do mercado inteiro até um lugar na mente do cliente. Clique em cada etapa.':'From the whole market down to a place in the customer\'s mind. Click each step.'}</div>
+      <div style="max-width:300px;margin:0 auto;">
+        ${bar(steps[0],0)}
+        <div style="text-align:center;font-size:10px;color:#94A3B8;line-height:1;margin:2px 0;">▼</div>
+        ${bar(steps[1],1)}
+        <div style="text-align:center;font-size:10px;color:#94A3B8;line-height:1;margin:2px 0;">▼</div>
+        ${bar(steps[2],2)}
+      </div>
+      <div id="${id}-b" style="display:none;margin-top:8px;background:#F0F9FF;border:1px solid #BAE6FD;border-radius:7px;padding:9px 11px;">
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;">
+          <span id="${id}-n" style="font-size:10.5px;font-weight:800;"></span>
+          <span id="${id}-q" style="font-size:6.5px;font-weight:700;color:#fff;padding:2px 7px;border-radius:10px;"></span>
+        </div>
+        <div id="${id}-d" style="font-size:8.5px;color:#374151;line-height:1.6;"></div>
+      </div>
+      <div style="margin-top:7px;font-size:7px;color:#94A3B8;line-height:1.5;">💡 ${pt?'Ordem fixa: primeiro Segmenta, depois escolhe o Alvo, por fim Posiciona. Um alimenta o outro.':'Fixed order: first Segment, then choose the Target, finally Position. Each feeds the next.'}</div>
+    </div>`;
+};
+
+/* ─── MKT W3: The 4 segmentation bases ──────────────────────────── */
+window.vis_segmentationBases = function(container, lang) {
+  const pt = lang === 'pt';
+  const id = 'segb-' + Math.random().toString(36).substr(2,5);
+  const bases = [
+    { icon:'🌍', color:'#0EA5E9', name:pt?'Geográfica':'Geographic', q:pt?'ONDE mora?':'WHERE do they live?', vars:pt?'Nação · região · cidade · bairro · clima':'Nation · region · city · neighbourhood · climate', desc:pt?'Divide por unidades geográficas: nações, regiões, estados, cidades, bairros — e clima. A empresa pode operar em poucas áreas ou em todas, mas adaptando produto, propaganda e vendas a cada região. Ex: o McDonald\'s muda o cardápio de país pra país.':'Divides by geographic units: nations, regions, states, cities, neighbourhoods — and climate. The firm may operate in a few areas or all, but adapting product, advertising and sales to each region. E.g. McDonald\'s changes its menu country by country.' },
+    { icon:'👤', color:'#0284C7', name:pt?'Demográfica':'Demographic', q:pt?'QUEM é?':'WHO are they?', vars:pt?'Idade · gênero · renda · ocupação · educação':'Age · gender · income · occupation · education', desc:pt?'A base MAIS popular — porque desejos, necessidades e taxa de uso variam muito com a demografia, e ela é a mais fácil de medir. Variáveis principais: idade (faixas e estilos de vida), gênero e renda. Ex: brinquedo por faixa etária; carro popular vs de luxo por renda.':'The MOST popular base — because wants, needs and usage rate vary closely with demographics, and it is the easiest to measure. Main variables: age (bands and lifestyles), gender and income. E.g. a toy by age band; a budget vs luxury car by income.' },
+    { icon:'🧠', color:'#7C3AED', name:pt?'Psicográfica':'Psychographic', q:pt?'COMO PENSA?':'HOW do they think?', vars:pt?'Classe social · estilo de vida · personalidade · valores':'Social class · lifestyle · personality · values', desc:pt?'Divide por classe social, estilo de vida ou características de personalidade. Vai além do “quem é” pra “como vive e o que valoriza”. Ex: marcas que vendem aventura e liberdade (GoPro, Red Bull) miram um estilo de vida, não uma idade.':'Divides by social class, lifestyle or personality traits. It goes beyond “who they are” to “how they live and what they value”. E.g. brands selling adventure and freedom (GoPro, Red Bull) aim at a lifestyle, not an age.' },
+    { icon:'🛒', color:'#16A34A', name:pt?'Comportamental':'Behavioural', q:pt?'COMO AGE?':'HOW do they act?', vars:pt?'Ocasião · benefício buscado · status · taxa de uso · lealdade':'Occasion · benefit sought · status · usage rate · loyalty', desc:pt?'Divide pelo comportamento real: conhecimento, atitudes, uso e resposta ao produto. Variáveis: ocasião de compra, benefício buscado, status de usuário, taxa de uso e grau de lealdade. Ex: programas de fidelidade (segmentam por lealdade); ofertas de Natal (por ocasião).':'Divides by actual behaviour: knowledge, attitudes, use and response to the product. Variables: purchase occasion, benefit sought, user status, usage rate and degree of loyalty. E.g. loyalty programmes (segment by loyalty); Christmas offers (by occasion).' }
+  ];
+  window[id+'_data'] = bases;
+  window[id+'_sel'] = function(i){ const bb=window[id+'_data'][i]; const b=document.getElementById(id+'-b'); if(!b)return; document.querySelectorAll('.'+id+'-c').forEach(function(c){c.style.outline='none';}); document.getElementById(id+'-c'+i).style.outline='2.5px solid '+bb.color; document.getElementById(id+'-n').textContent=bb.icon+' '+bb.name; document.getElementById(id+'-n').style.color=bb.color; document.getElementById(id+'-v').textContent=bb.vars; document.getElementById(id+'-v').style.color=bb.color; document.getElementById(id+'-d').textContent=bb.desc; b.style.display='block'; };
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#0C4A6E;margin-bottom:2px;">
+        ${pt?'As 4 Bases de Segmentação':'The 4 Segmentation Bases'}
+      </div>
+      <div style="font-size:7.5px;color:#64748B;margin-bottom:8px;">${pt?'4 perguntas pra recortar o mercado. Clique em cada uma.':'4 questions to slice the market. Click each one.'}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+        ${bases.map((bb,i)=>`
+          <div id="${id}-c${i}" class="${id}-c" onclick="window['${id}_sel'](${i})" style="background:${bb.color}0D;border:1px solid ${bb.color}33;border-radius:7px;padding:8px 7px;cursor:pointer;transition:outline .12s;">
+            <div style="font-size:16px;">${bb.icon}</div>
+            <div style="font-size:8.5px;font-weight:800;color:${bb.color};margin-top:2px;">${bb.name}</div>
+            <div style="font-size:7px;color:#64748B;font-weight:700;margin-top:1px;">${bb.q}</div>
+          </div>`).join('')}
+      </div>
+      <div id="${id}-b" style="display:none;margin-top:8px;background:#F8FAFC;border:1px solid #E5E7EB;border-radius:7px;padding:9px 11px;">
+        <div id="${id}-n" style="font-size:10px;font-weight:800;margin-bottom:2px;"></div>
+        <div id="${id}-v" style="font-size:7px;font-weight:700;margin-bottom:4px;"></div>
+        <div id="${id}-d" style="font-size:8.5px;color:#374151;line-height:1.6;"></div>
+      </div>
+      <div style="margin-top:7px;font-size:7px;color:#94A3B8;line-height:1.5;">💡 ${pt?'Macete: ONDE mora · QUEM é · COMO PENSA · COMO AGE. Pode combinar várias bases.':'Trick: WHERE they live · WHO they are · HOW they think · HOW they act. You can combine bases.'}</div>
+    </div>`;
+};
+
+/* ─── MKT W3: 4 targeting strategies (broad → narrow) ───────────── */
+window.vis_targetingStrategies = function(container, lang) {
+  const pt = lang === 'pt';
+  const id = 'tgt-' + Math.random().toString(36).substr(2,5);
+  const strat = [
+    { icon:'📢', reach:pt?'MERCADO TODO':'WHOLE MARKET', color:'#0C4A6E', name:pt?'Indiferenciado (Massa)':'Undifferentiated (Mass)', desc:pt?'Mira o mercado inteiro com UMA única oferta, focando no que é COMUM a todos, não nas diferenças. Também chamado de marketing de massa. É o mais barato. Ex: commodities (sal, açúcar), Coca-Cola clássica.':'Targets the whole market with ONE single offer, focusing on what is COMMON to everyone, not on differences. Also called mass marketing. It is the cheapest. E.g. commodities (salt, sugar), classic Coca-Cola.' },
+    { icon:'🎯', reach:pt?'VÁRIOS SEGMENTOS':'SEVERAL SEGMENTS', color:'#0284C7', name:pt?'Diferenciado':'Differentiated', desc:pt?'Mira VÁRIOS segmentos e desenha uma oferta SEPARADA pra cada um. Objetivo: mais vendas e posição mais forte. É relativamente CARO (vários produtos e campanhas). Ex: o Premier Inn com “Premium” (casais/negócios) + “Longer stays” (famílias).':'Targets SEVERAL segments and designs a SEPARATE offer for each. Goal: higher sales and a stronger position. It is relatively EXPENSIVE (several products and campaigns). E.g. Premier Inn with “Premium” (couples/business) + “Longer stays” (families).' },
+    { icon:'🔬', reach:pt?'UM NICHO':'ONE NICHE', color:'#0891B2', name:pt?'Concentrado (Nicho)':'Concentrated (Niche)', desc:pt?'Vai atrás de uma GRANDE fatia de UM (ou poucos) segmento pequeno. Também chamado marketing de nicho. Domina o nicho em vez de disputar o mercado todo. Ex: Ferrari, Rolex, marcas 100% veganas.':'Goes after a LARGE share of ONE (or a few) small segment. Also called niche marketing. Dominates the niche instead of fighting for the whole market. E.g. Ferrari, Rolex, 100% vegan brands.' },
+    { icon:'📍', reach:pt?'LOCAL / 1-A-1':'LOCAL / 1-TO-1', color:'#16A34A', name:pt?'Micromarketing':'Micromarketing', desc:pt?'Molda produtos e programas pro gosto de indivíduos e locais específicos. Inclui marketing local (por bairro/loja) e marketing individual (1-a-1, personalizado). Ex: cardápio que muda por bairro; recomendações personalizadas por cliente.':'Tailors products and programmes to the taste of specific individuals and locations. Includes local marketing (by neighbourhood/store) and individual marketing (1-to-1, personalised). E.g. a menu that changes by neighbourhood; per-customer personalised recommendations.' }
+  ];
+  window[id+'_data'] = strat;
+  window[id+'_sel'] = function(i){ const s=window[id+'_data'][i]; const b=document.getElementById(id+'-b'); if(!b)return; document.querySelectorAll('.'+id+'-c').forEach(function(c){c.style.outline='none';}); document.getElementById(id+'-c'+i).style.outline='2.5px solid '+s.color; document.getElementById(id+'-n').textContent=s.icon+' '+s.name; document.getElementById(id+'-n').style.color=s.color; document.getElementById(id+'-r').textContent=s.reach; document.getElementById(id+'-r').style.background=s.color; document.getElementById(id+'-d').textContent=s.desc; b.style.display='block'; };
+  const widths=[100,78,56,34];
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#0C4A6E;margin-bottom:2px;">
+        ${pt?'4 Estratégias de Targeting':'4 Targeting Strategies'}
+      </div>
+      <div style="font-size:7.5px;color:#64748B;margin-bottom:8px;">${pt?'Do mais amplo (todo mundo) ao mais estreito (1 a 1). Clique.':'From the broadest (everyone) to the narrowest (1 to 1). Click.'}</div>
+      <div style="display:flex;justify-content:space-between;font-size:6.5px;font-weight:800;color:#94A3B8;margin-bottom:3px;padding:0 2px;"><span>◀ ${pt?'AMPLO':'BROAD'}</span><span>${pt?'ESTREITO':'NARROW'} ▶</span></div>
+      <div style="max-width:300px;margin:0 auto;">
+        ${strat.map((s,i)=>`
+          <div id="${id}-c${i}" class="${id}-c" onclick="window['${id}_sel'](${i})" style="background:${s.color};color:#fff;border-radius:6px;padding:6px 8px;cursor:pointer;width:${widths[i]}%;margin:0 auto 4px;transition:outline .12s;display:flex;align-items:center;gap:6px;">
+            <span style="font-size:13px;">${s.icon}</span><span style="font-size:8px;font-weight:800;line-height:1.1;">${s.name}</span>
+          </div>`).join('')}
+      </div>
+      <div id="${id}-b" style="display:none;margin-top:6px;background:#F8FAFC;border:1px solid #E5E7EB;border-radius:7px;padding:9px 11px;">
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;">
+          <span id="${id}-n" style="font-size:10px;font-weight:800;"></span>
+          <span id="${id}-r" style="font-size:6px;font-weight:700;color:#fff;padding:2px 6px;border-radius:10px;"></span>
+        </div>
+        <div id="${id}-d" style="font-size:8.5px;color:#374151;line-height:1.6;"></div>
+      </div>
+      <div style="margin-top:7px;font-size:7px;color:#94A3B8;line-height:1.5;">💡 ${pt?'Quanto mais estreito o alvo, mais personalizado (e caro por cliente) — mas maior a relevância.':'The narrower the target, the more personalised (and costly per customer) — but the higher the relevance.'}</div>
+    </div>`;
+};
+
+/* ─── MKT W3: Positioning — perceptual map + statement formula ───── */
+window.vis_positioningMap = function(container, lang) {
+  const pt = lang === 'pt';
+  const id = 'posm-' + Math.random().toString(36).substr(2,5);
+  const brands = [
+    { x:80,  y:150, color:'#16A34A', label:pt?'Econômica':'Budget', stmt:pt?'“Para quem quer resolver gastando pouco, a marca que entrega o básico pelo menor preço.” Ex: marca própria de supermercado. Canto de baixo-esquerda: preço baixo, valor percebido básico.':'“For those who want to get by spending little, the brand that delivers the basics at the lowest price.” E.g. supermarket own-label. Bottom-left: low price, basic perceived value.' },
+    { x:150, y:118, color:'#0EA5E9', label:pt?'Popular / Massa':'Popular / Mass', stmt:pt?'“Para todo mundo, a marca conhecida e confiável do dia a dia.” Ex: Coca-Cola, marcas populares — alcance amplo, meio-termo de preço e percepção.':'“For everyone, the familiar, trusted everyday brand.” E.g. Coca-Cola, popular brands — broad reach, mid-range price and perception.' },
+    { x:232, y:62,  color:'#7C3AED', label:pt?'Premium':'Premium', stmt:pt?'“Para quem quer o melhor e o status, o produto de design e desempenho superiores.” Ex: Apple — preço alto, valor percebido alto.':'“For those who want the best and the status, the product with superior design and performance.” E.g. Apple — high price, high perceived value.' },
+    { x:255, y:40,  color:'#B45309', label:pt?'Luxo / Nicho':'Luxury / Niche', stmt:pt?'“Para o conhecedor, o símbolo de prestígio e exclusividade artesanal.” Ex: Rolex, Ferrari — um nicho lá no topo, pouquíssimos concorrentes.':'“For the connoisseur, the symbol of prestige and hand-crafted exclusivity.” E.g. Rolex, Ferrari — a niche right at the top, very few competitors.' }
+  ];
+  window[id+'_data'] = brands;
+  window[id+'_sel'] = function(i){ const br=window[id+'_data'][i]; const b=document.getElementById(id+'-b'); if(!b)return; document.querySelectorAll('.'+id+'-dot').forEach(function(c){c.setAttribute('r','6');c.setAttribute('stroke','#fff');}); const el=document.getElementById(id+'-dot'+i); el.setAttribute('r','9'); el.setAttribute('stroke','#0C4A6E'); document.getElementById(id+'-n').textContent='📍 '+br.label; document.getElementById(id+'-n').style.color=br.color; document.getElementById(id+'-d').textContent=br.stmt; b.style.display='block'; };
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#0C4A6E;margin-bottom:2px;">
+        ${pt?'Posicionamento — o Mapa Perceptual':'Positioning — the Perceptual Map'}
+      </div>
+      <div style="font-size:7.5px;color:#64748B;margin-bottom:6px;">${pt?'Cada marca ocupa um lugar na mente. Clique nos pontos.':'Each brand occupies a place in the mind. Click the dots.'}</div>
+      <svg viewBox="0 0 300 195" style="width:100%;height:auto;">
+        <line x1="30" y1="172" x2="288" y2="172" stroke="#CBD5E1" stroke-width="1.5"/>
+        <line x1="40" y1="18" x2="40" y2="180" stroke="#CBD5E1" stroke-width="1.5"/>
+        <text x="288" y="190" text-anchor="end" font-size="7" font-weight="700" fill="#64748B">${pt?'Preço alto →':'High price →'}</text>
+        <text x="46" y="190" text-anchor="start" font-size="7" font-weight="700" fill="#64748B">${pt?'← baixo':'← low'}</text>
+        <text x="33" y="16" text-anchor="start" font-size="7" font-weight="700" fill="#64748B">${pt?'↑ Premium':'↑ Premium'}</text>
+        <text x="33" y="180" text-anchor="start" font-size="7" font-weight="700" fill="#64748B">${pt?'Básico':'Basic'}</text>
+        ${brands.map((br,i)=>`<circle id="${id}-dot${i}" class="${id}-dot" cx="${br.x}" cy="${br.y}" r="6" fill="${br.color}" stroke="#fff" stroke-width="1.5" style="cursor:pointer" onclick="window['${id}_sel'](${i})"/><text x="${br.x}" y="${br.y-9}" text-anchor="middle" font-size="6.5" font-weight="700" fill="${br.color}" style="cursor:pointer" onclick="window['${id}_sel'](${i})">${br.label}</text>`).join('')}
+      </svg>
+      <div id="${id}-b" style="display:none;margin-top:4px;background:#F0F9FF;border:1px solid #BAE6FD;border-radius:7px;padding:9px 11px;">
+        <div id="${id}-n" style="font-size:10px;font-weight:800;margin-bottom:3px;"></div>
+        <div id="${id}-d" style="font-size:8.5px;color:#374151;line-height:1.6;"></div>
+      </div>
+      <div style="margin-top:8px;background:#0C4A6E;color:#E0F2FE;border-radius:7px;padding:9px 11px;">
+        <div style="font-size:7px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:#7DD3FC;margin-bottom:4px;">${pt?'A fórmula da declaração de posicionamento':'The positioning statement formula'}</div>
+        <div style="font-size:8.5px;line-height:1.6;">${pt?'<b>Para</b> [público-alvo] <b>que</b> [necessidade], a <b>[marca]</b> é a [categoria/conceito] <b>que</b> [diferencial que prova].':'<b>For</b> [target] <b>who</b> [need], <b>[brand]</b> is the [category/concept] <b>that</b> [differentiator that proves it].'}</div>
+        <div style="font-size:7.5px;line-height:1.55;margin-top:5px;color:#BAE6FD;">${pt?'🛒 <b>Amazon (real):</b> ser a empresa mais centrada no cliente da Terra; um lugar onde as pessoas encontram e descobrem qualquer coisa que queiram comprar online. · 🚗 <b>Volvo:</b> para famílias que valorizam proteção, o carro mais seguro.':'🛒 <b>Amazon (real):</b> to be earth\'s most customer-centric company; a place where people can find and discover anything they want to buy online. · 🚗 <b>Volvo:</b> for families who value protection, the safest car.'}</div>
+      </div>
+    </div>`;
+};
