@@ -3152,3 +3152,171 @@ window.vis_stpInPractice = function(container, lang) {
       <div style="margin-top:7px;font-size:7px;color:#94A3B8;line-height:1.5;">💡 ${pt?'A frase-chave: “se você não cuida do seu cliente, alguém cuida”. STP = mirar com recurso limitado + ser top of mind.':'Key line: “if you don\'t take care of your customer, someone else will”. STP = target with limited resources + be top of mind.'}</div>
     </div>`;
 };
+
+/* ═══════════════════════════════════════════════════════════════════
+   MARKETING STRATEGY — WEEK 4 (course Week 14): BRANDING
+   Brand · Brand Value · Brand Equity
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ─── MKT W4: the brand "cloud" (brand ≠ logo) ──────────────────── */
+window.vis_brandCloud = function(container, lang) {
+  const pt = lang === 'pt';
+  const id = 'bcl-' + Math.random().toString(36).substr(2,5);
+  const els = [
+    { x:92,  y:56,  name:pt?'Símbolos & logo':'Symbols & logo', desc:pt?'O logo, símbolos e a identidade visual. É só UM elemento da nuvem — o mais visível, por isso confundem com a marca inteira.':'The logo, symbols and visual identity. It is just ONE element of the cloud — the most visible, so people mistake it for the whole brand.' },
+    { x:228, y:56,  name:pt?'Nome':'Name', desc:pt?'O nome da marca e o que ele evoca. Parte central de como a marca é lembrada e falada.':'The brand name and what it evokes. Central to how the brand is remembered and talked about.' },
+    { x:60,  y:112, name:pt?'Design & cores':'Design & colours', desc:pt?'Tipografia, paleta, formas — a linguagem visual consistente que faz você reconhecer a marca de longe.':'Typography, palette, shapes — the consistent visual language that makes you recognise the brand from afar.' },
+    { x:260, y:112, name:pt?'Features':'Features', desc:pt?'Os atributos e características associados à marca. Ajudam a formar a percepção, mas não são a marca sozinhos.':'The attributes and features associated with the brand. They help form perception, but are not the brand on their own.' },
+    { x:96,  y:168, name:pt?'Memórias':'Memories', desc:pt?'As lembranças e experiências que a marca evoca. É o que a torna emocional e difícil de imitar.':'The memories and experiences the brand evokes. This is what makes it emotional and hard to imitate.' },
+    { x:224, y:168, name:pt?'Personalidade':'Personality', desc:pt?'O "jeito" da marca — como se fosse uma pessoa. Aventureira, séria, divertida? Guia o tom de tudo.':'The brand\'s "character" — as if it were a person. Adventurous, serious, fun? It guides the tone of everything.' }
+  ];
+  window[id+'_data'] = els;
+  window[id+'_sel'] = function(i){ const e=window[id+'_data'][i]; const b=document.getElementById(id+'-b'); if(!b)return; document.getElementById(id+'-n').textContent=e.name; document.getElementById(id+'-d').textContent=e.desc; b.style.display='block'; };
+  const label = (e,i) => `<text x="${e.x}" y="${e.y}" text-anchor="middle" font-size="8.5" font-weight="700" fill="#0369A1" style="cursor:pointer" onclick="window['${id}_sel'](${i})">${e.name}</text>`;
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#0C4A6E;margin-bottom:2px;">
+        ${pt?'A marca é uma "nuvem" — não o logo':'A brand is a "cloud" — not the logo'}
+      </div>
+      <div style="font-size:7.5px;color:#64748B;margin-bottom:4px;">${pt?'No centro, o produto; em volta, a aura intangível. Clique nos elementos.':'At the centre, the product; around it, the intangible aura. Click the elements.'}</div>
+      <svg viewBox="0 0 320 210" style="width:100%;height:auto;">
+        <ellipse cx="160" cy="112" rx="132" ry="82" fill="#F0F9FF" stroke="#BAE6FD" stroke-width="1" stroke-dasharray="4 3"/>
+        <circle cx="160" cy="110" r="37" fill="#0EA5E9"/>
+        <text x="160" y="106" text-anchor="middle" font-size="9" font-weight="800" fill="#fff">${pt?'Produto /':'Product /'}</text>
+        <text x="160" y="118" text-anchor="middle" font-size="9" font-weight="800" fill="#fff">${pt?'Serviço':'Service'}</text>
+        ${els.map((e,i)=>label(e,i)).join('')}
+      </svg>
+      <div id="${id}-b" style="display:none;margin-top:2px;background:#F0F9FF;border:1px solid #BAE6FD;border-radius:7px;padding:9px 11px;">
+        <div id="${id}-n" style="font-size:10px;font-weight:800;color:#0369A1;margin-bottom:3px;"></div>
+        <div id="${id}-d" style="font-size:8.5px;color:#374151;line-height:1.6;"></div>
+      </div>
+      <div style="margin-top:7px;background:#EFF6FF;border-radius:6px;padding:6px 9px;font-size:7.5px;color:#1E40AF;line-height:1.55;">🔥 ${pt?'"Brand" vem de <b>brandr</b> (queimar) — o gado marcado a ferro. Por isso confundem marca com o logo; mas o logo é só a pontinha da nuvem.':'"Brand" comes from <b>brandr</b> (to burn) — cattle branded with an iron. That is why people confuse a brand with the logo; but the logo is just the tip of the cloud.'}</div>
+    </div>`;
+};
+
+/* ─── MKT W4: why brands matter (benefits) ──────────────────────── */
+window.vis_brandBenefits = function(container, lang) {
+  const pt = lang === 'pt';
+  const id = 'bbn-' + Math.random().toString(36).substr(2,5);
+  const bs = [
+    { icon:'🎯', color:'#0EA5E9', name:pt?'Diferenciação':'Differentiation', desc:pt?'Separa um produto facilmente imitável da concorrência. O rival faz a mesma coisa, mas a marca te distingue.':'Separates an easily-imitated product from the competition. The rival does the same thing, but the brand distinguishes you.' },
+    { icon:'👁️', color:'#0284C7', name:pt?'Reconhecimento':'Recognition', desc:pt?'Você sabe o que está levando ao ver a marca — reduz o risco percebido da compra.':'You know what you are getting when you see the brand — it reduces the perceived risk of buying.' },
+    { icon:'🤝', color:'#0891B2', name:pt?'Confiança':'Trust', desc:pt?'A marca sinaliza "é isso que você recebe, é nisso que acreditamos, pode confiar". Confiança e credibilidade.':'The brand signals "this is what you get, this is what we stand for, you can trust us". Trust and credibility.' },
+    { icon:'💎', color:'#7C3AED', name:pt?'Lealdade → premium':'Loyalty → premium', desc:pt?'Clientes leais permitem cobrar MAIS pelo mesmo produto. A lealdade vira preço premium.':'Loyal customers let you charge MORE for the same product. Loyalty turns into premium pricing.' },
+    { icon:'🏅', color:'#16A34A', name:pt?'Orgulho do funcionário':'Employee pride', desc:pt?'Gente quer trabalhar em marcas fortes (Google, Tesla) — orgulho e motivação. É o branding interno (pesquisa da Dra. Lucy).':'People want to work for strong brands (Google, Tesla) — pride and motivation. This is internal branding (Dr. Lucy\'s research).' },
+    { icon:'🪞', color:'#B45309', name:pt?'Identidade':'Identity', desc:pt?'O cliente usa a marca pra sinalizar QUEM É. Ex: a Dra. Lucy dirige Jeep (aventura), não um Ford idêntico — compra o significado.':'The customer uses the brand to signal WHO THEY ARE. E.g. Dr. Lucy drives a Jeep (adventure), not an identical Ford — she buys the meaning.' }
+  ];
+  window[id+'_data'] = bs;
+  window[id+'_sel'] = function(i){ const s=window[id+'_data'][i]; const b=document.getElementById(id+'-b'); if(!b)return; document.querySelectorAll('.'+id+'-c').forEach(function(x){x.style.outline='none';}); document.getElementById(id+'-c'+i).style.outline='2.5px solid '+s.color; document.getElementById(id+'-n').textContent=s.icon+' '+s.name; document.getElementById(id+'-n').style.color=s.color; document.getElementById(id+'-d').textContent=s.desc; b.style.display='block'; };
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#0C4A6E;margin-bottom:2px;">
+        ${pt?'Por que marcas importam':'Why brands matter'}
+      </div>
+      <div style="font-size:7.5px;color:#64748B;margin-bottom:8px;">${pt?'Benefícios quase iguais pra empresa E pro cliente. Clique.':'Benefits almost the same for the firm AND the customer. Click.'}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;">
+        ${bs.map((s,i)=>`<div id="${id}-c${i}" class="${id}-c" onclick="window['${id}_sel'](${i})" style="background:${s.color}0D;border:1px solid ${s.color}33;border-radius:6px;padding:7px 4px;cursor:pointer;text-align:center;transition:outline .12s;"><div style="font-size:15px;">${s.icon}</div><div style="font-size:7px;font-weight:700;color:${s.color};line-height:1.15;margin-top:2px;">${s.name}</div></div>`).join('')}
+      </div>
+      <div id="${id}-b" style="display:none;margin-top:8px;background:#F8FAFC;border:1px solid #E5E7EB;border-radius:7px;padding:9px 11px;">
+        <div id="${id}-n" style="font-size:10px;font-weight:800;margin-bottom:3px;"></div>
+        <div id="${id}-d" style="font-size:8.5px;color:#374151;line-height:1.6;"></div>
+      </div>
+      <div style="margin-top:7px;font-size:7px;color:#94A3B8;line-height:1.5;">🚙 ${pt?'Âncora Jeep vs Ford: mesmo carro/features/preço; com logo Ford ela não entra, com Jeep sim. A marca carrega o significado.':'Jeep vs Ford anchor: same car/features/price; with a Ford badge she won\'t get in, with Jeep she will. The brand carries the meaning.'}</div>
+    </div>`;
+};
+
+/* ─── MKT W4: brand VALUE vs brand EQUITY ───────────────────────── */
+window.vis_equityVsValue = function(container, lang) {
+  const pt = lang === 'pt';
+  const id = 'eqv-' + Math.random().toString(36).substr(2,5);
+  const sides = [
+    { icon:'💰', color:'#0C4A6E', bg:'#EFF6FF', title:pt?'Brand VALUE':'Brand VALUE', tag:pt?'dinheiro · no balanço':'money · on the balance sheet', desc:pt?'O valor MONETÁRIO da marca. Calculado como um ativo separado (ativos − passivos), aparece na contabilidade. É "dinheiro de verdade". Ex: a marca Coca-Cola vale ~US$98 bilhões.':'The brand\'s MONETARY worth. Calculated as a separate asset (assets − liabilities), it appears in the accounting. It is "real money". E.g. the Coca-Cola brand is worth ~US$98 billion.' },
+    { icon:'🧠', color:'#0EA5E9', bg:'#F0F9FF', title:pt?'Brand EQUITY':'Brand EQUITY', tag:pt?'percepção · na cabeça':'perception · in the head', desc:pt?'O valor INTANGÍVEL na mente do consumidor (percepção, experiência, opinião) que faz pagar um premium. Ex: talco J&J US$5,99 vs genérico US$3,99 idêntico — os US$2 são brand equity pura.':'The INTANGIBLE value in the consumer\'s mind (perception, experience, opinion) that makes them pay a premium. E.g. J&J talc US$5.99 vs identical generic US$3.99 — the US$2 is pure brand equity.' }
+  ];
+  window[id+'_data'] = sides;
+  window[id+'_sel'] = function(i){ const s=window[id+'_data'][i]; const b=document.getElementById(id+'-b'); if(!b)return; document.querySelectorAll('.'+id+'-c').forEach(function(x){x.style.outline='none';}); document.getElementById(id+'-c'+i).style.outline='2.5px solid '+s.color; document.getElementById(id+'-n').textContent=s.icon+' '+s.title; document.getElementById(id+'-n').style.color=s.color; document.getElementById(id+'-t').textContent=s.tag; document.getElementById(id+'-t').style.background=s.color; document.getElementById(id+'-d').textContent=s.desc; b.style.display='block'; };
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#0C4A6E;margin-bottom:2px;">
+        ${pt?'Brand Value vs Brand Equity':'Brand Value vs Brand Equity'}
+      </div>
+      <div style="font-size:7.5px;color:#64748B;margin-bottom:8px;">${pt?'A pegadinha da semana. Clique nos dois lados.':'The week\'s trap. Click both sides.'}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        ${sides.map((s,i)=>`<div id="${id}-c${i}" class="${id}-c" onclick="window['${id}_sel'](${i})" style="background:${s.bg};border:1px solid ${s.color}44;border-radius:8px;padding:11px 8px;cursor:pointer;text-align:center;transition:outline .12s;"><div style="font-size:20px;">${s.icon}</div><div style="font-size:10px;font-weight:800;color:${s.color};margin-top:3px;">${s.title}</div><div style="font-size:6.5px;color:#64748B;font-weight:700;margin-top:2px;">${s.tag}</div></div>`).join('')}
+      </div>
+      <div id="${id}-b" style="display:none;margin-top:8px;background:#F8FAFC;border:1px solid #E5E7EB;border-radius:7px;padding:9px 11px;">
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;">
+          <span id="${id}-n" style="font-size:10px;font-weight:800;"></span>
+          <span id="${id}-t" style="font-size:6px;font-weight:700;color:#fff;padding:2px 6px;border-radius:10px;"></span>
+        </div>
+        <div id="${id}-d" style="font-size:8.5px;color:#374151;line-height:1.6;"></div>
+      </div>
+      <div style="margin-top:8px;background:#EFF6FF;border-radius:6px;padding:6px 9px;font-size:7.5px;color:#1E40AF;line-height:1.55;">💡 ${pt?'O <b>EQUITY</b> (percepção) é o que GERA o <b>VALUE</b> (dinheiro). Value = número no balanço; Equity = força na cabeça.':'The <b>EQUITY</b> (perception) is what GENERATES the <b>VALUE</b> (money). Value = number on the balance sheet; Equity = strength in the head.'}</div>
+    </div>`;
+};
+
+/* ─── MKT W4: Aaker's 4 pillars of brand equity ─────────────────── */
+window.vis_brandEquityDrivers = function(container, lang) {
+  const pt = lang === 'pt';
+  const id = 'bed-' + Math.random().toString(36).substr(2,5);
+  const pillars = [
+    { L:'A', color:'#0EA5E9', name:pt?'Awareness':'Awareness', q:pt?'te conhecem?':'do they know you?', desc:pt?'Consciência: o quanto os consumidores identificam e reconhecem a marca de forma consistente. Base de tudo — sem awareness não há equity. Mas awareness ≠ equity ("já ouviu?" vs "quão valiosa é?").':'Awareness: how consistently consumers identify and recognise the brand. The base of everything — no awareness, no equity. But awareness ≠ equity ("heard of it?" vs "how valuable is it?").' },
+    { L:'A', color:'#0284C7', name:pt?'Associations':'Associations', q:pt?'o que vem à mente?':'what comes to mind?', desc:pt?'Associações/atributos: o que as pessoas ligam à marca — valores (sustentabilidade, qualidade), experiências, personalidade. É a "nuvem" de significados da marca.':'Associations/attributes: what people link to the brand — values (sustainability, quality), experiences, personality. It is the brand\'s "cloud" of meanings.' },
+    { L:'P', color:'#0891B2', name:pt?'Perceived Quality':'Perceived Quality', q:pt?'quão boa acham?':'how good do they think?', desc:pt?'Qualidade percebida: como o cliente julga a qualidade pela experiência com a MARCA, não só pelas features. Produto bom + experiência ruim = percepção ruim.':'Perceived quality: how the customer judges quality by the BRAND experience, not just features. Good product + bad experience = bad perception.' },
+    { L:'L', color:'#16A34A', name:pt?'Loyalty':'Loyalty', q:pt?'voltam e recomendam?':'do they come back?', desc:pt?'Lealdade: o topo, construído por experiências positivas acumuladas. Gera margem e recompra. Cliente leal perdoa erro 7× e testa produto novo 9× mais.':'Loyalty: the top, built from accumulated positive experiences. Drives margin and repeat purchase. A loyal customer forgives mistakes 7× and tries new products 9× more.' }
+  ];
+  window[id+'_data'] = pillars;
+  window[id+'_sel'] = function(i){ const p=window[id+'_data'][i]; const b=document.getElementById(id+'-b'); if(!b)return; document.querySelectorAll('.'+id+'-c').forEach(function(x){x.style.outline='none';}); document.getElementById(id+'-c'+i).style.outline='2.5px solid '+p.color; document.getElementById(id+'-n').textContent=p.L+' · '+p.name; document.getElementById(id+'-n').style.color=p.color; document.getElementById(id+'-q').textContent=p.q; document.getElementById(id+'-q').style.background=p.color; document.getElementById(id+'-d').textContent=p.desc; b.style.display='block'; };
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#0C4A6E;margin-bottom:2px;">
+        ${pt?'Os 4 Pilares do Brand Equity (Aaker)':'The 4 Pillars of Brand Equity (Aaker)'}
+      </div>
+      <div style="font-size:7.5px;color:#64748B;margin-bottom:8px;">${pt?'Macete "A-A-P-L" (quase "Apple"). Clique em cada pilar.':'Mnemonic "A-A-P-L" (almost "Apple"). Click each pillar.'}</div>
+      <div style="display:flex;gap:5px;">
+        ${pillars.map((p,i)=>`<div id="${id}-c${i}" class="${id}-c" onclick="window['${id}_sel'](${i})" style="flex:1;background:${p.color}0D;border:1px solid ${p.color}33;border-radius:6px;padding:8px 3px;cursor:pointer;text-align:center;transition:outline .12s;"><div style="font-size:16px;font-weight:900;color:${p.color};line-height:1;">${p.L}</div><div style="font-size:6.5px;font-weight:700;color:${p.color};line-height:1.1;margin-top:3px;">${p.name}</div></div>`).join('')}
+      </div>
+      <div id="${id}-b" style="display:none;margin-top:8px;background:#F8FAFC;border:1px solid #E5E7EB;border-radius:7px;padding:9px 11px;">
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;">
+          <span id="${id}-n" style="font-size:10px;font-weight:800;"></span>
+          <span id="${id}-q" style="font-size:6.5px;font-weight:700;color:#fff;padding:2px 7px;border-radius:10px;"></span>
+        </div>
+        <div id="${id}-d" style="font-size:8.5px;color:#374151;line-height:1.6;"></div>
+      </div>
+      <div style="margin-top:8px;background:#EFF6FF;border-radius:6px;padding:6px 9px;font-size:7.5px;color:#1E40AF;line-height:1.55;">💡 ${pt?'Escada de construção do equity: Awareness → Reconhecimento → Trial → Preferência → Lealdade. (Keller usa a pirâmide CBBE, com ressonância no topo.)':'The equity-building ladder: Awareness → Recognition → Trial → Preference → Loyalty. (Keller uses the CBBE pyramid, with resonance at the top.)'}</div>
+    </div>`;
+};
+
+/* ─── MKT W4: Brand Finance Global 500 2022 ranking ─────────────── */
+window.vis_brandFinance500 = function(container, lang) {
+  const pt = lang === 'pt';
+  const id = 'bf5-' + Math.random().toString(36).substr(2,5);
+  const brands = [
+    { name:'Apple', val:355.1, color:'#0C4A6E', note:pt?'#1 do mundo — o maior brand value já registrado (~US$355 bi). Foco na MARCA e na relação com o consumidor, não em specs.':'#1 in the world — the highest brand value ever recorded (~US$355bn). Focus on the BRAND and the consumer relationship, not specs.' },
+    { name:'Amazon', val:350.3, color:'#0369A1', note:pt?'#2 — gigante do e-commerce e da nuvem. Marca de conveniência e confiança em escala.':'#2 — e-commerce and cloud giant. A brand of convenience and trust at scale.' },
+    { name:'Google', val:263.4, color:'#0284C7', note:pt?'#3 — a marca virou verbo ("googlar"). Onipresença e utilidade diária.':'#3 — the brand became a verb ("to google"). Ubiquity and daily utility.' },
+    { name:'Microsoft', val:184.2, color:'#0EA5E9', note:pt?'#4 — software e nuvem corporativa. Marca de produtividade e confiança B2B.':'#4 — software and enterprise cloud. A brand of productivity and B2B trust.' },
+    { name:'Walmart', val:111.9, color:'#38BDF8', note:pt?'#5 — subiu do 6º ao 5º (+20%). Único não-tech no Top 5; marca de preço baixo e escala.':'#5 — up from 6th to 5th (+20%). The only non-tech in the Top 5; a brand of low price and scale.' },
+    { name:'TikTok', val:59, color:'#DC2626', note:pt?'⭐ A marca que MAIS cresceu no mundo: +215% (US$18,7 → US$59 bi), maior nova entrante (18º lugar). Explosão das novas mídias = força macro tecnológica + social (Semanas 11-12).':'⭐ The fastest-GROWING brand in the world: +215% (US$18.7 → US$59bn), the highest new entrant (18th). New-media surge = technological + social macro force (Weeks 11-12).' }
+  ];
+  window[id+'_data'] = brands;
+  window[id+'_sel'] = function(i){ const br=window[id+'_data'][i]; const b=document.getElementById(id+'-b'); if(!b)return; document.querySelectorAll('.'+id+'-c').forEach(function(x){x.style.outline='none';}); document.getElementById(id+'-c'+i).style.outline='2px solid '+br.color; document.getElementById(id+'-n').textContent=br.name+' · US$ '+br.val+' bi'; document.getElementById(id+'-n').style.color=br.color; document.getElementById(id+'-d').textContent=br.note; b.style.display='block'; };
+  const row = (br,i) => `<div id="${id}-c${i}" class="${id}-c" onclick="window['${id}_sel'](${i})" style="display:flex;align-items:center;gap:6px;cursor:pointer;padding:2px 3px;border-radius:5px;transition:outline .12s;margin-bottom:3px;">
+    <span style="width:56px;flex:none;font-size:8px;font-weight:800;color:${br.color};text-align:right;">${br.name}</span>
+    <div style="flex:1;background:#F1F5F9;border-radius:4px;height:15px;overflow:hidden;"><div style="width:${(br.val/360*100).toFixed(1)}%;height:100%;background:${br.color};border-radius:4px;"></div></div>
+    <span style="width:42px;flex:none;font-size:7.5px;font-weight:700;color:#475569;">${br.val}</span>
+  </div>`;
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#0C4A6E;margin-bottom:2px;">
+        ${pt?'Brand Finance Global 500 — 2022':'Brand Finance Global 500 — 2022'}
+      </div>
+      <div style="font-size:7.5px;color:#64748B;margin-bottom:8px;">${pt?'Marcas mais valiosas (US$ bi). Setor tech ≈ US$1,3 tri. Clique.':'Most valuable brands (US$bn). Tech sector ≈ US$1.3tn. Click.'}</div>
+      ${brands.map((br,i)=>row(br,i)).join('')}
+      <div id="${id}-b" style="display:none;margin-top:6px;background:#F0F9FF;border:1px solid #BAE6FD;border-radius:7px;padding:9px 11px;">
+        <div id="${id}-n" style="font-size:10px;font-weight:800;margin-bottom:3px;"></div>
+        <div id="${id}-d" style="font-size:8.5px;color:#374151;line-height:1.6;"></div>
+      </div>
+      <div style="margin-top:7px;font-size:7px;color:#94A3B8;line-height:1.5;">🚀 ${pt?'A história do ano: o TikTok (+215%) — novas mídias empurrando o valor. Valores aprox. (Brand Finance 2022).':'The story of the year: TikTok (+215%) — new media pushing value up. Approx. figures (Brand Finance 2022).'}</div>
+    </div>`;
+};

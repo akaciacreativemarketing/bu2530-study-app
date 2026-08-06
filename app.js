@@ -787,6 +787,12 @@ const VIS_DISPATCH = {
   'damasTest':           true,
   'positioningMap':      true,
   'stpInPractice':       true,
+  // Marketing Strategy — Week 4 (Branding)
+  'brandCloud':          true,
+  'brandBenefits':       true,
+  'equityVsValue':       true,
+  'brandEquityDrivers':  true,
+  'brandFinance500':     true,
 };
 
 function renderTheoryCard(th) {
