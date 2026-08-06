@@ -3320,3 +3320,40 @@ window.vis_brandFinance500 = function(container, lang) {
       <div style="margin-top:7px;font-size:7px;color:#94A3B8;line-height:1.5;">🚀 ${pt?'A história do ano: o TikTok (+215%) — novas mídias empurrando o valor. Valores aprox. (Brand Finance 2022).':'The story of the year: TikTok (+215%) — new media pushing value up. Approx. figures (Brand Finance 2022).'}</div>
     </div>`;
 };
+
+/* ─── MKT W4: Keller's CBBE brand equity pyramid ────────────────── */
+window.vis_kellerPyramid = function(container, lang) {
+  const pt = lang === 'pt';
+  const id = 'kel-' + Math.random().toString(36).substr(2,5);
+  const blocks = [
+    { pts:'30,195 270,195 240,150 60,150', lx:150, ly:176, s:pt?'Saliência':'Salience', color:'#7DD3FC', name:pt?'Saliência (Salience)':'Salience', lvl:pt?'1. Identidade':'1. Identity', q:pt?'Quem é você?':'Who are you?', desc:pt?'A BASE: awareness/saliência. O cliente reconhece e lembra da sua marca na hora da decisão. Sem isso, nada acontece — é o alicerce da pirâmide.':'The BASE: awareness/salience. The customer recognises and recalls your brand at decision time. Without it, nothing happens — it is the pyramid\'s foundation.' },
+    { pts:'60,150 150,150 150,105 90,105', lx:112, ly:130, s:pt?'Perf.':'Perf.', color:'#38BDF8', name:pt?'Performance':'Performance', lvl:pt?'2. Significado':'2. Meaning', q:pt?'O que é você?':'What are you?', desc:pt?'Significado FUNCIONAL: a marca entrega o que promete? Confiabilidade, durabilidade, eficiência, preço — o desempenho concreto do produto.':'FUNCTIONAL meaning: does the brand deliver what it promises? Reliability, durability, efficiency, price — the product\'s concrete performance.' },
+    { pts:'150,150 240,150 210,105 150,105', lx:188, ly:130, s:pt?'Imagem':'Imagery', color:'#38BDF8', name:pt?'Imagem (Imagery)':'Imagery', lvl:pt?'2. Significado':'2. Meaning', q:pt?'O que é você?':'What are you?', desc:pt?'Significado PSICOLÓGICO/social: o que a marca diz sobre quem a usa. Personalidade, valores, status — a imagem intangível.':'PSYCHOLOGICAL/social meaning: what the brand says about who uses it. Personality, values, status — the intangible image.' },
+    { pts:'90,105 150,105 150,60 120,60', lx:127, ly:88, s:pt?'Julg.':'Judg.', color:'#0EA5E9', name:pt?'Julgamentos (Judgments)':'Judgments', lvl:pt?'3. Resposta':'3. Response', q:pt?'O que eu acho de você?':'What about you?', desc:pt?'Resposta RACIONAL: as opiniões do cliente — qualidade, credibilidade, superioridade. É a cabeça avaliando a marca.':'RATIONAL response: the customer\'s opinions — quality, credibility, superiority. It is the head judging the brand.' },
+    { pts:'150,105 210,105 180,60 150,60', lx:173, ly:88, s:pt?'Sent.':'Feel.', color:'#0EA5E9', name:pt?'Sentimentos (Feelings)':'Feelings', lvl:pt?'3. Resposta':'3. Response', q:pt?'O que eu acho de você?':'What about you?', desc:pt?'Resposta EMOCIONAL: o que a marca faz o cliente SENTIR — segurança, diversão, autoestima, pertencimento. É o coração respondendo.':'EMOTIONAL response: what the brand makes the customer FEEL — security, fun, self-respect, belonging. It is the heart responding.' },
+    { pts:'120,60 180,60 150,15', lx:150, ly:46, s:pt?'Reso.':'Reso.', color:'#0369A1', name:pt?'Ressonância (Resonance)':'Resonance', lvl:pt?'4. Relação':'4. Relationships', q:pt?'E nós dois?':'What about you and me?', desc:pt?'O TOPO: lealdade profunda e conexão. O cliente se identifica, recompra, defende a marca e sente comunidade. Poucas chegam aqui (ex: Apple, Harley-Davidson).':'The TOP: deep loyalty and connection. The customer identifies, repurchases, advocates and feels community. Few reach here (e.g. Apple, Harley-Davidson).' }
+  ];
+  window[id+'_data'] = blocks;
+  window[id+'_sel'] = function(i){ const bl=window[id+'_data'][i]; const b=document.getElementById(id+'-b'); if(!b)return; document.querySelectorAll('.'+id+'-p').forEach(function(x){x.setAttribute('stroke','#fff');x.setAttribute('stroke-width','1.5');}); const el=document.getElementById(id+'-p'+i); el.setAttribute('stroke','#0C4A6E'); el.setAttribute('stroke-width','2.5'); document.getElementById(id+'-n').textContent=bl.name; document.getElementById(id+'-n').style.color=(i===0?'#0369A1':bl.color); document.getElementById(id+'-t').textContent=bl.lvl+' · '+bl.q; document.getElementById(id+'-d').textContent=bl.desc; b.style.display='block'; };
+  const poly = (bl,i) => `<polygon id="${id}-p${i}" class="${id}-p" points="${bl.pts}" fill="${bl.color}" stroke="#fff" stroke-width="1.5" style="cursor:pointer" onclick="window['${id}_sel'](${i})"/>`;
+  const lbl = (bl,i) => `<text x="${bl.lx}" y="${bl.ly}" text-anchor="middle" font-size="6" font-weight="800" fill="#fff" style="pointer-events:none;">${bl.s}</text>`;
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#0C4A6E;margin-bottom:2px;">
+        ${pt?'Pirâmide de Brand Equity (Keller / CBBE)':'Brand Equity Pyramid (Keller / CBBE)'}
+      </div>
+      <div style="font-size:7.5px;color:#64748B;margin-bottom:4px;">${pt?'Da base (te conhecem) ao topo (te amam). 4 níveis, 6 blocos. Clique.':'From the base (they know you) to the top (they love you). 4 levels, 6 blocks. Click.'}</div>
+      <svg viewBox="0 0 300 210" style="width:100%;height:auto;max-width:340px;display:block;margin:0 auto;">
+        ${blocks.map((bl,i)=>poly(bl,i)).join('')}
+        ${blocks.map((bl,i)=>lbl(bl,i)).join('')}
+      </svg>
+      <div id="${id}-b" style="display:none;margin-top:2px;background:#F0F9FF;border:1px solid #BAE6FD;border-radius:7px;padding:9px 11px;">
+        <div style="display:flex;align-items:baseline;gap:6px;margin-bottom:3px;flex-wrap:wrap;">
+          <span id="${id}-n" style="font-size:10px;font-weight:800;"></span>
+          <span id="${id}-t" style="font-size:7px;font-weight:700;color:#0369A1;"></span>
+        </div>
+        <div id="${id}-d" style="font-size:8.5px;color:#374151;line-height:1.6;"></div>
+      </div>
+      <div style="margin-top:7px;background:#EFF6FF;border-radius:6px;padding:6px 9px;font-size:7.5px;color:#1E40AF;line-height:1.55;">💡 ${pt?'As 4 perguntas do cliente, subindo: <b>Quem é você?</b> (identidade) → <b>O que é você?</b> (significado) → <b>O que acho de você?</b> (resposta) → <b>E nós dois?</b> (relação). O objetivo é chegar na RESSONÂNCIA.':'The customer\'s 4 climbing questions: <b>Who are you?</b> (identity) → <b>What are you?</b> (meaning) → <b>What about you?</b> (response) → <b>What about you and me?</b> (relationship). The goal is to reach RESONANCE.'}</div>
+    </div>`;
+};

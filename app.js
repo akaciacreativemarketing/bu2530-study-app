@@ -793,6 +793,7 @@ const VIS_DISPATCH = {
   'equityVsValue':       true,
   'brandEquityDrivers':  true,
   'brandFinance500':     true,
+  'kellerPyramid':       true,
 };
 
 function renderTheoryCard(th) {
