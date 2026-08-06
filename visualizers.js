@@ -3117,3 +3117,38 @@ window.vis_damasTest = function(container, lang) {
       </div>
     </div>`;
 };
+
+/* ─── MKT W3: STP in practice — industry expert interview takeaways ─ */
+window.vis_stpInPractice = function(container, lang) {
+  const pt = lang === 'pt';
+  const id = 'stpx-' + Math.random().toString(36).substr(2,5);
+  const ins = [
+    { icon:'❓', color:'#0EA5E9', name:pt?'O “porquê”':'The “why”', desc:pt?'Tudo começa na pergunta mais difícil: POR QUE marketamos? Sabendo o porquê, você segmenta, mira e posiciona com sentido. O “why” guia todo o STP.':'It all starts with the hardest question: WHY do we market? Knowing the why lets you segment, target and position with purpose. The “why” drives the whole STP.' },
+    { icon:'💰', color:'#0284C7', name:pt?'Eficiência de recursos':'Resource efficiency', desc:pt?'O MAIOR benefício do STP. Recursos são limitados (gente, dinheiro, sistemas de TI) e o marketing é sempre a 1ª vítima de corte de orçamento. STP troca a “espingarda” (mirar todo mundo) por tiro seletivo — aplica o pouco que você tem onde dá mais retorno.':'The BIGGEST benefit of STP. Resources are limited (people, money, IT systems) and marketing is always the first victim of budget cuts. STP swaps the “shotgun” (aiming at everyone) for selective fire — putting the little you have where it pays off most.' },
+    { icon:'🙋', color:'#0891B2', name:pt?'Bom pro cliente':'Good for the customer', desc:pt?'Pesquisa (Forbes/HBR): clientes QUEREM ser mirados especificamente. Excesso de opção trava a decisão — se é difícil escolher, o cliente te ignora. Ex: preciso de uma camisa? Não me ofereça calça, sapato e meia. Mirar = ajudar a escolher.':'Research (Forbes/HBR): customers WANT to be targeted specifically. Too much choice freezes the decision — if it is hard to choose, the customer ignores you. E.g. I need a shirt? Do not offer me trousers, shoes and socks. Targeting = helping them choose.' },
+    { icon:'🏢', color:'#7C3AED', name:pt?'Funciona no B2B':'Works in B2B', desc:pt?'Empresas também têm as 4 bases (localização, comportamento, “demografia”). No B2B você segmenta por INDÚSTRIA/vertical (eólica vs automotiva vs óleo&gás), o que ajuda a destacar suas competências-core. Aplica o Pareto (80/20): foca no setor mais lucrativo e alcançável.':'Companies also have the 4 bases (location, behaviour, “demographics”). In B2B you segment by INDUSTRY/vertical (wind vs automotive vs oil & gas), which helps flesh out your core competencies. It applies Pareto (80/20): focus on the most profitable, reachable sector.' },
+    { icon:'🔄', color:'#16A34A', name:pt?'Revise sempre':'Always revise', desc:pt?'O mercado NÃO é estático — as 4 bases mudam com o tempo (gente se muda, envelhece, muda de estilo de vida) e o produto tem ciclo de vida. Ex: mercado migrando pra carros elétricos = pare de mirar diesel/gasolina. Gatilho nº1 pra revisar: COMPETIÇÃO (Porter) — inclusive a concorrência digital/invisível.':'The market is NOT static — the 4 bases change over time (people move, age, change lifestyle) and products have a life cycle. E.g. the market shifting to electric cars = stop targeting diesel/petrol. The nº1 trigger to revise: COMPETITION (Porter) — including digital/invisible competition.' },
+    { icon:'📈', color:'#B45309', name:pt?'Mire o CLV':'Target the CLV', desc:pt?'CLV = Customer Lifetime Value (valor do cliente ao longo do tempo). Todo negócio existe pra maximizar lucro, então mire quem trará MAIS receita ao longo da relação, não o ticket único. Ex: se o Dr. X me dá a maior receita em 5 anos, é nele que eu foco.':'CLV = Customer Lifetime Value. Every business exists to maximise profit, so target whoever will bring the MOST revenue over the relationship, not the one-off ticket. E.g. if Dr. X gives me the highest revenue over 5 years, that is who I focus on.' }
+  ];
+  window[id+'_data'] = ins;
+  window[id+'_sel'] = function(i){ const t=window[id+'_data'][i]; const b=document.getElementById(id+'-b'); if(!b)return; document.querySelectorAll('.'+id+'-c').forEach(function(x){x.style.outline='none';}); document.getElementById(id+'-c'+i).style.outline='2.5px solid '+t.color; document.getElementById(id+'-n').textContent=t.icon+' '+t.name; document.getElementById(id+'-n').style.color=t.color; document.getElementById(id+'-d').textContent=t.desc; b.style.display='block'; };
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#0C4A6E;margin-bottom:2px;">
+        ${pt?'STP na prática — 6 sacadas do especialista':'STP in practice — 6 takeaways from the expert'}
+      </div>
+      <div style="font-size:7.5px;color:#64748B;margin-bottom:8px;">${pt?'Da entrevista com Felix Donkor (Chartered Marketer, Honeywell). Clique em cada uma.':'From the interview with Felix Donkor (Chartered Marketer, Honeywell). Click each one.'}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;">
+        ${ins.map((t,i)=>`
+          <div id="${id}-c${i}" class="${id}-c" onclick="window['${id}_sel'](${i})" style="background:${t.color}0D;border:1px solid ${t.color}33;border-radius:6px;padding:7px 4px;cursor:pointer;text-align:center;transition:outline .12s;">
+            <div style="font-size:15px;">${t.icon}</div>
+            <div style="font-size:7px;font-weight:700;color:${t.color};line-height:1.15;margin-top:2px;">${t.name}</div>
+          </div>`).join('')}
+      </div>
+      <div id="${id}-b" style="display:none;margin-top:8px;background:#F0F9FF;border:1px solid #BAE6FD;border-radius:7px;padding:9px 11px;">
+        <div id="${id}-n" style="font-size:10px;font-weight:800;margin-bottom:3px;"></div>
+        <div id="${id}-d" style="font-size:8.5px;color:#374151;line-height:1.6;"></div>
+      </div>
+      <div style="margin-top:7px;font-size:7px;color:#94A3B8;line-height:1.5;">💡 ${pt?'A frase-chave: “se você não cuida do seu cliente, alguém cuida”. STP = mirar com recurso limitado + ser top of mind.':'Key line: “if you don\'t take care of your customer, someone else will”. STP = target with limited resources + be top of mind.'}</div>
+    </div>`;
+};

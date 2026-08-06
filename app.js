@@ -786,6 +786,7 @@ const VIS_DISPATCH = {
   'targetingStrategies': true,
   'damasTest':           true,
   'positioningMap':      true,
+  'stpInPractice':       true,
 };
 
 function renderTheoryCard(th) {

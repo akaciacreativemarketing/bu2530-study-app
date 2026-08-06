@@ -128,6 +128,30 @@ window.WEEKS_DATA['marketing-strategy'][3] = {
         pt: 'Mudar deliberadamente a posição de uma marca na mente do público — geralmente para acompanhar o ciclo de vida do produto ou alcançar um novo alvo. Caso clássico: a Lucozade, que deixou de ser um remédio para doentes se recuperarem e passou a ser uma bebida esportiva/energética para pessoas ativas e saudáveis.',
         en: 'Deliberately changing a brand\'s position in the audience\'s mind — usually to follow the product lifecycle or reach a new target. Classic case: Lucozade, which shifted from a remedy for the sick to recover into a sports/energy drink for active, healthy people.'
       }
+    },
+    {
+      pt: 'Eficiência de recursos (o porquê do STP)',
+      en: 'Resource efficiency (the why of STP)',
+      definition: {
+        pt: 'O principal benefício do STP na prática, segundo o especialista: recursos (dinheiro, pessoas, sistemas de TI) são limitados e o orçamento de marketing é sempre o primeiro a ser cortado. Em vez do “tiro de espingarda” (falar com todo mundo), o STP concentra o esforço nos segmentos certos — alocação eficiente do pouco que se tem. Liga com o Pareto (80/20): foque no setor mais lucrativo e mais fácil de alcançar.',
+        en: 'STP\'s main practical benefit, per the expert: resources (money, people, IT systems) are limited and the marketing budget is always the first to be cut. Instead of the “shotgun” (talking to everyone), STP concentrates effort on the right segments — efficient allocation of the little you have. It links to Pareto (80/20): focus on the most profitable, easiest-to-reach sector.'
+      }
+    },
+    {
+      pt: 'CLV — Valor do Cliente no Tempo',
+      en: 'CLV — Customer Lifetime Value',
+      definition: {
+        pt: 'Customer Lifetime Value: a receita média que um cliente traz ao longo de todo o tempo em que fica com você. É um critério de segmentação/alvo — como todo negócio existe pra maximizar lucro, você mira os clientes de MAIOR CLV, não os de compra única. Ex: se o Dr. X gera a maior receita em 5 anos, foque nele.',
+        en: 'Customer Lifetime Value: the average revenue a customer brings over the whole time they stay with you. It is a segmentation/targeting criterion — since every business exists to maximise profit, you target the HIGHEST-CLV customers, not one-off buyers. E.g. if Dr. X generates the highest revenue over 5 years, focus on him.'
+      }
+    },
+    {
+      pt: 'Revisão do STP (mercado dinâmico)',
+      en: 'Revising STP (a dynamic market)',
+      definition: {
+        pt: 'O STP não é feito uma vez e esquecido — o mercado não é estático. As 4 bases mudam com o tempo (as pessoas se mudam, envelhecem, mudam de estilo de vida) e os produtos têm ciclo de vida. É preciso revisar segmentação, alvo e posicionamento periodicamente. Gatilho nº1: a COMPETIÇÃO (Porter), incluindo a concorrência digital/invisível. Ex: mercado migrando pra carros elétricos → pare de mirar diesel/gasolina.',
+        en: 'STP is not done once and forgotten — the market is not static. The 4 bases change over time (people move, age, change lifestyle) and products have a life cycle. You must revise segmentation, targeting and positioning periodically. Nº1 trigger: COMPETITION (Porter), including digital/invisible competition. E.g. the market shifting to electric cars → stop targeting diesel/petrol.'
+      }
     }
   ],
   theories: [
@@ -179,6 +203,16 @@ window.WEEKS_DATA['marketing-strategy'][3] = {
       description: {
         pt: 'Posicionar é decidir que LUGAR a marca vai ocupar na mente do cliente, em atributos que importam. O mapa perceptual desenha esse espaço em dois eixos (aqui: preço × valor percebido/premium) e mostra onde cada marca “mora” — o ideal é ocupar um espaço claro e não colar em cima de um concorrente. Depois vem a declaração de posicionamento, a frase que amarra tudo: “Para [alvo] que [necessidade], a [marca] é a [conceito] que [diferencial]”. A do Amazon (real): ser a empresa mais centrada no cliente da Terra. Clique nos pontos do mapa.',
         en: 'Positioning is deciding what PLACE the brand will occupy in the customer\'s mind, on attributes that matter. The perceptual map draws that space on two axes (here: price × perceived/premium value) and shows where each brand “lives” — ideally you occupy a clear space and don\'t sit on top of a competitor. Then comes the positioning statement, the sentence that ties it together: “For [target] who [need], [brand] is the [concept] that [differentiator]”. Amazon\'s (real): to be earth\'s most customer-centric company. Click the dots on the map.'
+      }
+    },
+    {
+      name: { pt: 'STP na prática (visão do especialista)', en: 'STP in practice (the expert view)' },
+      authors: ['Donkor'],
+      year: '',
+      renderer: 'stpInPractice',
+      description: {
+        pt: 'A entrevista da Lição 4 com Felix Donkor (Chartered Marketer do CIM, MBA, 15+ anos em Suécia/UK/Alemanha, hoje Channel Marketing Manager para a Europa na Honeywell) traduz o STP pro mundo real em 6 sacadas. Começa sempre pelo “porquê” você marketa; o maior benefício é a EFICIÊNCIA DE RECURSOS (nada de espingarda — recurso é limitado e marketing é o 1º a cortar); é bom pro CLIENTE também (gente quer ser mirada; excesso de opção afasta); funciona no B2B (segmenta por indústria/vertical + Pareto 80/20); tem que REVISAR sempre (mercado muda; gatilho nº1 = competição); e você mira quem tem o maior CLV. Clique em cada sacada.',
+        en: 'The Lesson 4 interview with Felix Donkor (a CIM Chartered Marketer, MBA, 15+ years across Sweden/UK/Germany, now Channel Marketing Manager for Europe at Honeywell) translates STP into the real world in 6 takeaways. Always start with the “why” you market; the biggest benefit is RESOURCE EFFICIENCY (no shotgun — resources are limited and marketing is the first to be cut); it is good for the CUSTOMER too (people want to be targeted; too much choice pushes them away); it works in B2B (segment by industry/vertical + Pareto 80/20); you must REVISE constantly (the market changes; nº1 trigger = competition); and you target the highest CLV. Click each takeaway.'
       }
     }
   ],
@@ -245,7 +279,13 @@ window.WEEKS_DATA['marketing-strategy'][3] = {
     { term: 'Positioning statement', definition: { pt: '“Para [alvo] que [necessidade], a [marca] é a [conceito] que [diferencial].”', en: '“For [target] who [need], [brand] is the [concept] that [differentiator].”' } },
     { term: 'Perceptual map', definition: { pt: 'Diagrama de 2 eixos que mostra onde as marcas “moram” na mente do cliente.', en: '2-axis diagram showing where brands “live” in the customer\'s mind.' } },
     { term: 'Repositioning', definition: { pt: 'Mudar de propósito a posição de uma marca (ex: Lucozade, de remédio a bebida esportiva).', en: 'Deliberately changing a brand\'s position (e.g. Lucozade, from remedy to sports drink).' } },
-    { term: 'Value proposition', definition: { pt: 'A promessa de valor que justifica por que o cliente-alvo deve escolher a marca.', en: 'The promise of value that justifies why the target customer should choose the brand.' } }
+    { term: 'Value proposition', definition: { pt: 'A promessa de valor que justifica por que o cliente-alvo deve escolher a marca.', en: 'The promise of value that justifies why the target customer should choose the brand.' } },
+    { term: 'CLV (Customer Lifetime Value)', definition: { pt: 'Receita média que um cliente traz ao longo de toda a relação. Mire quem tem o maior CLV.', en: 'Average revenue a customer brings over the whole relationship. Target the highest CLV.' } },
+    { term: 'Pareto (80/20)', definition: { pt: 'Regra da segmentação: ~80% do lucro vem de ~20% dos clientes/segmentos. Foca neles.', en: 'Segmentation rule: ~80% of profit comes from ~20% of customers/segments. Focus on them.' } },
+    { term: 'Shotgun vs targeted', definition: { pt: '“Espingarda” = falar com todo mundo (desperdício). STP = tiro seletivo, recurso eficiente.', en: '“Shotgun” = talk to everyone (waste). STP = selective fire, efficient resources.' } },
+    { term: 'USP (Unique Selling Point)', definition: { pt: 'O motivo pra te escolher em vez do concorrente — o coração do posicionamento.', en: 'The reason to choose you over the competitor — the heart of positioning.' } },
+    { term: 'Top of mind', definition: { pt: 'Ser a 1ª marca que vem à cabeça do cliente diante de uma “dor” — o objetivo do posicionamento.', en: 'Being the 1st brand that comes to the customer\'s mind for a “pain point” — the goal of positioning.' } },
+    { term: '4 Ps (marketing mix)', definition: { pt: 'Product, Price, Promotion, Place. Definidos DEPOIS do STP: cada segmento tem seu próprio mix.', en: 'Product, Price, Promotion, Place. Set AFTER STP: each segment has its own mix.' } }
   ],
   connections: [
     { subject: 'marketing-strategy', week: 2, reason: { pt: 'A auditoria do ambiente (SWOT/Porter/PESTLE, Sem. 12) é o insumo do STP: você segmenta e posiciona com base nas oportunidades, ameaças e forças identificadas.', en: 'The environment audit (SWOT/Porter/PESTLE, Week 12) feeds STP: you segment and position based on the identified opportunities, threats and strengths.' } },
@@ -264,14 +304,19 @@ window.WEEKS_DATA['marketing-strategy'][3] = {
     { q: { pt: 'Quais os 5 critérios DAMAS pra avaliar um segmento?', en: 'What are the 5 DAMAS criteria to evaluate a segment?' }, a: { pt: 'Distinct (se comporta diferente), Accessible (dá pra alcançar), Measurable (dá pra quantificar), Actionable (você tem capacidade+verba pra servir com lucro) e Substantial (grande/valioso o bastante). Reprovou em um → repensa o segmento.', en: 'Distinct (behaves differently), Accessible (you can reach it), Measurable (you can quantify it), Actionable (you have capability+budget to serve it profitably) and Substantial (big/valuable enough). Fail one → rethink the segment.' } },
     { q: { pt: 'O que é posicionamento?', en: 'What is positioning?' }, a: { pt: 'A forma como o produto é definido pelos consumidores em atributos importantes — o lugar que ele ocupa na MENTE deles em relação aos concorrentes. A empresa escolhe a proposta de valor.', en: 'The way a product is defined by consumers on important attributes — the place it occupies in their MINDS relative to competitors. The firm chooses the value proposition.' } },
     { q: { pt: 'Qual a fórmula de uma declaração de posicionamento?', en: 'What is the formula of a positioning statement?' }, a: { pt: '“Para [público-alvo] que [necessidade], a [marca] é a [categoria/conceito] que [diferencial].” Ex: Amazon = a empresa mais centrada no cliente da Terra.', en: '“For [target] who [need], [brand] is the [category/concept] that [differentiator].” E.g. Amazon = earth\'s most customer-centric company.' } },
-    { q: { pt: 'Por que a Lucozade é o caso clássico de reposicionamento?', en: 'Why is Lucozade the classic repositioning case?' }, a: { pt: 'Saiu de bebida dada a DOENTES para se recuperarem e virou bebida ESPORTIVA/energética para pessoas ativas e saudáveis — novo alvo e nova posição, mesma marca, acompanhando o ciclo de vida.', en: 'It went from a drink given to the SICK to recover into a SPORTS/energy drink for active, healthy people — new target and new position, same brand, following the lifecycle.' } }
+    { q: { pt: 'Por que a Lucozade é o caso clássico de reposicionamento?', en: 'Why is Lucozade the classic repositioning case?' }, a: { pt: 'Saiu de bebida dada a DOENTES para se recuperarem e virou bebida ESPORTIVA/energética para pessoas ativas e saudáveis — novo alvo e nova posição, mesma marca, acompanhando o ciclo de vida.', en: 'It went from a drink given to the SICK to recover into a SPORTS/energy drink for active, healthy people — new target and new position, same brand, following the lifecycle.' } },
+    { q: { pt: 'Segundo o especialista, qual o MAIOR benefício do STP?', en: 'According to the expert, what is the BIGGEST benefit of STP?' }, a: { pt: 'Eficiência de recursos. Recursos (gente, dinheiro, TI) são limitados e o marketing é o 1º corte; o STP evita a “espingarda” e concentra o esforço nos segmentos certos (Pareto 80/20).', en: 'Resource efficiency. Resources (people, money, IT) are limited and marketing is the first cut; STP avoids the “shotgun” and concentrates effort on the right segments (Pareto 80/20).' } },
+    { q: { pt: 'Qual o benefício do STP para o CLIENTE?', en: 'What is the benefit of STP for the CUSTOMER?' }, a: { pt: 'O cliente quer ser mirado especificamente. Excesso de opção trava a decisão e ele te ignora. Mirar = ajudar a escolher (ex: precisei de camisa, não me ofereça calça/sapato/meia).', en: 'The customer wants to be targeted specifically. Too much choice freezes the decision and they ignore you. Targeting = helping them choose (e.g. I needed a shirt, do not offer trousers/shoes/socks).' } },
+    { q: { pt: 'Por que e quando revisar o STP? Qual o gatilho nº1?', en: 'Why and when to revise STP? What is the nº1 trigger?' }, a: { pt: 'Porque o mercado não é estático: as 4 bases mudam e o produto tem ciclo de vida (ex: carros elétricos). Gatilho nº1 = COMPETIÇÃO (Porter), incluindo a concorrência digital/invisível.', en: 'Because the market is not static: the 4 bases change and the product has a life cycle (e.g. electric cars). Nº1 trigger = COMPETITION (Porter), including digital/invisible competition.' } },
+    { q: { pt: 'O que é CLV e como usar no targeting?', en: 'What is CLV and how to use it in targeting?' }, a: { pt: 'Customer Lifetime Value = receita média do cliente ao longo de toda a relação. Como o negócio existe pra maximizar lucro, mire os clientes de MAIOR CLV, não os de compra única.', en: 'Customer Lifetime Value = the customer\'s average revenue over the whole relationship. Since the business exists to maximise profit, target the HIGHEST-CLV customers, not one-off buyers.' } }
   ],
   links: [
     { title: 'STP model — lecture (Coursera, Week 13)', url: '', type: 'video', description: { pt: 'A aula-vídeo (8 min) que estrutura toda a semana: bases de segmentação, estratégias de targeting e a declaração de posicionamento (com o exemplo da Amazon).', en: 'The lecture video (8 min) that structures the whole week: segmentation bases, targeting strategies and the positioning statement (with the Amazon example).' } },
     { title: 'Ng, C. — “Market segmentation – Nike case study” (2018)', url: '', type: 'article', description: { pt: 'Leitura do curso sobre as metodologias/técnicas de segmentação usadas pela Nike.', en: 'Course reading on the segmentation methodologies/techniques used by Nike.' } },
     { title: 'Hugel, M. — “Market targeting: Why it pays to differentiate” (Hurree, 2022)', url: 'https://blog.hurree.co/market-targeting', type: 'article', description: { pt: 'Lido na íntegra: 4 estratégias com marcas (IKEA/Nike/Lush/Groupon), teste DAMAS, benefícios de diferenciar e targeting digital.', en: 'Read in full: 4 strategies with brands (IKEA/Nike/Lush/Groupon), DAMAS test, benefits of differentiation and digital targeting.' } },
-    { title: 'Pratt, T. — “Afternoon tea and eccentric chic: the US still loves British brands” (The Guardian, 2015)', url: '', type: 'article', description: { pt: 'Leitura sobre posicionamento de marcas britânicas nos EUA (herança + excentricidade chique).', en: 'Reading on the positioning of British brands in the US (heritage + chic eccentricity).' } },
-    { title: 'Suntory / Lucozade energy (n.d.) + “The rebranding of Lucozade” (vídeo)', url: '', type: 'video', description: { pt: 'Material do curso sobre o ciclo de vida e o reposicionamento da Lucozade (de remédio a bebida esportiva).', en: 'Course material on Lucozade\'s lifecycle and repositioning (from remedy to sports drink).' } }
+    { title: 'Pratt, T. — “Afternoon tea and eccentric chic: the US still loves British brands” (The Guardian, 2015)', url: 'https://www.theguardian.com/small-business-network/2015/mar/03/eccentric-chic-us-loves-british-brands', type: 'article', description: { pt: 'Leitura sobre posicionamento de marcas britânicas nos EUA (herança + excentricidade chique).', en: 'Reading on the positioning of British brands in the US (heritage + chic eccentricity).' } },
+    { title: 'Suntory / Lucozade energy (n.d.) + “The rebranding of Lucozade” (vídeo)', url: '', type: 'video', description: { pt: 'Material do curso sobre o ciclo de vida e o reposicionamento da Lucozade (de remédio a bebida esportiva).', en: 'Course material on Lucozade\'s lifecycle and repositioning (from remedy to sports drink).' } },
+    { title: 'STP — Industry expert interview: Felix Donkor (Honeywell)', url: '', type: 'video', description: { pt: 'Entrevista da Lição 4 (25 min): STP na prática — o porquê, eficiência de recursos, benefício pro cliente, B2B/Pareto, revisão, CLV, posicionamento/USP.', en: 'Lesson 4 interview (25 min): STP in practice — the why, resource efficiency, customer benefit, B2B/Pareto, revision, CLV, positioning/USP.' } }
   ],
   notes: {
     pt: `═══ VISÃO GERAL ═══
@@ -304,6 +349,18 @@ Mapa perceptual: 2 eixos (ex: preço × premium) mostram onde cada marca “mora
 Declaração de posicionamento (fórmula): “Para [alvo] que [necessidade], a [marca] é a [conceito] que [diferencial].”
 Exemplos: Amazon (real) = ser a empresa mais centrada no cliente da Terra, onde se encontra/descobre qualquer coisa pra comprar online. Volvo = segurança.
 
+═══ 4) VISÃO DO ESPECIALISTA (entrevista — Felix Donkor, Honeywell) ═══
+Chartered Marketer (CIM), MBA, 15+ anos (Suécia/UK/Alemanha), Channel Marketing Manager Europa na Honeywell. Sacadas do STP no mundo real:
+• Comece pelo PORQUÊ — a pergunta mais difícil e mais importante: por que marketamos? O "why" guia S, T e P.
+• Maior benefício = EFICIÊNCIA DE RECURSOS. Recursos (dinheiro, PESSOAS, sistemas de TI) são limitados e marketing é o 1º corte de budget. STP troca a "espingarda" (todo mundo) por tiro seletivo. Pareto (80/20): foca no setor mais lucrativo e alcançável.
+• Bom PRO CLIENTE também (Forbes/HBR): o cliente quer ser mirado; excesso de opção trava a escolha e ele te ignora (ex: precisei de camisa → não me ofereça calça/sapato/meia).
+• STP alimenta os 4 Ps (Product/Price/Promotion/Place) e coordena funções interdependentes (logística/supply chain não aguentam marketing "espingarda"; pricing, etc.).
+• Funciona no B2B: segmenta por INDÚSTRIA/vertical (eólica vs automotiva vs óleo&gás) e destaca suas competências-core. Empresas também têm as 4 bases.
+• REVISAR sempre: mercado dinâmico; as 4 bases mudam; ciclo de vida do produto (ex: carros elétricos matando diesel/gasolina). Gatilho nº1 = COMPETIÇÃO (Porter) — que hoje pode ser 6-7 forças (acionistas, ESG, concorrência DIGITAL/invisível).
+• POSICIONAMENTO = seu USP (unique selling point) e ser TOP OF MIND: quando o cliente tem uma "dor" (pain point), você quer ser a 1ª solução que vem à cabeça. "Se você não cuida do seu cliente, alguém cuida."
+• CLV (Customer Lifetime Value): mire quem traz a maior receita ao longo da relação, não o ticket único.
+Ex do especialista (rede de hotéis — casa com o Premier Inn): segmenta por comportamento — luxo/premium (quem paga mais), estadia longa/curta (famílias, estudantes viajantes).
+
 ═══ CASOS DA SEMANA ═══
 • Nike (Ng, 2018): segmentação combinando demográfica + psicográfica + comportamental.
 • Lucozade: reposicionamento clássico — de remédio pra doentes → bebida esportiva/energética (acompanha o ciclo de vida).
@@ -319,8 +376,9 @@ O STP é um dos modelos mais aplicados do marketing. Foca na eficácia comercial
 🎬 Aula-vídeo do curso (Coursera, Week 13 — “STP model”, 8 min): objetivos, definição de segmentação, 4 bases (geográfica/demográfica/psicográfica/comportamental), targeting (indiferenciado/diferenciado/concentrado/micromarketing) e posicionamento + declaração (exemplo Amazon). Transcrição enviada pelo usuário.
 📖 Ng, C. “Market segmentation – Nike case study” (2018) — metodologias de segmentação.
 📖 Hugel, M. “Market targeting: Why it pays to differentiate” (Hurree, 2022) — LIDO na íntegra (blog.hurree.co/market-targeting): 4 estratégias com marcas reais (IKEA/Nike/Lush/Groupon), teste DAMAS, benefícios de diferenciar e targeting digital (comportamental/IA/privacidade).
-📖 Pratt, T. “Afternoon tea and eccentric chic: the US still loves British brands” (The Guardian, 2015) — posicionamento.
+📖 Pratt, T. “Afternoon tea and eccentric chic: the US still loves British brands” (The Guardian, 2015; theguardian.com/small-business-network/2015/mar/03/eccentric-chic-us-loves-british-brands) — posicionamento por herança + excentricidade chique. (O Guardian bloqueia fetch automático; tese registrada pelas telas do curso.)
 📖 Suntory Beverage & Food GB&I / Lucozade energy (n.d.) + vídeo “The rebranding of Lucozade” — ciclo de vida e reposicionamento.
+🎙️ Entrevista com especialista de STP — Felix Donkor (Chartered Marketer/CIM, MBA, Channel Marketing Manager Europa na Honeywell), Coursera Week 13, Lição 4 (25 min): o porquê, eficiência de recursos, benefício pro cliente, B2B/Pareto, revisão do STP, CLV, posicionamento/USP/top of mind.
 🏨 Case Premier Inn (tela do curso): dois grupos — “Premium” (casais jovens + viagens de negócios) e “Longer stays” (famílias com filhos).
 📎 Autores de referência: Kotler (sistematizou o STP) e Ries & Trout (“Positioning”, 1981).
 
@@ -355,6 +413,18 @@ Perceptual map: 2 axes (e.g. price × premium) show where each brand “lives”
 Positioning statement (formula): “For [target] who [need], [brand] is the [concept] that [differentiator].”
 Examples: Amazon (real) = to be earth's most customer-centric company, where you find/discover anything to buy online. Volvo = safety.
 
+═══ 4) THE EXPERT VIEW (interview — Felix Donkor, Honeywell) ═══
+Chartered Marketer (CIM), MBA, 15+ years (Sweden/UK/Germany), Channel Marketing Manager Europe at Honeywell. Real-world STP takeaways:
+• Start with the WHY — the hardest and most important question: why do we market? The "why" drives S, T and P.
+• Biggest benefit = RESOURCE EFFICIENCY. Resources (money, PEOPLE, IT systems) are limited and marketing is the first budget cut. STP swaps the "shotgun" (everyone) for selective fire. Pareto (80/20): focus on the most profitable, reachable sector.
+• Good for the CUSTOMER too (Forbes/HBR): the customer wants to be targeted; too much choice freezes the decision and they ignore you (e.g. I needed a shirt → do not offer trousers/shoes/socks).
+• STP feeds the 4 Ps (Product/Price/Promotion/Place) and coordinates interdependent functions (logistics/supply chain cannot cope with "shotgun" marketing; pricing, etc.).
+• It works in B2B: segment by INDUSTRY/vertical (wind vs automotive vs oil & gas) and flesh out your core competencies. Companies also have the 4 bases.
+• REVISE constantly: dynamic market; the 4 bases change; product life cycle (e.g. electric cars killing diesel/petrol). Nº1 trigger = COMPETITION (Porter) — which today could be 6-7 forces (shareholders, ESG, DIGITAL/invisible competition).
+• POSITIONING = your USP (unique selling point) and being TOP OF MIND: when the customer has a "pain point", you want to be the 1st solution that comes to mind. "If you don't take care of your customer, someone else will."
+• CLV (Customer Lifetime Value): target whoever brings the most revenue over the relationship, not the one-off ticket.
+Expert example (hotel chain — matches Premier Inn): segments by behaviour — luxury/premium (those who pay more), long/short stay (families, travelling students).
+
 ═══ WEEK CASES ═══
 • Nike (Ng, 2018): segmentation combining demographic + psychographic + behavioural.
 • Lucozade: classic repositioning — from remedy for the sick → sports/energy drink (follows the lifecycle).
@@ -370,8 +440,9 @@ STP is one of marketing's most applied models. It focuses on commercial effectiv
 🎬 Course lecture video (Coursera, Week 13 — “STP model”, 8 min): objectives, definition of segmentation, 4 bases (geographic/demographic/psychographic/behavioural), targeting (undifferentiated/differentiated/concentrated/micromarketing) and positioning + statement (Amazon example). Transcript sent by the user.
 📖 Ng, C. “Market segmentation – Nike case study” (2018) — segmentation methodologies.
 📖 Hugel, M. “Market targeting: Why it pays to differentiate” (Hurree, 2022) — READ in full (blog.hurree.co/market-targeting): 4 strategies with real brands (IKEA/Nike/Lush/Groupon), DAMAS test, benefits of differentiation and digital targeting (behavioural/AI/privacy).
-📖 Pratt, T. “Afternoon tea and eccentric chic: the US still loves British brands” (The Guardian, 2015) — positioning.
+📖 Pratt, T. “Afternoon tea and eccentric chic: the US still loves British brands” (The Guardian, 2015; theguardian.com/small-business-network/2015/mar/03/eccentric-chic-us-loves-british-brands) — positioning by heritage + chic eccentricity. (The Guardian blocks automatic fetch; thesis captured from the course screens.)
 📖 Suntory Beverage & Food GB&I / Lucozade energy (n.d.) + video “The rebranding of Lucozade” — lifecycle and repositioning.
+🎙️ STP industry-expert interview — Felix Donkor (Chartered Marketer/CIM, MBA, Channel Marketing Manager Europe at Honeywell), Coursera Week 13, Lesson 4 (25 min): the why, resource efficiency, customer benefit, B2B/Pareto, revising STP, CLV, positioning/USP/top of mind.
 🏨 Premier Inn case (course screen): two groups — “Premium” (younger couples + business trips) and “Longer stays” (families with children).
 📎 Reference authors: Kotler (systematised STP) and Ries & Trout (“Positioning”, 1981).
 
