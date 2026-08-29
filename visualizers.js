@@ -3551,3 +3551,197 @@ window.vis_externalRefresh = function(container, lang) {
       <div style="margin-top:7px;font-size:7px;color:#94A3B8;line-height:1.5;">💡 ${pt?'External branding só se sustenta se DERIVA do interno. Senão é maquiagem sem lastro.':'External branding only holds if it DERIVES from the internal. Otherwise it is makeup with no backing.'}</div>
     </div>`;
 };
+
+/* ═══════════════════════════════════════════════════════════════════
+   MARKETING STRATEGY — WEEK 6 (course Week 16): THE 4 Ps (MARKETING MIX)
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ─── MKT W6: the 4 Ps ──────────────────────────────────────────── */
+window.vis_fourPs = function(container, lang) {
+  const pt = lang === 'pt';
+  const id = 'fps-' + Math.random().toString(36).substr(2,5);
+  const ps = [
+    { icon:'📦', color:'#0EA5E9', name:'Product', q:pt?'O que o cliente quer? Como me diferencio?':'What does the customer want? How do I differ?', desc:pt?'O que se oferece pra satisfazer uma necessidade. O jogo é diferenciar da concorrência (via style, design, packaging, labelling).':'What is offered to satisfy a need. The game is to differentiate from competitors (via style, design, packaging, labelling).' },
+    { icon:'💰', color:'#0284C7', name:'Price', q:pt?'O cliente percebe valor? É sensível a preço?':'Does the customer see value? Price-sensitive?', desc:pt?'O valor monetário da troca — o ÚNICO P que gera receita. Pro fabricante = lucro; pro cliente = medida de qualidade.':'The monetary value of the exchange — the ONLY P that generates revenue. To the maker = profit; to the customer = a measure of quality.' },
+    { icon:'📍', color:'#0891B2', name:'Place', q:pt?'Onde o comprador procuraria o produto?':'Where would the buyer look for it?', desc:pt?'Onde e como o produto fica acessível — canais, distribuição, logística, ponto de venda (físico e/ou online).':'Where and how the product is made accessible — channels, distribution, logistics, point of sale (physical and/or online).' },
+    { icon:'📣', color:'#0C4A6E', name:'Promotion', q:pt?'Quando, onde e como levo a mensagem?':'When, where and how do I deliver the message?', desc:pt?'Comunicar o benefício e persuadir à compra. É o P que converte os outros três em demanda — sem ele, o cliente nem sabe que o produto existe.':'Communicate the benefit and persuade the purchase. The P that converts the other three into demand — without it, the customer does not even know the product exists.' }
+  ];
+  window[id+'_data'] = ps;
+  window[id+'_sel'] = function(i){ const p=window[id+'_data'][i]; const b=document.getElementById(id+'-b'); if(!b)return; document.querySelectorAll('.'+id+'-c').forEach(function(x){x.style.outline='none';}); document.getElementById(id+'-c'+i).style.outline='2.5px solid '+p.color; document.getElementById(id+'-n').textContent=p.icon+' '+p.name; document.getElementById(id+'-n').style.color=p.color; document.getElementById(id+'-q').textContent=p.q; document.getElementById(id+'-d').textContent=p.desc; b.style.display='block'; };
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#0C4A6E;margin-bottom:2px;">
+        ${pt?'Os 4 Ps do Marketing Mix':'The 4 Ps of the Marketing Mix'}
+      </div>
+      <div style="font-size:7.5px;color:#64748B;margin-bottom:8px;">${pt?'Cada P responde uma pergunta. Clique.':'Each P answers a question. Click.'}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+        ${ps.map((p,i)=>`<div id="${id}-c${i}" class="${id}-c" onclick="window['${id}_sel'](${i})" style="background:${p.color}0D;border:1px solid ${p.color}33;border-radius:7px;padding:9px 7px;cursor:pointer;text-align:center;transition:outline .12s;"><div style="font-size:18px;">${p.icon}</div><div style="font-size:9px;font-weight:800;color:${p.color};margin-top:2px;">${p.name}</div></div>`).join('')}
+      </div>
+      <div id="${id}-b" style="display:none;margin-top:8px;background:#F8FAFC;border:1px solid #E5E7EB;border-radius:7px;padding:9px 11px;">
+        <div id="${id}-n" style="font-size:10px;font-weight:800;margin-bottom:2px;"></div>
+        <div id="${id}-q" style="font-size:7.5px;font-weight:700;color:#0369A1;font-style:italic;margin-bottom:4px;"></div>
+        <div id="${id}-d" style="font-size:8.5px;color:#374151;line-height:1.6;"></div>
+      </div>
+      <div style="margin-top:8px;background:#EFF6FF;border-radius:6px;padding:6px 9px;font-size:7.5px;color:#1E40AF;line-height:1.55;">💡 ${pt?'Os 4 Ps são <b>interdependentes</b>: um preço errado afunda um bom produto; um canal errado torna a promoção inútil. Vale o EQUILÍBRIO.':'The 4 Ps are <b>interdependent</b>: a wrong price sinks a good product; a wrong channel makes promotion useless. It is the BALANCE that counts.'}</div>
+    </div>`;
+};
+
+/* ─── MKT W6: 4 product features ────────────────────────────────── */
+window.vis_productFeatures = function(container, lang) {
+  const pt = lang === 'pt';
+  const id = 'pft-' + Math.random().toString(36).substr(2,5);
+  const f = [
+    { icon:'🎨', color:'#0EA5E9', name:pt?'Style (estilo)':'Style', desc:pt?'A APARÊNCIA do produto — o que se vê. Cor, forma, acabamento. A primeira alavanca de diferenciação.':'The product\'s APPEARANCE — what you see. Colour, shape, finish. The first lever of differentiation.' },
+    { icon:'⚙️', color:'#0284C7', name:pt?'Design':'Design', desc:pt?'O que aumenta a UTILIDADE e a funcionalidade do produto. Não é só bonito — é como ele resolve melhor.':'What increases the product\'s USEFULNESS and utility. It is not just pretty — it is how it solves better.' },
+    { icon:'📦', color:'#0891B2', name:pt?'Packaging (embalagem)':'Packaging', desc:pt?'PROTEGE o produto durante o armazenamento, a venda e a distribuição — e também comunica e vende na prateleira.':'PROTECTS the product during storage, sale and distribution — and also communicates and sells on the shelf.' },
+    { icon:'🏷️', color:'#0C4A6E', name:pt?'Labelling (rótulo)':'Labelling', desc:pt?'Exibe a INFORMAÇÃO do produto: ingredientes, modo de uso, avisos. Cumpre função legal e de confiança.':'Displays the product INFORMATION: ingredients, instructions, warnings. It serves a legal and trust function.' }
+  ];
+  window[id+'_data'] = f;
+  window[id+'_sel'] = function(i){ const x=window[id+'_data'][i]; const b=document.getElementById(id+'-b'); if(!b)return; document.querySelectorAll('.'+id+'-c').forEach(function(c){c.style.outline='none';}); document.getElementById(id+'-c'+i).style.outline='2.5px solid '+x.color; document.getElementById(id+'-n').textContent=x.icon+' '+x.name; document.getElementById(id+'-n').style.color=x.color; document.getElementById(id+'-d').textContent=x.desc; b.style.display='block'; };
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#0C4A6E;margin-bottom:2px;">
+        ${pt?'As 4 Features de Produto':'The 4 Product Features'}
+      </div>
+      <div style="font-size:7.5px;color:#64748B;margin-bottom:8px;">${pt?'As alavancas pra diferenciar o produto. Clique.':'The levers to differentiate the product. Click.'}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+        ${f.map((x,i)=>`<div id="${id}-c${i}" class="${id}-c" onclick="window['${id}_sel'](${i})" style="background:${x.color}0D;border:1px solid ${x.color}33;border-radius:7px;padding:8px 6px;cursor:pointer;text-align:center;transition:outline .12s;"><div style="font-size:16px;">${x.icon}</div><div style="font-size:8px;font-weight:800;color:${x.color};margin-top:2px;line-height:1.1;">${x.name}</div></div>`).join('')}
+      </div>
+      <div id="${id}-b" style="display:none;margin-top:8px;background:#F8FAFC;border:1px solid #E5E7EB;border-radius:7px;padding:9px 11px;">
+        <div id="${id}-n" style="font-size:10px;font-weight:800;margin-bottom:3px;"></div>
+        <div id="${id}-d" style="font-size:8.5px;color:#374151;line-height:1.6;"></div>
+      </div>
+      <div style="margin-top:7px;font-size:7px;color:#94A3B8;line-height:1.5;">💡 ${pt?'Macete: "a cara (style), o jeito (design), a caixa (packaging) e a etiqueta (labelling)".':'Mnemonic: "the look (style), the feel (design), the box (packaging) and the label (labelling)".'}</div>
+    </div>`;
+};
+
+/* ─── MKT W6: pricing strategies ────────────────────────────────── */
+window.vis_pricingStrategies = function(container, lang) {
+  const pt = lang === 'pt';
+  const id = 'prc-' + Math.random().toString(36).substr(2,5);
+  const st = [
+    { color:'#0EA5E9', name:pt?'Penetration':'Penetration', tag:pt?'entra barato, sobe depois':'enter low, raise later', desc:pt?'Preço deliberadamente BAIXO na entrada pra ganhar market share e fidelizar; depois de estabelecida a base, sobe. Ex: OnePlus lançou a US$299, modelos seguintes a US$500-700.':'Deliberately LOW entry price to gain market share and build loyalty; once the base is set, raise it. E.g. OnePlus launched at US$299, later models at US$500-700.' },
+    { color:'#0284C7', name:pt?'Skimming':'Skimming', tag:pt?'entra caro, baixa aos poucos':'enter high, lower gradually', desc:pt?'Lança CARO um produto inovador com pouca concorrência, captura os early adopters, e reduz o preço à medida que a concorrência chega. Ex: smartphones novos.':'Launches an innovative, low-competition product HIGH, captures early adopters, and lowers the price as competition arrives. E.g. new smartphones.' },
+    { color:'#7C3AED', name:pt?'Premium':'Premium', tag:pt?'sempre acima do mercado':'always above market', desc:pt?'Preço sempre ACIMA do padrão do setor, sinalizando qualidade/status superior. Exige marca forte e diferenciação real. Ex: gasolina de marca mais cara que a comum.':'Price always ABOVE the sector standard, signalling superior quality/status. Requires a strong brand and real differentiation. E.g. branded fuel priced above regular.' },
+    { color:'#16A34A', name:pt?'Economy':'Economy', tag:pt?'sempre abaixo, corta custo':'always below, cut cost', desc:pt?'Preço baixo sustentado pela REDUÇÃO radical de custo (operação, marketing). Alvo: cliente sensível a preço. Ex: Aldi, com lojas pequenas e produtos nos próprios contêineres.':'Low price sustained by radical COST reduction (operations, marketing). Target: price-sensitive customer. E.g. Aldi, with small stores and products in their own containers.' },
+    { color:'#B45309', name:pt?'Psychological':'Psychological', tag:pt?'gatilho, não cálculo':'trigger, not calculation', desc:pt?'Usa percepção em vez de lógica de custo: charm (R$2,99 em vez de R$3), prestige (número redondo alto), BOGOF ("leve 2 pague 1") e ancoragem (mostrar um preço alto ao lado).':'Uses perception instead of cost logic: charm ($2.99 instead of $3), prestige (high round number), BOGOF ("buy 2 get 1") and anchoring (showing a high price alongside).' },
+    { color:'#0891B2', name:pt?'Bundle (pacote)':'Bundle', tag:pt?'pacote < soma dos itens':'bundle < sum of items', desc:pt?'Vende um conjunto por um valor MENOR que a soma dos itens separados. Aumenta o ticket médio e o valor percebido. Ex: o Happy Meal (McLanche Feliz).':'Sells a set for LESS than the sum of the separate items. Raises the average ticket and perceived value. E.g. the Happy Meal.' },
+    { color:'#DC2626', name:pt?'Value-based':'Value-based', tag:pt?'preço = valor percebido':'price = perceived value', desc:pt?'O preço parte do VALOR PERCEBIDO pelo cliente, não do custo. Captura o máximo de valor; é a lógica coerente com o próprio marketing. Exige pesquisa de percepção. Bom pra diferenciação alta, B2B, serviços.':'Price starts from the customer\'s PERCEIVED VALUE, not cost. Captures the most value; it is the logic coherent with marketing itself. Requires perception research. Good for high differentiation, B2B, services.' },
+    { color:'#0C4A6E', name:pt?'Dynamic':'Dynamic', tag:pt?'muda por usuário/hora':'changes by user/time', desc:pt?'Cobra preços DIFERENTES pelo mesmo item conforme demanda, horário, estoque ou disposição de pagar. Ex: e-commerce (Amazon), viagens e hotelaria.':'Charges DIFFERENT prices for the same item by demand, time, stock or willingness to pay. E.g. e-commerce (Amazon), travel and hospitality.' }
+  ];
+  window[id+'_data'] = st;
+  window[id+'_sel'] = function(i){ const s=window[id+'_data'][i]; const b=document.getElementById(id+'-b'); if(!b)return; document.querySelectorAll('.'+id+'-c').forEach(function(x){x.style.outline='none';}); document.getElementById(id+'-c'+i).style.outline='2px solid '+s.color; document.getElementById(id+'-n').textContent=s.name; document.getElementById(id+'-n').style.color=s.color; document.getElementById(id+'-t').textContent=s.tag; document.getElementById(id+'-t').style.background=s.color; document.getElementById(id+'-d').textContent=s.desc; b.style.display='block'; };
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#0C4A6E;margin-bottom:2px;">
+        ${pt?'Estratégias de Precificação':'Pricing Strategies'}
+      </div>
+      <div style="font-size:7.5px;color:#64748B;margin-bottom:8px;">${pt?'O curso destaca penetration e skimming. Clique em cada uma.':'The course highlights penetration and skimming. Click each one.'}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;">
+        ${st.map((s,i)=>`<div id="${id}-c${i}" class="${id}-c" onclick="window['${id}_sel'](${i})" style="background:${s.color}0D;border:1px solid ${s.color}33;border-radius:6px;padding:6px 7px;cursor:pointer;transition:outline .12s;"><div style="font-size:8.5px;font-weight:800;color:${s.color};">${s.name}</div><div style="font-size:6.5px;color:#64748B;font-weight:600;margin-top:1px;">${s.tag}</div></div>`).join('')}
+      </div>
+      <div id="${id}-b" style="display:none;margin-top:8px;background:#F8FAFC;border:1px solid #E5E7EB;border-radius:7px;padding:9px 11px;">
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;">
+          <span id="${id}-n" style="font-size:10px;font-weight:800;"></span>
+          <span id="${id}-t" style="font-size:6px;font-weight:700;color:#fff;padding:2px 6px;border-radius:10px;"></span>
+        </div>
+        <div id="${id}-d" style="font-size:8.5px;color:#374151;line-height:1.6;"></div>
+      </div>
+    </div>`;
+};
+
+/* ─── MKT W6: place / distribution ──────────────────────────────── */
+window.vis_placeDistribution = function(container, lang) {
+  const pt = lang === 'pt';
+  const id = 'plc-' + Math.random().toString(36).substr(2,5);
+  const data = [
+    { grp:'route', color:'#0EA5E9', name:pt?'Direto':'Direct', desc:pt?'Você mesmo vende (loja/site próprios, porta a porta): CONTROLE total de preço e da relação com o cliente, e insight de mercado. Custo: alcance limitado e exige interface de venda própria.':'You sell it yourself (own store/site, door-to-door): full CONTROL of price and the customer relationship, and market insight. Cost: limited reach and requires your own sales interface.' },
+    { grp:'route', color:'#0284C7', name:pt?'Indireto':'Indirect', desc:pt?'Via atacadista/varejista terceiros: ALCANCE ampliado, menos operação e menos armazenagem. Custo: perde a relação direta com o cliente e há risco de diluir a marca.':'Via third-party wholesaler/retailer: wider REACH, less operation and less storage. Cost: you lose the direct customer relationship and risk diluting the brand.' },
+    { grp:'int', color:'#7DD3FC', name:pt?'Intensiva':'Intensive', desc:pt?'Máximo de pontos de venda possível (bala, chiclete). Garante a distribuição mais ampla — mas tende a PRESSIONAR o preço pra baixo e dá pouco controle de marca.':'The maximum possible points of sale (candy, gum). It ensures the widest distribution — but tends to PUSH price down and gives little brand control.' },
+    { grp:'int', color:'#38BDF8', name:pt?'Seletiva':'Selective', desc:pt?'Poucos revendedores escolhidos, focados em qualidade (produtos upscale, eletro de marca). Constrói relações mais fortes que a intensiva e sustenta o preço.':'A few chosen resellers focused on quality (upscale products, branded appliances). Builds stronger relationships than intensive and sustains the price.' },
+    { grp:'int', color:'#0369A1', name:pt?'Exclusiva':'Exclusive', desc:pt?'Um ÚNICO revendedor com direito exclusivo de vender. Máximo controle de marca e preço. Ideal pra produtos de especialidade/prestígio (luxo, alta relojoaria).':'A SINGLE reseller with exclusive selling rights. Maximum brand and price control. Ideal for specialty/prestige products (luxury, fine watchmaking).' }
+  ];
+  window[id+'_data'] = data;
+  window[id+'_sel'] = function(i){ const d=window[id+'_data'][i]; const b=document.getElementById(id+'-b'); if(!b)return; document.querySelectorAll('.'+id+'-c').forEach(function(x){x.style.outline='none';}); document.getElementById(id+'-c'+i).style.outline='2.5px solid '+d.color; document.getElementById(id+'-n').textContent=d.name; document.getElementById(id+'-n').style.color=(i>=2&&i<=2?'#0369A1':d.color); document.getElementById(id+'-d').textContent=d.desc; b.style.display='block'; };
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#0C4A6E;margin-bottom:2px;">
+        ${pt?'Place: Distribuição':'Place: Distribution'}
+      </div>
+      <div style="font-size:7px;color:#64748B;font-weight:700;margin:4px 0 3px;">${pt?'A ROTA':'THE ROUTE'}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+        ${[0,1].map(i=>{const d=data[i];return `<div id="${id}-c${i}" class="${id}-c" onclick="window['${id}_sel'](${i})" style="background:${d.color}0D;border:1px solid ${d.color}44;border-radius:6px;padding:8px;cursor:pointer;text-align:center;transition:outline .12s;"><div style="font-size:9px;font-weight:800;color:${d.color};">${d.name}</div></div>`;}).join('')}
+      </div>
+      <div style="font-size:7px;color:#64748B;font-weight:700;margin:8px 0 3px;">${pt?'A INTENSIDADE · + pontos = - controle de preço':'THE INTENSITY · more points = less price control'}</div>
+      <div style="display:flex;gap:4px;">
+        ${[2,3,4].map(i=>{const d=data[i];return `<div id="${id}-c${i}" class="${id}-c" onclick="window['${id}_sel'](${i})" style="flex:1;background:${d.color}22;border:1px solid ${d.color};border-radius:6px;padding:7px 3px;cursor:pointer;text-align:center;transition:outline .12s;"><div style="font-size:8px;font-weight:800;color:${i===4?'#0369A1':'#075985'};">${d.name}</div></div>`;}).join('')}
+      </div>
+      <div id="${id}-b" style="display:none;margin-top:8px;background:#F8FAFC;border:1px solid #E5E7EB;border-radius:7px;padding:9px 11px;">
+        <div id="${id}-n" style="font-size:10px;font-weight:800;margin-bottom:3px;"></div>
+        <div id="${id}-d" style="font-size:8.5px;color:#374151;line-height:1.6;"></div>
+      </div>
+      <div style="margin-top:7px;font-size:7px;color:#94A3B8;line-height:1.5;">💡 ${pt?'Níveis de canal: 0 (direto/D2C) → 1 (varejo) → 2 (atacado→varejo, bebida/FMCG) → 3 (agente→atacado→varejo).':'Channel levels: 0 (direct/D2C) → 1 (retail) → 2 (wholesale→retail, drinks/FMCG) → 3 (agent→wholesale→retail).'}</div>
+    </div>`;
+};
+
+/* ─── MKT W6: promotional mix (5 tools) ─────────────────────────── */
+window.vis_promotionalMix = function(container, lang) {
+  const pt = lang === 'pt';
+  const id = 'pmx-' + Math.random().toString(36).substr(2,5);
+  const tools = [
+    { color:'#0EA5E9', name:'Advertising', paid:pt?'PAGA':'PAID', pers:pt?'impessoal':'non-personal', desc:pt?'Comunicação PAGA e não-pessoal via mídia de massa (TV, imprensa, rádio, online, outdoor). Alcança públicos amplos.':'PAID, non-personal communication via mass media (TV, print, radio, online, billboards). Reaches broad audiences.' },
+    { color:'#0284C7', name:'Sales promotion', paid:pt?'PAGA':'PAID', pers:pt?'impessoal':'non-personal', desc:pt?'Incentivos TÁTICOS de curto prazo pra acelerar a venda: cupom, desconto, "leve 2 pague 1", amostra. Muito eficaz em alimentos e bebidas.':'Short-term TACTICAL incentives to speed up the sale: coupon, discount, "buy 2 get 1", sample. Very effective in food and drink.' },
+    { color:'#16A34A', name:'Public relations', paid:pt?'NÃO paga':'UNPAID', pers:pt?'impessoal':'non-personal', desc:pt?'Comunicação NÃO paga pra construir imagem positiva e gerir crises: press release, imprensa, prêmios, conferências. Mais credível justamente por não ser paga.':'UNPAID communication to build a positive image and manage crises: press release, media, awards, conferences. More credible precisely because it is unpaid.' },
+    { color:'#B45309', name:'Personal selling', paid:pt?'PAGA':'PAID', pers:pt?'PESSOAL':'PERSONAL', desc:pt?'Engajamento DIRETO, um a um, com o cliente: apresentações de venda, persuasão face a face. Forte no B2B e em produtos complexos/caros.':'DIRECT, one-to-one engagement with the customer: sales presentations, face-to-face persuasion. Strong in B2B and complex/expensive products.' },
+    { color:'#7C3AED', name:'Direct marketing', paid:pt?'PAGA':'PAID', pers:pt?'endereçada':'addressed', desc:pt?'Comunicação DIRECIONADA a indivíduos nomeados: e-mail, telemarketing, mala direta, catálogo. A personalização aumenta a taxa de resposta.':'TARGETED communication to named individuals: email, telemarketing, direct mail, catalogue. Personalisation raises the response rate.' }
+  ];
+  window[id+'_data'] = tools;
+  window[id+'_sel'] = function(i){ const t=window[id+'_data'][i]; const b=document.getElementById(id+'-b'); if(!b)return; document.querySelectorAll('.'+id+'-c').forEach(function(x){x.style.outline='none';}); document.getElementById(id+'-c'+i).style.outline='2.5px solid '+t.color; document.getElementById(id+'-n').textContent=t.name; document.getElementById(id+'-n').style.color=t.color; document.getElementById(id+'-tg').textContent=t.paid+' · '+t.pers; document.getElementById(id+'-d').textContent=t.desc; b.style.display='block'; };
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#0C4A6E;margin-bottom:2px;">
+        ${pt?'O Mix Promocional (5 ferramentas)':'The Promotional Mix (5 tools)'}
+      </div>
+      <div style="font-size:7.5px;color:#64748B;margin-bottom:8px;">${pt?'2 eixos: paga × grátis, pessoal × impessoal. Clique.':'2 axes: paid × unpaid, personal × non-personal. Click.'}</div>
+      <div style="display:flex;flex-direction:column;gap:4px;">
+        ${tools.map((t,i)=>`<div id="${id}-c${i}" class="${id}-c" onclick="window['${id}_sel'](${i})" style="display:flex;align-items:center;justify-content:space-between;gap:6px;background:${t.color}0D;border:1px solid ${t.color}33;border-radius:6px;padding:6px 9px;cursor:pointer;transition:outline .12s;"><span style="font-size:8.5px;font-weight:800;color:${t.color};">${t.name}</span><span style="font-size:6px;font-weight:700;color:#64748B;">${t.paid} · ${t.pers}</span></div>`).join('')}
+      </div>
+      <div id="${id}-b" style="display:none;margin-top:8px;background:#F8FAFC;border:1px solid #E5E7EB;border-radius:7px;padding:9px 11px;">
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;">
+          <span id="${id}-n" style="font-size:10px;font-weight:800;"></span>
+          <span id="${id}-tg" style="font-size:6.5px;font-weight:700;color:#475569;"></span>
+        </div>
+        <div id="${id}-d" style="font-size:8.5px;color:#374151;line-height:1.6;"></div>
+      </div>
+      <div style="margin-top:7px;font-size:7px;color:#94A3B8;line-height:1.5;">⚠️ ${pt?'Pegadinha de prova: <b>advertising é PAGA</b>; <b>public relations NÃO é paga</b>.':'Exam trap: <b>advertising is PAID</b>; <b>public relations is UNPAID</b>.'}</div>
+    </div>`;
+};
+
+/* ─── MKT W6: IMC + loyalty ladder ──────────────────────────────── */
+window.vis_imcLadder = function(container, lang) {
+  const pt = lang === 'pt';
+  const id = 'imc-' + Math.random().toString(36).substr(2,5);
+  const steps = [
+    { n:'1', color:'#7DD3FC', name:'Awareness', desc:pt?'O cliente SABE que o produto existe. Sem isso, nada mais acontece. Tarefa da comunicação: informar, dar a conhecer.':'The customer KNOWS the product exists. Without it, nothing else happens. Communication task: inform, make known.' },
+    { n:'2', color:'#38BDF8', name:'Preference', desc:pt?'O cliente acha o produto MELHOR que o dos concorrentes. Tarefa: convencer da superioridade, diferenciar.':'The customer finds the product BETTER than competitors\'. Task: convince of superiority, differentiate.' },
+    { n:'3', color:'#0369A1', name:'Insistence', desc:pt?'O cliente EXIGE aquela marca, compra repetidamente e a associa ao próprio estilo de vida — vira fã (raving fan). É o objetivo final da promoção.':'The customer DEMANDS that brand, buys repeatedly and associates it with their own lifestyle — becomes a raving fan. It is promotion\'s end goal.' }
+  ];
+  window[id+'_data'] = steps;
+  window[id+'_sel'] = function(i){ const s=window[id+'_data'][i]; const b=document.getElementById(id+'-b'); if(!b)return; document.querySelectorAll('.'+id+'-c').forEach(function(x){x.style.outline='none';}); document.getElementById(id+'-c'+i).style.outline='2.5px solid '+s.color; document.getElementById(id+'-n').textContent=s.n+' · '+s.name; document.getElementById(id+'-n').style.color=(i===2?'#0369A1':'#075985'); document.getElementById(id+'-d').textContent=s.desc; b.style.display='block'; };
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#0C4A6E;margin-bottom:2px;">
+        ${pt?'IMC e a Escada da Lealdade':'IMC and the Loyalty Ladder'}
+      </div>
+      <div style="font-size:7.5px;color:#64748B;margin-bottom:6px;">${pt?'A promoção sobe 3 degraus. Clique.':'Promotion climbs 3 steps. Click.'}</div>
+      <div style="display:flex;align-items:flex-end;gap:4px;">
+        ${steps.map((s,i)=>`<div id="${id}-c${i}" class="${id}-c" onclick="window['${id}_sel'](${i})" style="flex:1;background:${s.color}22;border:1px solid ${s.color};border-radius:6px 6px 0 0;padding:7px 3px;cursor:pointer;text-align:center;transition:outline .12s;height:${28+i*16}px;display:flex;flex-direction:column;justify-content:flex-end;"><div style="font-size:8px;font-weight:800;color:${i===2?'#0369A1':'#075985'};line-height:1.1;">${s.n}. ${s.name}</div></div>`).join('')}
+      </div>
+      <div style="border-top:2px solid #CBD5E1;margin-top:0;"></div>
+      <div id="${id}-b" style="display:none;margin-top:8px;background:#F0F9FF;border:1px solid #BAE6FD;border-radius:7px;padding:9px 11px;">
+        <div id="${id}-n" style="font-size:10px;font-weight:800;margin-bottom:3px;"></div>
+        <div id="${id}-d" style="font-size:8.5px;color:#374151;line-height:1.6;"></div>
+      </div>
+      <div style="margin-top:8px;background:#EFF6FF;border-radius:6px;padding:6px 9px;font-size:7.5px;color:#1E40AF;line-height:1.55;">💡 ${pt?'<b>IMC</b> (Comunicação Integrada): 1 mensagem consistente em vários canais (3 C: <b>C</b>omunicar, <b>C</b>ompetir, <b>C</b>onvencer). Caso <b>trivago</b>: "economize reservando hotel" em TV, outdoor, banner e rádio.':'<b>IMC</b> (Integrated Communication): 1 consistent message across channels (3 Cs: <b>C</b>ommunicate, <b>C</b>ompete, <b>C</b>onvince). <b>trivago</b> case: "save money booking a hotel" on TV, billboard, banner and radio.'}</div>
+    </div>`;
+};

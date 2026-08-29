@@ -801,6 +801,13 @@ const VIS_DISPATCH = {
   'internalStrategies':      true,
   'jabesEvidence':           true,
   'externalRefresh':         true,
+  // Marketing Strategy — Week 6 (The 4 Ps / marketing mix)
+  'fourPs':              true,
+  'productFeatures':     true,
+  'pricingStrategies':   true,
+  'placeDistribution':   true,
+  'promotionalMix':      true,
+  'imcLadder':           true,
 };
 
 function renderTheoryCard(th) {
