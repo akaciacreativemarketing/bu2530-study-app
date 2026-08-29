@@ -815,6 +815,13 @@ const VIS_DISPATCH = {
   'serviceProcess':      true,
   'physicalEvidence':    true,
   'richardMille':        true,
+  // Marketing Strategy — Week 8 (Marketing in the digital age)
+  'digitalValue':        true,
+  'poemModel':           true,
+  'multiVsOmni':         true,
+  'omniTransition':      true,
+  'socialMedia':         true,
+  'dataPrivacySecurity': true,
 };
 
 function renderTheoryCard(th) {

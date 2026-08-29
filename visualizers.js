@@ -3938,3 +3938,210 @@ window.vis_richardMille = function(container, lang) {
       <div style="margin-top:8px;background:#EFF6FF;border-radius:6px;padding:6px 9px;font-size:7.5px;color:#1E40AF;line-height:1.55;">💡 ${pt?'A lição: num serviço de alto valor, os 7 Ps têm que <b>RIMAR</b> entre si — o intangível vira tangível de forma coerente.':'The lesson: in a high-value service, the 7 Ps must <b>RHYME</b> with each other — the intangible becomes tangible coherently.'}</div>
     </div>`;
 };
+
+/* ═══════════════ MKT W8 (course Week 18): Marketing in the digital age ═══════════════ */
+
+/* ─── MKT W8: what digital marketing is + 4 consumer benefits (Ozuem) ─── */
+window.vis_digitalValue = function(container, lang) {
+  const pt = lang === 'pt';
+  const id = 'dgv-' + Math.random().toString(36).substr(2,5);
+  const b = [
+    { icon:'🎮', name:pt?'Controle':'Control', desc:pt?'O consumidor decide QUANDO e ONDE comprar — sem horário de loja, sem vendedor empurrando. O poder migrou pra mão dele.':'The consumer decides WHEN and WHERE to buy — no store hours, no pushy salesperson. Power moved into their hands.' },
+    { icon:'💬', name:pt?'Interatividade':'Interactivity', desc:pt?'Plataforma de mão dupla: o cliente responde, comenta, avalia, conversa. Não é mais broadcast (marca fala, cliente ouve) — é diálogo.':'A two-way platform: the customer replies, comments, reviews, chats. No longer broadcast (brand talks, customer listens) — it is dialogue.' },
+    { icon:'🌍', name:pt?'Riqueza (richness)':'Richness', desc:pt?'Alcance além da esquina: o cliente compra do outro lado do mundo e acessa uma variedade que a loja física nunca teria. A prateleira virou infinita.':'Reach beyond the corner: the customer buys from the other side of the world and accesses variety no physical store could hold. The shelf became infinite.' },
+    { icon:'📚', name:pt?'Informação':'Information', desc:pt?'Acesso a qualquer informação à vontade: compara preço, lê review, pesquisa antes de decidir. O cliente chega mais informado que o próprio vendedor.':'Access to any information at will: compares prices, reads reviews, researches before deciding. The customer arrives better informed than the salesperson.' }
+  ];
+  window[id+'_data'] = b;
+  window[id+'_sel'] = function(i){ const x=window[id+'_data'][i]; const bx=document.getElementById(id+'-b'); if(!bx)return; document.querySelectorAll('.'+id+'-c').forEach(function(c){c.style.outline='none';}); document.getElementById(id+'-c'+i).style.outline='2.5px solid #0284C7'; document.getElementById(id+'-n').textContent=x.icon+' '+x.name; document.getElementById(id+'-d').textContent=x.desc; bx.style.display='block'; };
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#0C4A6E;margin-bottom:2px;">
+        ${pt?'O que é marketing digital (Ozuem)':'What digital marketing is (Ozuem)'}
+      </div>
+      <div style="display:flex;gap:5px;margin:5px 0 8px;">
+        <div style="flex:1;background:#F1F5F9;border:1px solid #E2E8F0;border-radius:6px;padding:6px 8px;"><div style="font-size:6.5px;font-weight:800;color:#94A3B8;text-transform:uppercase;letter-spacing:.5px;">${pt?'Definição fraca':'Weak definition'}</div><div style="font-size:8px;color:#64748B;margin-top:2px;line-height:1.4;">${pt?'usar tecnologia digital pra <b>promover</b> produtos.':'use digital tech to <b>promote</b> products.'}</div></div>
+        <div style="flex:1;background:#E0F2FE;border:1px solid #7DD3FC;border-radius:6px;padding:6px 8px;"><div style="font-size:6.5px;font-weight:800;color:#0369A1;text-transform:uppercase;letter-spacing:.5px;">${pt?'Definição forte':'Strong definition'}</div><div style="font-size:8px;color:#0C4A6E;margin-top:2px;line-height:1.4;">${pt?'usar tecnologia digital pra <b>ENTREGAR VALOR SUPERIOR</b> ao cliente.':'use digital tech to <b>DELIVER SUPERIOR VALUE</b> to the customer.'}</div></div>
+      </div>
+      <div style="font-size:7px;color:#0C4A6E;font-weight:800;margin:0 0 3px;">${pt?'4 BENEFÍCIOS PRO CONSUMIDOR (macete C.I.R.I. 👑)':'4 CONSUMER BENEFITS (mnemonic C.I.R.I. 👑)'}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:4px;">
+        ${b.map((x,i)=>`<div id="${id}-c${i}" class="${id}-c" onclick="window['${id}_sel'](${i})" style="background:#E0F2FE;border:1px solid #7DD3FC;border-radius:6px;padding:7px 3px;cursor:pointer;text-align:center;transition:outline .12s;"><div style="font-size:14px;">${x.icon}</div><div style="font-size:6.5px;font-weight:800;color:#0369A1;line-height:1.1;margin-top:2px;">${x.name}</div></div>`).join('')}
+      </div>
+      <div id="${id}-b" style="display:none;margin-top:8px;background:#F8FAFC;border:1px solid #E5E7EB;border-radius:7px;padding:9px 11px;">
+        <div id="${id}-n" style="font-size:10px;font-weight:800;color:#0369A1;margin-bottom:3px;"></div>
+        <div id="${id}-d" style="font-size:8.5px;color:#374151;line-height:1.6;"></div>
+      </div>
+      <div style="margin-top:7px;font-size:7px;color:#94A3B8;line-height:1.5;">💡 ${pt?'Tese do Ozuem: digital NÃO substitui o físico — <b>combina</b> os dois. Marketplace (offline) + market space (online).':'Ozuem\'s thesis: digital does NOT replace the physical — it <b>combines</b> both. Marketplace (offline) + market space (online).'}</div>
+    </div>`;
+};
+
+/* ─── MKT W8: POEM model (Paid/Owned/Earned) + influencer + SEO ─── */
+window.vis_poemModel = function(container, lang) {
+  const pt = lang === 'pt';
+  const id = 'poem-' + Math.random().toString(36).substr(2,5);
+  const m = [
+    { grp:'core', icon:'💳', color:'#0EA5E9', name:pt?'Paid (paga)':'Paid', tag:pt?'Alugo':'I rent', desc:pt?'Você ALUGA a atenção: anúncios, mídia paga, patrocínio. Controle total da mensagem, mas para quando o dinheiro para. Ex Akacia: os anúncios Meta/Google que você roda pros clientes.':'You RENT attention: ads, paid media, sponsorship. Full control of the message, but it stops when the money stops. Akacia e.g.: the Meta/Google ads you run for clients.' },
+    { grp:'core', icon:'🏠', color:'#0284C7', name:pt?'Owned (própria)':'Owned', tag:pt?'Sou dono':'I own', desc:pt?'Canais dos quais você é DONO: site, blog, app, lista de e-mail/WhatsApp, seu perfil. Ativo de longo prazo, custo baixo, controle total. Ex Akacia: akaciacreative.com, o Studio, a lista de WhatsApp.':'Channels you OWN: website, blog, app, email/WhatsApp list, your profile. A long-term asset, low cost, full control. Akacia e.g.: akaciacreative.com, the Studio, the WhatsApp list.' },
+    { grp:'core', icon:'🏆', color:'#0C4A6E', name:pt?'Earned (conquistada)':'Earned', tag:pt?'Mereço':'I earn', desc:pt?'Atenção que você MERECE: indicação, imprensa espontânea, depoimento, viralização. A mais CRÍVEL (quem fala é um terceiro), mas a que você menos controla. Ex Akacia: um cliente que te indica.':'Attention you EARN: referrals, spontaneous press, testimonials, going viral. The most CREDIBLE (a third party speaks), but the one you control least. Akacia e.g.: a client who refers you.' },
+    { grp:'rel', icon:'⭐', color:'#0891B2', name:pt?'Influencer mkt':'Influencer mkt', tag:'', desc:pt?'Pegar carona na audiência e na CONFIANÇA de outra pessoa — é earned "comprada", meio caminho entre paga e conquistada. Ex: a Anna Lourensetti fazendo pílulas de conteúdo.':'Riding on someone else\'s audience and TRUST — it is "purchased" earned media, halfway between paid and earned. E.g.: a creator posting content pills for the brand.' },
+    { grp:'rel', icon:'🔍', color:'#0891B2', name:'SEO', tag:'', desc:pt?'Aparecer no Google SEM pagar por posição — é o motor da mídia própria (owned): seu site trabalhando de graça 24h. Ex Akacia: indexar o akaciacreative.com pra ranquear organicamente.':'Ranking on Google WITHOUT paying for position — the engine of owned media: your site working for free 24/7. Akacia e.g.: indexing akaciacreative.com to rank organically.' }
+  ];
+  window[id+'_data'] = m;
+  window[id+'_sel'] = function(i){ const x=window[id+'_data'][i]; const bx=document.getElementById(id+'-b'); if(!bx)return; document.querySelectorAll('.'+id+'-c').forEach(function(c){c.style.outline='none';}); document.getElementById(id+'-c'+i).style.outline='2.5px solid '+x.color; document.getElementById(id+'-n').textContent=x.icon+' '+x.name; document.getElementById(id+'-n').style.color=x.color; document.getElementById(id+'-d').textContent=x.desc; bx.style.display='block'; };
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#0C4A6E;margin-bottom:2px;">
+        ${pt?'POEM — os 3 tipos de mídia':'POEM — the 3 media types'}
+      </div>
+      <div style="font-size:7.5px;color:#64748B;margin-bottom:8px;">${pt?'Macete A-D-M: Alugo · sou Dono · Mereço. Clique.':'Mnemonic: I Rent · I Own · I Earn. Click.'}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;">
+        ${[0,1,2].map(i=>{const x=m[i];return `<div id="${id}-c${i}" class="${id}-c" onclick="window['${id}_sel'](${i})" style="background:${x.color}0D;border:1px solid ${x.color}44;border-radius:6px;padding:8px 3px;cursor:pointer;text-align:center;transition:outline .12s;"><div style="font-size:16px;">${x.icon}</div><div style="font-size:7px;font-weight:800;color:${x.color};margin-top:2px;line-height:1.1;">${x.name}</div><div style="font-size:6px;font-weight:700;color:#94A3B8;margin-top:1px;">${x.tag}</div></div>`;}).join('')}
+      </div>
+      <div style="font-size:7px;color:#64748B;font-weight:700;margin:8px 0 3px;">${pt?'CONCEITOS LIGADOS':'RELATED CONCEPTS'}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;">
+        ${[3,4].map(i=>{const x=m[i];return `<div id="${id}-c${i}" class="${id}-c" onclick="window['${id}_sel'](${i})" style="background:${x.color}12;border:1px solid ${x.color}55;border-radius:6px;padding:6px 4px;cursor:pointer;text-align:center;transition:outline .12s;"><span style="font-size:11px;">${x.icon}</span> <span style="font-size:8px;font-weight:800;color:${x.color};">${x.name}</span></div>`;}).join('')}
+      </div>
+      <div id="${id}-b" style="display:none;margin-top:8px;background:#F8FAFC;border:1px solid #E5E7EB;border-radius:7px;padding:9px 11px;">
+        <div id="${id}-n" style="font-size:10px;font-weight:800;margin-bottom:3px;"></div>
+        <div id="${id}-d" style="font-size:8.5px;color:#374151;line-height:1.6;"></div>
+      </div>
+      <div style="margin-top:7px;font-size:7px;color:#94A3B8;line-height:1.5;">💡 ${pt?'A earned/conquistada é a mais crível — porque quem fala não é a marca (eco da Semana 14, PR).':'Earned media is the most credible — because the speaker is not the brand (echo of Week 14, PR).'}</div>
+    </div>`;
+};
+
+/* ─── MKT W8: Multichannel × Omnichannel (the star) ─── */
+window.vis_multiVsOmni = function(container, lang) {
+  const pt = lang === 'pt';
+  const id = 'mvo-' + Math.random().toString(36).substr(2,5);
+  const rows = [
+    { dim:pt?'Conceito-chave':'Key concept', m:pt?'Divisão — canais separados, em silo.':'Division — separate channels, in silos.', o:pt?'INTEGRAÇÃO — os canais conversam entre si.':'INTEGRATION — the channels talk to each other.' },
+    { dim:pt?'Foco':'Focus', m:pt?'No produto / no canal.':'On the product / the channel.', o:pt?'No CLIENTE.':'On the CUSTOMER.' },
+    { dim:pt?'Objetivo':'Goal', m:pt?'Engajamento (alcance máximo).':'Engagement (maximum reach).', o:pt?'Experiência (consistência máxima).':'Experience (maximum consistency).' },
+    { dim:pt?'Dados':'Data', m:pt?'Cada canal é uma ilha — não compartilha.':'Each channel is an island — no sharing.', o:pt?'Base única compartilhada (single customer view).':'One shared base (single customer view).' },
+    { dim:pt?'Visão do cliente':'Customer view', m:pt?'Uma por canal — o mesmo cliente vira vários registros.':'One per channel — the same customer becomes several records.', o:pt?'Visão única e unificada.':'A single, unified view.' },
+    { dim:pt?'Teste prático 🔑':'Practical test 🔑', m:pt?'Ao trocar de canal, o cliente RECOMEÇA do zero.':'On switching channels, the customer RESTARTS from scratch.', o:pt?'Ao trocar de canal, o cliente CONTINUA de onde parou.':'On switching channels, the customer CONTINUES where they left off.' }
+  ];
+  window[id+'_data'] = rows;
+  window[id+'_sel'] = function(i){ const r=window[id+'_data'][i]; const bx=document.getElementById(id+'-b'); if(!bx)return; document.querySelectorAll('.'+id+'-c').forEach(function(x){x.style.background='#fff';}); document.getElementById(id+'-c'+i).style.background='#F0F9FF'; document.getElementById(id+'-dim').textContent=r.dim; document.getElementById(id+'-m').textContent='MULTI · '+r.m; document.getElementById(id+'-o').textContent='OMNI · '+r.o; bx.style.display='block'; };
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#0C4A6E;margin-bottom:2px;">
+        ${pt?'Multichannel × Omnichannel':'Multichannel × Omnichannel'}
+      </div>
+      <div style="font-size:7.5px;color:#64748B;margin-bottom:8px;">${pt?'A diferença NÃO é a quantidade de canais — é a integração. Clique numa dimensão.':'The difference is NOT the number of channels — it is integration. Click a dimension.'}</div>
+      <div style="display:flex;gap:5px;margin-bottom:5px;">
+        <div style="flex:1;background:#7DD3FC;color:#0C4A6E;border-radius:5px;padding:4px;text-align:center;font-size:8px;font-weight:900;">MULTI 🚪🚪🚪</div>
+        <div style="flex:1;background:#0C4A6E;color:#fff;border-radius:5px;padding:4px;text-align:center;font-size:8px;font-weight:900;">OMNI 🤝</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:3px;">
+        ${rows.map((r,i)=>`<div id="${id}-c${i}" class="${id}-c" onclick="window['${id}_sel'](${i})" style="background:#fff;border:1px solid #E2E8F0;border-radius:5px;padding:5px 9px;cursor:pointer;font-size:8px;font-weight:700;color:#334155;transition:background .12s;">${r.dim}</div>`).join('')}
+      </div>
+      <div id="${id}-b" style="display:none;margin-top:8px;background:#F8FAFC;border:1px solid #E5E7EB;border-radius:7px;padding:9px 11px;">
+        <div id="${id}-dim" style="font-size:9.5px;font-weight:800;color:#0C4A6E;margin-bottom:5px;"></div>
+        <div id="${id}-m" style="font-size:8px;color:#64748B;line-height:1.5;padding:4px 7px;background:#F1F5F9;border-radius:5px;border-left:3px solid #7DD3FC;margin-bottom:4px;"></div>
+        <div id="${id}-o" style="font-size:8px;color:#0C4A6E;font-weight:600;line-height:1.5;padding:4px 7px;background:#E0F2FE;border-radius:5px;border-left:3px solid #0C4A6E;"></div>
+      </div>
+      <div style="margin-top:7px;font-size:7px;color:#94A3B8;line-height:1.5;">💡 ${pt?'Frase de bolso: <b>omni foca no CLIENTE, multi foca no produto</b>. Ozuem: o conceito-chave do omni é INTEGRAÇÃO.':'Pocket line: <b>omni focuses on the CUSTOMER, multi on the product</b>. Ozuem: the key concept of omni is INTEGRATION.'}</div>
+    </div>`;
+};
+
+/* ─── MKT W8: transition multi→omni + rooming behaviours ─── */
+window.vis_omniTransition = function(container, lang) {
+  const pt = lang === 'pt';
+  const id = 'otr-' + Math.random().toString(36).substr(2,5);
+  const steps = [
+    { n:'1', name:pt?'Diagnosticar a maturidade':'Diagnose maturity', desc:pt?'Mapear todos os canais, quem responde por cada um e as bases de dados. Pergunta-teste: um cliente que fala em 3 canais aparece como 1 pessoa ou como 3 registros?':'Map every channel, who owns each and the databases. Test question: does a customer who talks across 3 channels appear as 1 person or as 3 records?' },
+    { n:'2', name:pt?'Unificar os DADOS primeiro':'Unify the DATA first', desc:pt?'Criar identidade única do cliente (e visão única de estoque, no varejo) ANTES de unificar a comunicação. Sem isso, "omni" vira só campanha coordenada — que é multi bem-feito, não omni.':'Create a single customer identity (and single stock view, in retail) BEFORE unifying communication. Without it, "omni" is just coordinated campaigning — which is multichannel done well, not omni.' },
+    { n:'3', name:pt?'Redesenhar a JORNADA':'Redesign the JOURNEY', desc:pt?'Mapear os pontos de contato do início ao fim e desenhar as TRANSIÇÕES entre canais (chat→telefone, site→loja, app→devolução). O omni vive nas transições, não nos canais soltos.':'Map touchpoints end to end and design the TRANSITIONS between channels (chat→phone, site→store, app→return). Omni lives in the transitions, not in isolated channels.' },
+    { n:'4', name:pt?'Mudar os INCENTIVOS':'Change the INCENTIVES', desc:pt?'A barreira mais subestimada: enquanto a loja física e o e-commerce brigarem pela mesma venda, ninguém integra. É preciso mudar metas e comissionamento — atribuir a venda "click & collect" aos dois.':'The most underestimated barrier: while the physical store and e-commerce fight over the same sale, no one integrates. Change targets and commissions — credit the "click & collect" sale to both.' },
+    { n:'5', name:pt?'Governar a PRIVACIDADE':'Govern PRIVACY', desc:pt?'A visão única do cliente é justamente o que acende o alarme de privacidade (2ª metade da semana). Integrar dados sem base legal e sem transparência é criar passivo, não vantagem.':'The single customer view is exactly what triggers the privacy alarm (second half of the week). Integrating data with no legal basis and no transparency creates liability, not advantage.' }
+  ];
+  window[id+'_data'] = steps;
+  window[id+'_sel'] = function(i){ const s=window[id+'_data'][i]; const bx=document.getElementById(id+'-b'); if(!bx)return; document.querySelectorAll('.'+id+'-c').forEach(function(x){x.style.outline='none';}); document.getElementById(id+'-c'+i).style.outline='2.5px solid #0284C7'; document.getElementById(id+'-n').textContent=s.n+'. '+s.name; document.getElementById(id+'-d').textContent=s.desc; bx.style.display='block'; };
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#0C4A6E;margin-bottom:2px;">
+        ${pt?'Como migrar de multi → omni':'How to move from multi → omni'}
+      </div>
+      <div style="font-size:7.5px;color:#64748B;margin-bottom:8px;">${pt?'5 passos. Clique em cada um.':'5 steps. Click each one.'}</div>
+      <div style="display:flex;flex-direction:column;gap:4px;">
+        ${steps.map((s,i)=>`<div id="${id}-c${i}" class="${id}-c" onclick="window['${id}_sel'](${i})" style="display:flex;align-items:center;gap:8px;background:#0284C70D;border:1px solid #0284C733;border-radius:6px;padding:6px 9px;cursor:pointer;transition:outline .12s;"><span style="flex:none;width:18px;height:18px;border-radius:50%;background:#0284C7;color:#fff;font-size:9px;font-weight:900;display:flex;align-items:center;justify-content:center;">${s.n}</span><span style="font-size:8.5px;font-weight:800;color:#0369A1;">${s.name}</span></div>`).join('')}
+      </div>
+      <div id="${id}-b" style="display:none;margin-top:8px;background:#F8FAFC;border:1px solid #E5E7EB;border-radius:7px;padding:9px 11px;">
+        <div id="${id}-n" style="font-size:10px;font-weight:800;color:#0369A1;margin-bottom:3px;"></div>
+        <div id="${id}-d" style="font-size:8.5px;color:#374151;line-height:1.6;"></div>
+      </div>
+      <div style="margin-top:8px;background:#EFF6FF;border-radius:6px;padding:6px 9px;font-size:7.5px;color:#1E40AF;line-height:1.6;">🔎 <b>Webrooming</b> ${pt?'(pesquiso online → compro na loja) e':'(research online → buy in store) and'} <b>showrooming</b> ${pt?'(vejo na loja → compro online): ~70% dos consumidores pesquisam online antes de comprar (Ozuem). No multi isso é vazamento de venda; no omni é jornada desenhada.':'(see in store → buy online): ~70% of consumers research online before buying (Ozuem). In multichannel this is a leaking sale; in omni it is a designed journey.'}</div>
+    </div>`;
+};
+
+/* ─── MKT W8: social media marketing — 5 benefits + 5 limitations ─── */
+window.vis_socialMedia = function(container, lang) {
+  const pt = lang === 'pt';
+  const id = 'smm-' + Math.random().toString(36).substr(2,5);
+  const d = [
+    { g:'ben', icon:'🎯', name:pt?'Alcance + mira':'Reach + targeting', desc:pt?'A mídia tradicional dava escala SEM segmentação; a rede social dá escala COM mira (por interesse e comportamento), a custo menor. É o "budget gigante virou passado" na prática — o que torna a Akacia possível pra PME.':'Traditional media gave scale WITHOUT targeting; social gives scale WITH aim (by interest and behaviour), at lower cost. It is the "huge budget is a thing of the past" in practice — what makes an agency viable for small businesses.' },
+    { g:'ben', icon:'📣', name:pt?'Brand awareness':'Brand awareness', desc:pt?'Move o cliente ao longo da jornada (desconhece → conhece → considera). É o canal onde a marca CONVERSA em vez de anunciar. O efeito acumulado é presença mental — ativo de longo prazo.':'Moves the customer along the journey (unaware → aware → considering). It is where the brand CONVERSES instead of advertising. The cumulative effect is mental availability — a long-term asset.' },
+    { g:'ben', icon:'🔗', name:pt?'Tráfego → conversão':'Traffic → conversion', desc:pt?'As redes já superam a mídia tradicional como fonte de tráfego. O papel é de PONTE: o conteúdo prende a atenção, o link leva ao site, e é no site que a venda acontece. (Isso é raciocínio omnichannel — a rede não é ilha.)':'Social already beats traditional media as a traffic source. Its role is a BRIDGE: content grabs attention, the link leads to the site, and the site is where the sale happens. (This is omnichannel thinking — the network is not an island.)' },
+    { g:'ben', icon:'💬', name:pt?'Atendimento em tempo real':'Real-time service', desc:pt?'Resposta na hora, chatbot, resolução PÚBLICA de problema (gera prova social positiva). Reduz atrito pra quem reclama. Mas é faca de dois gumes: a falha também é pública.':'Instant reply, chatbot, PUBLIC problem resolution (creates positive social proof). Reduces friction for complainers. But it is double-edged: the failure is public too.' },
+    { g:'ben', icon:'📊', name:pt?'Dados + UGC':'Data + UGC', desc:pt?'Analytics nativo (você itera com evidência, não achismo) + conteúdo gerado pelo usuário (depoimento, foto, review): custo quase zero, MAIS crível que o material da marca, e cria comunidade.':'Native analytics (you iterate with evidence, not hunches) + user-generated content (testimonials, photos, reviews): near-zero cost, MORE credible than brand material, and it builds community.' },
+    { g:'lim', icon:'⏳', name:pt?'Trabalho contínuo':'Constant work', desc:pt?'Não é post isolado: exige consistência, publicação, monitoramento e engajamento constantes. Um post sozinho não decide nada — o resultado é de volume ao longo do tempo.':'Not a one-off post: it demands consistency, publishing, monitoring and engaging constantly. A single post decides nothing — results come from volume over time.' },
+    { g:'lim', icon:'🔀', name:pt?'Algoritmo muda':'Algorithm changes', desc:pt?'Os algoritmos mudam o tempo todo e derrubam o alcance orgânico de um dia pro outro. Você constrói em terreno alugado — a plataforma pode mudar as regras sozinha.':'Algorithms change constantly and cut organic reach overnight. You build on rented land — the platform can change the rules on its own.' },
+    { g:'lim', icon:'📢', name:pt?'Exposição pública':'Public exposure', desc:pt?'O feedback é aberto: reclamação, avaliação negativa e crise ficam à vista de todos. O mesmo canal que amplifica o elogio amplifica o erro (eco da Semana 14: a tecnologia amplia os dois lados).':'Feedback is open: complaints, negative reviews and crises are visible to all. The same channel that amplifies praise amplifies error (echo of Week 14: technology amplifies both sides).' },
+    { g:'lim', icon:'🎭', name:pt?'Impossível agradar todos':'Cannot please everyone', desc:pt?'Ambiente público e diverso: uma campanha que funciona pra um grupo pode irritar outro. Não há mensagem única que sirva pra todo mundo ao mesmo tempo.':'A public, diverse space: a campaign that works for one group can annoy another. There is no single message that fits everyone at once.' },
+    { g:'lim', icon:'📈', name:pt?'Retorno de longo prazo':'Long-term payoff', desc:pt?'Social media é investimento, não gatilho instantâneo. Exige volume de publicações e ajuste de estratégia ao longo do tempo pra medir resultado — a paciência é parte do método.':'Social media is an investment, not an instant trigger. It needs a volume of posts and strategy adjustments over time to measure results — patience is part of the method.' }
+  ];
+  window[id+'_data'] = d;
+  window[id+'_sel'] = function(i){ const x=window[id+'_data'][i]; const col=x.g==='ben'?'#0284C7':'#DC2626'; const bx=document.getElementById(id+'-b'); if(!bx)return; document.querySelectorAll('.'+id+'-c').forEach(function(c){c.style.outline='none';}); document.getElementById(id+'-c'+i).style.outline='2.5px solid '+col; document.getElementById(id+'-n').textContent=x.icon+' '+x.name; document.getElementById(id+'-n').style.color=col; document.getElementById(id+'-d').textContent=x.desc; bx.style.display='block'; };
+  const tile=(x,i,col,bg)=>`<div id="${id}-c${i}" class="${id}-c" onclick="window['${id}_sel'](${i})" style="display:flex;align-items:center;gap:5px;background:${bg};border:1px solid ${col}44;border-radius:6px;padding:5px 7px;cursor:pointer;transition:outline .12s;"><span style="font-size:11px;">${x.icon}</span><span style="font-size:7.5px;font-weight:800;color:${col};line-height:1.1;">${x.name}</span></div>`;
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#0C4A6E;margin-bottom:2px;">
+        ${pt?'Social media marketing':'Social media marketing'}
+      </div>
+      <div style="font-size:7px;color:#0369A1;font-weight:800;margin:5px 0 3px;">${pt?'✅ 5 BENEFÍCIOS PRINCIPAIS':'✅ 5 MAIN BENEFITS'}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;">
+        ${[0,1,2,3,4].map(i=>tile(d[i],i,'#0284C7','#E0F2FE')).join('')}
+      </div>
+      <div style="font-size:7px;color:#DC2626;font-weight:800;margin:8px 0 3px;">${pt?'⚠️ 5 LIMITAÇÕES (objetivo de aprendizagem 4)':'⚠️ 5 LIMITATIONS (learning objective 4)'}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;">
+        ${[5,6,7,8,9].map(i=>tile(d[i],i,'#DC2626','#FEF2F2')).join('')}
+      </div>
+      <div id="${id}-b" style="display:none;margin-top:8px;background:#F8FAFC;border:1px solid #E5E7EB;border-radius:7px;padding:9px 11px;">
+        <div id="${id}-n" style="font-size:10px;font-weight:800;margin-bottom:3px;"></div>
+        <div id="${id}-d" style="font-size:8.5px;color:#374151;line-height:1.6;"></div>
+      </div>
+      <div style="margin-top:7px;font-size:7px;color:#94A3B8;line-height:1.5;">💡 ${pt?'A vantagem dos dados (analytics) é o que ACENDE o alarme de privacidade da 2ª metade da semana.':'The data advantage (analytics) is exactly what TRIGGERS the privacy alarm in the week\'s second half.'}</div>
+    </div>`;
+};
+
+/* ─── MKT W8: data privacy × security × protection (3 verbs) ─── */
+window.vis_dataPrivacySecurity = function(container, lang) {
+  const pt = lang === 'pt';
+  const id = 'dps-' + Math.random().toString(36).substr(2,5);
+  const t = [
+    { icon:'💾', color:'#7DD3FC', tcol:'#0369A1', name:'Data Protection', verb:pt?'DISPONÍVEL':'AVAILABLE', prob:pt?'perder':'losing', desc:pt?'Tornar o dado DISPONÍVEL: preservação, retenção, ciclo de vida. O problema que resolve é PERDER o dado (falha de disco, corrupção, desastre). Meios: backup, replicação, RAID, disaster recovery. No cofre: ter uma 2ª cópia em outro prédio.':'Make data AVAILABLE: preservation, retention, lifecycle. The problem it solves is LOSING data (disk failure, corruption, disaster). Means: backup, replication, RAID, disaster recovery. In the vault: a second copy in another building.' },
+    { icon:'🔒', color:'#0284C7', tcol:'#0284C7', name:'Data Security', verb:pt?'ÍNTEGRO':'INTACT', prob:pt?'invadirem':'intrusion', desc:pt?'Manter o dado ÍNTEGRO e o acesso AUTORIZADO. O problema que resolve é INVADIREM (roubo, corrupção, alteração indevida). Meios: IAM (controle de acesso), criptografia (repouso e trânsito), logging, segurança física. No cofre: a tranca, a câmera, a lista de quem tem a chave.':'Keep data INTACT and access AUTHORIZED. The problem it solves is INTRUSION (theft, corruption, tampering). Means: IAM (access control), encryption (at rest and in transit), logging, physical security. In the vault: the lock, the camera, the key-holder list.' },
+    { icon:'⚖️', color:'#0C4A6E', tcol:'#0C4A6E', name:'Data Privacy', verb:pt?'CONTROLE':'CONTROL', prob:pt?'usar mal':'misuse', desc:pt?'Manter o CONTROLE sobre o uso: uso responsável, transparência, direitos do titular (ver, corrigir, apagar — "direito ao esquecimento") e decidir o que compartilhar com terceiros. É ética + jurídica. Regulação: GDPR, CCPA e a LGPD (Lei 13.709/2018, Brasil). No cofre: a decisão do que você FAZ com os documentos.':'Keep CONTROL over use: responsible use, transparency, data-subject rights (view, correct, delete — "right to be forgotten") and deciding what to share with third parties. It is ethical + legal. Regulation: GDPR, CCPA and Brazil\'s LGPD (Law 13.709/2018). In the vault: the decision of what you DO with the documents.' }
+  ];
+  window[id+'_data'] = t;
+  window[id+'_sel'] = function(i){ const x=window[id+'_data'][i]; const bx=document.getElementById(id+'-b'); if(!bx)return; document.querySelectorAll('.'+id+'-c').forEach(function(c){c.style.outline='none';}); document.getElementById(id+'-c'+i).style.outline='2.5px solid '+x.color; document.getElementById(id+'-n').textContent=x.icon+' '+x.name; document.getElementById(id+'-n').style.color=x.tcol; document.getElementById(id+'-v').textContent=x.verb; document.getElementById(id+'-v').style.background=x.color; document.getElementById(id+'-p').textContent=(pt?'evita: ':'prevents: ')+x.prob; document.getElementById(id+'-d').textContent=x.desc; bx.style.display='block'; };
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#0C4A6E;margin-bottom:2px;">
+        ${pt?'Privacidade × Segurança de dados':'Data privacy × security'}
+      </div>
+      <div style="font-size:7.5px;color:#64748B;margin-bottom:8px;">${pt?'3 termos, 3 verbos. Metáfora do cofre. Clique.':'3 terms, 3 verbs. The vault metaphor. Click.'}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;">
+        ${t.map((x,i)=>`<div id="${id}-c${i}" class="${id}-c" onclick="window['${id}_sel'](${i})" style="background:${x.color}0D;border:1px solid ${x.color}44;border-radius:6px;padding:8px 3px;cursor:pointer;text-align:center;transition:outline .12s;"><div style="font-size:16px;">${x.icon}</div><div style="font-size:7px;font-weight:800;color:${x.tcol};margin-top:2px;line-height:1.1;">${x.name}</div><div style="font-size:6.5px;font-weight:900;color:#fff;background:${x.color};border-radius:3px;margin:3px 4px 0;padding:1px 0;">${x.verb}</div></div>`).join('')}
+      </div>
+      <div id="${id}-b" style="display:none;margin-top:8px;background:#F8FAFC;border:1px solid #E5E7EB;border-radius:7px;padding:9px 11px;">
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">
+          <span id="${id}-n" style="font-size:10px;font-weight:800;"></span>
+          <span id="${id}-v" style="font-size:7px;font-weight:900;color:#fff;border-radius:3px;padding:1px 6px;"></span>
+          <span id="${id}-p" style="font-size:7px;font-weight:700;color:#DC2626;"></span>
+        </div>
+        <div id="${id}-d" style="font-size:8.5px;color:#374151;line-height:1.6;"></div>
+      </div>
+      <div style="margin-top:8px;background:#0C4A6E;border-radius:6px;padding:7px 9px;font-size:7.5px;color:#E0F2FE;line-height:1.6;">🔑 <b>${pt?'Segurança = proteger de quem NÃO deveria ter acesso. Privacidade = decidir o que fazer com o acesso que se TEM.':'Security = protect from those who should NOT have access. Privacy = decide what to do with the access you DO have.'}</b> ${pt?'Dá pra ser 100% seguro e ainda violar privacidade (guardar bem e vender sem consentimento).':'You can be 100% secure and still violate privacy (store it well and sell it without consent).'}</div>
+    </div>`;
+};
