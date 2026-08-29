@@ -822,6 +822,13 @@ const VIS_DISPATCH = {
   'omniTransition':      true,
   'socialMedia':         true,
   'dataPrivacySecurity': true,
+  // Marketing Strategy — Week 9 (Porter's Value Chain)
+  'valueChainMap':       true,
+  'competitiveAdvantage':true,
+  'valueLinkages':       true,
+  'valueChainSteps':     true,
+  'valueChainBenefits':  true,
+  'cocaColaVC':          true,
 };
 
 function renderTheoryCard(th) {

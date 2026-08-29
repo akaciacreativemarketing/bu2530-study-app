@@ -4147,3 +4147,219 @@ window.vis_dataPrivacySecurity = function(container, lang) {
       <div style="margin-top:8px;background:#0C4A6E;border-radius:6px;padding:7px 9px;font-size:7.5px;color:#E0F2FE;line-height:1.6;">🔑 <b>${pt?'Segurança = proteger de quem NÃO deveria ter acesso. Privacidade = decidir o que fazer com o acesso que se TEM.':'Security = protect from those who should NOT have access. Privacy = decide what to do with the access you DO have.'}</b> ${pt?'Dá pra ser 100% seguro e ainda violar privacidade (guardar bem e vender sem consentimento).':'You can be 100% secure and still violate privacy (store it well and sell it without consent).'}</div>
     </div>`;
 };
+
+/* ═══════════════ MKT W9 (course Week 19): Porter's Value Chain ═══════════════ */
+
+/* ─── MKT W9: the value chain diagram (9 activities + margin) ─── */
+window.vis_valueChainMap = function(container, lang) {
+  const pt = lang === 'pt';
+  const id = 'vcm-' + Math.random().toString(36).substr(2,5);
+  const a = [
+    { grp:'p', icon:'📥', name:pt?'1 · Inbound logistics':'1 · Inbound logistics', short:pt?'Entra':'In', desc:pt?'Receber, armazenar e distribuir internamente os insumos (recebimento, controle de estoque, movimentação interna).':'Receive, store and internally distribute inputs (goods-in, stock control, internal handling).', val:pt?'nas relações com fornecedores':'in supplier relationships' },
+    { grp:'p', icon:'⚙️', name:pt?'2 · Operations':'2 · Operations', short:pt?'Transforma':'Make', desc:pt?'Os processos de transformação que convertem insumos em produto vendável (montagem, embalagem, testes, manutenção).':'The transformation processes that turn inputs into a sellable product (assembly, packaging, testing, maintenance).', val:pt?'nos sistemas de transformação':'in the transformation systems' },
+    { grp:'p', icon:'📤', name:pt?'3 · Outbound logistics':'3 · Outbound logistics', short:pt?'Sai':'Out', desc:pt?'Coletar, armazenar e distribuir o produto acabado ao cliente (armazém de produto pronto, processamento de pedidos, entrega).':'Collect, store and distribute the finished product to the customer (finished-goods warehouse, order processing, delivery).', val:pt?'na capacidade de entregar ao comprador':'in the ability to deliver to the buyer' },
+    { grp:'p', icon:'📣', name:pt?'4 · Marketing & sales':'4 · Marketing & sales', short:pt?'Vende':'Sell', desc:pt?'Convencer o cliente a comprar de você e não do concorrente (publicidade, promoção, força de vendas, preço, canais).':'Persuade the customer to buy from you rather than a competitor (advertising, promotion, sales force, pricing, channels).', val:pt?'na eficácia da comunicação do benefício':'in the effectiveness of communicating the benefit' },
+    { grp:'p', icon:'🛠️', name:pt?'5 · Service':'5 · Service', short:pt?'Cuida':'Care', desc:pt?'Atividades pós-compra que mantêm o produto/serviço funcionando (instalação, reparo, peças, suporte).':'Post-purchase activities that keep the product/service working (installation, repair, parts, support).', val:pt?'em preservar o valor já entregue':'in preserving the value already delivered' },
+    { grp:'s', icon:'🏛️', name:pt?'Firm infrastructure':'Firm infrastructure', short:'Infra', desc:pt?'A ESTRUTURA DE GESTÃO da firma: direção, finanças, jurídico, contabilidade, planejamento. ⚠️ NÃO é prédio nem TI.':'The firm\'s MANAGEMENT structure: leadership, finance, legal, accounting, planning. ⚠️ NOT the building nor IT.', val:pt?'sustenta a empresa inteira':'underpins the whole firm' },
+    { grp:'s', icon:'👥', name:pt?'HR management':'HR management', short:pt?'Gente':'People', desc:pt?'Recrutar, selecionar, treinar, motivar, recompensar e reter pessoas. As pessoas como fonte de valor — o peso varia muito por setor.':'Recruit, select, train, motivate, reward and retain people. People as a value source — the weight varies greatly by sector.', val:pt?'nas pessoas que executam tudo':'in the people who execute everything' },
+    { grp:'s', icon:'🔬', name:pt?'Technology development':'Technology development', short:'Tech', desc:pt?'P&D, TI, automação de escritório, medição de qualidade — melhora o produto E o processo. É aqui que fica a TI (não na infra).':'R&D, IT, office automation, quality measurement — improves the product AND the process. IT lives here (not in infrastructure).', val:pt?'em melhorar produto e processo':'in improving product and process' },
+    { grp:'s', icon:'🛒', name:pt?'Procurement':'Procurement', short:pt?'Compras':'Buy', desc:pt?'A FUNÇÃO de comprar (procedimentos de compra, análise/homologação de fornecedor), não o insumo comprado. ⚠️ diferente de inbound logistics.':'The FUNCTION of purchasing (buying procedures, vendor analysis/approval), not the input itself. ⚠️ different from inbound logistics.', val:pt?'no poder de negociação com fornecedores':'in bargaining power with suppliers' }
+  ];
+  window[id+'_data'] = a;
+  window[id+'_sel'] = function(i){ const x=window[id+'_data'][i]; const bx=document.getElementById(id+'-b'); if(!bx)return; document.querySelectorAll('.'+id+'-c').forEach(function(c){c.style.outline='none';}); document.getElementById(id+'-c'+i).style.outline='2.5px solid '+(x.grp==='s'?'#0C4A6E':'#0EA5E9'); document.getElementById(id+'-n').textContent=x.icon+' '+x.name; document.getElementById(id+'-n').style.color=(x.grp==='s'?'#0C4A6E':'#0369A1'); document.getElementById(id+'-d').textContent=x.desc; document.getElementById(id+'-v').textContent=(pt?'Onde nasce o valor: ':'Where value is born: ')+x.val; bx.style.display='block'; };
+  const sup = i => { const x=a[i]; return `<div id="${id}-c${i}" class="${id}-c" onclick="window['${id}_sel'](${i})" style="background:#0C4A6E14;border:1px solid #0C4A6E55;border-radius:5px;padding:4px 3px;cursor:pointer;text-align:center;transition:outline .12s;"><span style="font-size:10px;">${x.icon}</span><div style="font-size:6px;font-weight:800;color:#0C4A6E;line-height:1;margin-top:1px;">${x.short}</div></div>`; };
+  const prim = i => { const x=a[i]; return `<div id="${id}-c${i}" class="${id}-c" onclick="window['${id}_sel'](${i})" style="background:#E0F2FE;border:1px solid #7DD3FC;border-radius:5px;padding:5px 2px;cursor:pointer;text-align:center;transition:outline .12s;"><div style="font-size:12px;">${x.icon}</div><div style="font-size:6px;font-weight:800;color:#0369A1;line-height:1;margin-top:1px;">${x.short}</div></div>`; };
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#0C4A6E;margin-bottom:2px;">
+        ${pt?'A Cadeia de Valor (Porter, 1985)':'The Value Chain (Porter, 1985)'}
+      </div>
+      <div style="font-size:7.5px;color:#64748B;margin-bottom:6px;">${pt?'4 apoio no teto + 5 primárias na esteira → MARGEM. Clique em cada uma.':'4 support on top + 5 primary in the flow → MARGIN. Click each one.'}</div>
+      <div style="display:flex;gap:4px;align-items:stretch;">
+        <div style="flex:1;">
+          <div style="font-size:6px;font-weight:800;color:#0C4A6E;text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px;">${pt?'Apoio':'Support'}</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:3px;margin-bottom:4px;">${[5,6,7,8].map(sup).join('')}</div>
+          <div style="font-size:6px;font-weight:800;color:#0369A1;text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px;">${pt?'Primárias (fluxo →)':'Primary (flow →)'}</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr;gap:3px;">${[0,1,2,3,4].map(prim).join('')}</div>
+        </div>
+        <div style="flex:none;width:34px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#0C4A6E;border-radius:6px;color:#fff;padding:2px;">
+          <div style="font-size:13px;">📐</div><div style="font-size:6px;font-weight:900;text-align:center;line-height:1.1;">${pt?'MAR-GEM':'MAR-GIN'}</div>
+        </div>
+      </div>
+      <div id="${id}-b" style="display:none;margin-top:8px;background:#F8FAFC;border:1px solid #E5E7EB;border-radius:7px;padding:9px 11px;">
+        <div id="${id}-n" style="font-size:10px;font-weight:800;margin-bottom:3px;"></div>
+        <div id="${id}-d" style="font-size:8.5px;color:#374151;line-height:1.6;"></div>
+        <div id="${id}-v" style="font-size:7.5px;color:#16A34A;font-weight:700;margin-top:4px;"></div>
+      </div>
+      <div style="margin-top:7px;font-size:7px;color:#94A3B8;line-height:1.5;">💡 ${pt?'MARGEM = valor criado − custo de criar. O modelo acha ONDE, dentro da firma, a margem é construída ou destruída.':'MARGIN = value created − cost to create it. The model finds WHERE, inside the firm, margin is built or destroyed.'}</div>
+    </div>`;
+};
+
+/* ─── MKT W9: competitive advantage + 3 generic strategies ─── */
+window.vis_competitiveAdvantage = function(container, lang) {
+  const pt = lang === 'pt';
+  const id = 'cadv-' + Math.random().toString(36).substr(2,5);
+  const s = [
+    { color:'#0EA5E9', name:pt?'1 · Liderança em custo':'1 · Cost leadership', scope:pt?'alvo amplo · custo':'broad · cost', desc:pt?'Ser o produtor de MENOR CUSTO do setor (escala, tecnologia proprietária, acesso a insumos, curva de experiência). ⚠️ requisito espelhado: manter PARIDADE DE PRODUTO — barato demais e ruim vira comoditização, não liderança em custo.':'Be the LOWEST-COST producer in the sector (scale, proprietary tech, input access, experience curve). ⚠️ mirrored requirement: keep PRODUCT PARITY — too cheap and poor becomes commoditisation, not cost leadership.' },
+    { color:'#0284C7', name:pt?'2 · Diferenciação':'2 · Differentiation', scope:pt?'alvo amplo · valor':'broad · value', desc:pt?'Ser ÚNICA em atributos amplamente valorizados (produto, entrega, marketing) → o cliente paga preço-prêmio. ⚠️ requisito espelhado: manter PARIDADE DE CUSTO — diferenciar não é licença pra torrar dinheiro. Várias diferenciadas podem coexistir.':'Be UNIQUE in widely valued attributes (product, delivery, marketing) → the buyer pays a price premium. ⚠️ mirrored requirement: keep COST PARITY — differentiating is no licence to overspend. Several differentiators can coexist.' },
+    { color:'#0891B2', name:pt?'3a · Foco em custo':'3a · Cost focus', scope:pt?'alvo estreito · custo':'narrow · cost', desc:pt?'Escolher UM segmento e ser o menor custo NELE. Condição: o segmento tem necessidades incomuns ou é subatendido pelos concorrentes de alvo amplo.':'Pick ONE segment and be the lowest cost WITHIN it. Condition: the segment has unusual needs or is underserved by broad-target competitors.' },
+    { color:'#0C4A6E', name:pt?'3b · Foco em diferenciação':'3b · Differentiation focus', scope:pt?'alvo estreito · valor':'narrow · value', desc:pt?'Escolher UM segmento e ser único NELE. Vários focos podem coexistir se mirarem segmentos diferentes. Ex: uma marca premium para um nicho específico.':'Pick ONE segment and be unique WITHIN it. Several focus players can coexist if they target different segments. E.g. a premium brand for a specific niche.' }
+  ];
+  window[id+'_data'] = s;
+  window[id+'_sel'] = function(i){ const x=window[id+'_data'][i]; const bx=document.getElementById(id+'-b'); if(!bx)return; document.querySelectorAll('.'+id+'-c').forEach(function(c){c.style.outline='none';}); document.getElementById(id+'-c'+i).style.outline='2.5px solid '+x.color; document.getElementById(id+'-n').textContent=x.name; document.getElementById(id+'-n').style.color=x.color; document.getElementById(id+'-s').textContent=x.scope; document.getElementById(id+'-d').textContent=x.desc; bx.style.display='block'; };
+  const cell = i => { const x=s[i]; return `<div id="${id}-c${i}" class="${id}-c" onclick="window['${id}_sel'](${i})" style="background:${x.color}0D;border:1px solid ${x.color}55;border-radius:6px;padding:7px 5px;cursor:pointer;text-align:center;transition:outline .12s;"><div style="font-size:8px;font-weight:800;color:${x.color};line-height:1.15;">${x.name}</div></div>`; };
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#0C4A6E;margin-bottom:2px;">
+        ${pt?'Vantagem competitiva: 3 estratégias':'Competitive advantage: 3 strategies'}
+      </div>
+      <div style="font-size:7.5px;color:#64748B;margin-bottom:6px;">${pt?'Vantagem = preço maior OU custo menor. Tipo × escopo. Clique.':'Advantage = higher price OR lower cost. Type × scope. Click.'}</div>
+      <div style="display:grid;grid-template-columns:14px 1fr 1fr;gap:3px;align-items:center;">
+        <div></div>
+        <div style="font-size:6px;font-weight:800;color:#0369A1;text-align:center;text-transform:uppercase;">${pt?'Custo↓':'Cost↓'}</div>
+        <div style="font-size:6px;font-weight:800;color:#0369A1;text-align:center;text-transform:uppercase;">${pt?'Valor↑':'Value↑'}</div>
+        <div style="font-size:6px;font-weight:800;color:#94A3B8;writing-mode:vertical-rl;text-align:center;">${pt?'Amplo':'Broad'}</div>
+        ${cell(0)}${cell(1)}
+        <div style="font-size:6px;font-weight:800;color:#94A3B8;writing-mode:vertical-rl;text-align:center;">${pt?'Estreito':'Narrow'}</div>
+        ${cell(2)}${cell(3)}
+      </div>
+      <div id="${id}-b" style="display:none;margin-top:8px;background:#F8FAFC;border:1px solid #E5E7EB;border-radius:7px;padding:9px 11px;">
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;">
+          <span id="${id}-n" style="font-size:10px;font-weight:800;"></span>
+          <span id="${id}-s" style="font-size:6.5px;font-weight:700;color:#94A3B8;text-transform:uppercase;"></span>
+        </div>
+        <div id="${id}-d" style="font-size:8.5px;color:#374151;line-height:1.6;"></div>
+      </div>
+      <div style="margin-top:8px;background:#0C4A6E;border-radius:6px;padding:6px 9px;font-size:7.5px;color:#E0F2FE;line-height:1.6;">☠️ <b>${pt?'Stuck in the middle':'Stuck in the middle'}</b>: ${pt?'quem tenta as duas rotas ao mesmo tempo não consegue nenhuma (as ações se contradizem). Saída = SEPARAR em unidades (Toyota massa + Lexus premium). E vantagem ≠ eficácia operacional: boas práticas todo mundo copia; vantagem exige trade-offs.':'trying both routes at once achieves neither (the actions contradict). Way out = SEPARATE into units (Toyota mass + Lexus premium). And advantage ≠ operational effectiveness: best practices are copyable; advantage needs trade-offs.'}</div>
+    </div>`;
+};
+
+/* ─── MKT W9: linkages (vertical value system + horizontal) ─── */
+window.vis_valueLinkages = function(container, lang) {
+  const pt = lang === 'pt';
+  const id = 'vlk-' + Math.random().toString(36).substr(2,5);
+  const t = [
+    { color:'#0EA5E9', name:pt?'Elos VERTICAIS (sistema de valor)':'VERTICAL linkages (value system)', desc:pt?'A sua cadeia se estende PRA FORA da firma: fornecedores → SUA empresa → distribuidores → cliente. Um fornecedor com bom controle de qualidade melhora a sua operação; um distribuidor que faz pós-venda agrega valor à sua marca. É aqui que vivem as decisões de integrar verticalmente, terceirizar ou fazer parceria. O case Coca-Cola é isto: reter concentrado/marca, delegar envase.':'Your chain extends OUTSIDE the firm: suppliers → YOUR company → distributors → customer. A supplier with good quality control improves your operation; a distributor that does after-sales adds value to your brand. This is where decisions to vertically integrate, outsource or partner live. The Coca-Cola case is exactly this: retain concentrate/brand, delegate bottling.' },
+    { color:'#0C4A6E', name:pt?'Elos HORIZONTAIS (interdependência)':'HORIZONTAL linkages (interdependence)', desc:pt?'As atividades DENTRO da firma dependem umas das outras. Melhorar o prazo de entrega (outbound) derruba os chamados no atendimento (service); investir em RH eleva as vendas; qualidade (infra) melhora operações E marketing. Uma intervenção rende em várias frentes — e é a fonte MAIS DEFENSÁVEL de vantagem, porque o concorrente vê a atividade isolada, mas não a coordenação entre elas.':'The activities INSIDE the firm depend on one another. Improving delivery time (outbound) cuts service calls (service); investing in HR lifts sales; quality (infrastructure) improves operations AND marketing. One intervention pays off on several fronts — and it is the MOST DEFENSIBLE source of advantage, because the competitor sees the isolated activity, not the coordination between them.' }
+  ];
+  window[id+'_data'] = t;
+  window[id+'_sel'] = function(i){ const x=window[id+'_data'][i]; const bx=document.getElementById(id+'-b'); if(!bx)return; document.querySelectorAll('.'+id+'-c').forEach(function(c){c.style.outline='none';}); document.getElementById(id+'-c'+i).style.outline='2.5px solid '+x.color; document.getElementById(id+'-n').textContent=x.name; document.getElementById(id+'-n').style.color=x.color; document.getElementById(id+'-d').textContent=x.desc; bx.style.display='block'; };
+  const chip = txt => `<div style="flex:1;min-width:0;background:#E0F2FE;border:1px solid #7DD3FC;border-radius:4px;padding:3px 1px;text-align:center;font-size:6px;font-weight:800;color:#0369A1;">${txt}</div>`;
+  const arrow = `<div style="flex:none;color:#94A3B8;font-size:8px;align-self:center;">→</div>`;
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#0C4A6E;margin-bottom:2px;">
+        ${pt?'Os 2 elos (linkages)':'The 2 linkages'}
+      </div>
+      <div style="font-size:7.5px;color:#64748B;margin-bottom:6px;">${pt?'A cadeia NÃO é atividades independentes. Clique nos dois tipos.':'The chain is NOT independent activities. Click both types.'}</div>
+      <div style="display:flex;align-items:center;gap:2px;margin-bottom:6px;">
+        ${chip(pt?'Fornec.':'Suppliers')}${arrow}${chip(pt?'VOCÊ':'YOU')}${arrow}${chip(pt?'Distrib.':'Distrib.')}${arrow}${chip(pt?'Cliente':'Customer')}
+      </div>
+      <div style="display:flex;flex-direction:column;gap:5px;">
+        ${t.map((x,i)=>`<div id="${id}-c${i}" class="${id}-c" onclick="window['${id}_sel'](${i})" style="background:${x.color}0D;border:1px solid ${x.color}44;border-radius:6px;padding:7px 9px;cursor:pointer;transition:outline .12s;"><span style="font-size:8.5px;font-weight:800;color:${x.color};">${x.name}</span></div>`).join('')}
+      </div>
+      <div id="${id}-b" style="display:none;margin-top:8px;background:#F8FAFC;border:1px solid #E5E7EB;border-radius:7px;padding:9px 11px;">
+        <div id="${id}-n" style="font-size:10px;font-weight:800;margin-bottom:3px;"></div>
+        <div id="${id}-d" style="font-size:8.5px;color:#374151;line-height:1.6;"></div>
+      </div>
+      <div style="margin-top:7px;font-size:7px;color:#94A3B8;line-height:1.5;">💡 ${pt?'Elo é difícil de copiar: o rival enxerga a atividade, não a coordenação. Por isso é a vantagem mais durável.':'A linkage is hard to copy: the rival sees the activity, not the coordination. That is why it is the most durable advantage.'}</div>
+    </div>`;
+};
+
+/* ─── MKT W9: the 4-step analysis process ─── */
+window.vis_valueChainSteps = function(container, lang) {
+  const pt = lang === 'pt';
+  const id = 'vcs-' + Math.random().toString(36).substr(2,5);
+  const st = [
+    { n:'1', name:pt?'Mapear subatividades das PRIMÁRIAS':'Map the PRIMARY subactivities', desc:pt?'Para cada uma das 5 primárias, liste as subatividades que geram valor. Elas se dividem em 3 tipos: DIRETAS (criam valor sozinhas — ex: venda online), INDIRETAS (permitem as diretas rodarem — ex: gestão da força de vendas) e GARANTIA DE QUALIDADE (asseguram o padrão — ex: revisão/proofreading).':'For each of the 5 primary activities, list the subactivities that create value. They split into 3 types: DIRECT (create value on their own — e.g. online sales), INDIRECT (let the direct ones run — e.g. sales-force management) and QUALITY ASSURANCE (ensure the standard — e.g. proofreading).' },
+    { n:'2', name:pt?'Mapear subatividades das de APOIO':'Map the SUPPORT subactivities', desc:pt?'Para CADA primária, pergunte como RH, tecnologia e compras agregam valor NAQUELA primária. É a matriz cruzada: 4 apoios × 5 primárias = 20 células de pergunta. Trabalhoso, mas é aqui que aparecem oportunidades que a análise "por caixa" não revela. Infraestrutura costuma ser transversal.':'For EACH primary, ask how HR, technology and procurement add value IN that primary. It is the cross matrix: 4 supports × 5 primaries = 20 question cells. Laborious, but this is where opportunities the box-by-box analysis misses appear. Infrastructure is usually cross-cutting.' },
+    { n:'3', name:pt?'Identificar os ELOS':'Identify the LINKAGES', desc:pt?'Encontrar as conexões entre as atividades. Dá trabalho, mas é onde está o ganho. Ex: investir em RH (treinar/reter vendedores) → mais vendas; prazo de entrega melhor → menos chamados no atendimento. Uma melhoria num ponto se propaga.':'Find the connections between activities. It takes effort, but the gain is here. E.g. investing in HR (training/retaining sellers) → more sales; better delivery time → fewer service calls. One improvement propagates.' },
+    { n:'4', name:pt?'Buscar oportunidades de MAIS valor':'Seek opportunities for MORE value', desc:pt?'Revisar cada subatividade e cada elo e perguntar como podem ser melhorados para MAXIMIZAR o valor ao cliente — mantendo alinhamento com a estratégia e as forças da organização. É o filtro contra iniciativas que "melhoram algo" sem servir ao posicionamento.':'Review each subactivity and each linkage and ask how they can be improved to MAXIMISE customer value — while staying aligned with the strategy and the organisation\'s strengths. It is the filter against initiatives that "improve something" without serving the positioning.' }
+  ];
+  window[id+'_data'] = st;
+  window[id+'_sel'] = function(i){ const x=window[id+'_data'][i]; const bx=document.getElementById(id+'-b'); if(!bx)return; document.querySelectorAll('.'+id+'-c').forEach(function(c){c.style.outline='none';}); document.getElementById(id+'-c'+i).style.outline='2.5px solid #0284C7'; document.getElementById(id+'-n').textContent=x.n+'. '+x.name; document.getElementById(id+'-d').textContent=x.desc; bx.style.display='block'; };
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#0C4A6E;margin-bottom:2px;">
+        ${pt?'Como fazer a análise (4 passos)':'How to run the analysis (4 steps)'}
+      </div>
+      <div style="font-size:7.5px;color:#64748B;margin-bottom:8px;">${pt?'O método operacional do modelo. Clique.':'The model\'s operational method. Click.'}</div>
+      <div style="display:flex;flex-direction:column;gap:4px;">
+        ${st.map((x,i)=>`<div id="${id}-c${i}" class="${id}-c" onclick="window['${id}_sel'](${i})" style="display:flex;align-items:center;gap:8px;background:#0284C70D;border:1px solid #0284C733;border-radius:6px;padding:6px 9px;cursor:pointer;transition:outline .12s;"><span style="flex:none;width:18px;height:18px;border-radius:50%;background:#0284C7;color:#fff;font-size:9px;font-weight:900;display:flex;align-items:center;justify-content:center;">${x.n}</span><span style="font-size:8px;font-weight:800;color:#0369A1;line-height:1.1;">${x.name}</span></div>`).join('')}
+      </div>
+      <div id="${id}-b" style="display:none;margin-top:8px;background:#F8FAFC;border:1px solid #E5E7EB;border-radius:7px;padding:9px 11px;">
+        <div id="${id}-n" style="font-size:10px;font-weight:800;color:#0369A1;margin-bottom:3px;"></div>
+        <div id="${id}-d" style="font-size:8.5px;color:#374151;line-height:1.6;"></div>
+      </div>
+      <div style="margin-top:7px;font-size:7px;color:#94A3B8;line-height:1.5;">💡 ${pt?'Cada subatividade = direta, indireta ou de garantia de qualidade. Isso dá critério pra priorizar investimento.':'Each subactivity = direct, indirect or quality-assurance. That gives a criterion to prioritise investment.'}</div>
+    </div>`;
+};
+
+/* ─── MKT W9: benefits of using the value chain (item 4 deliverable) ─── */
+window.vis_valueChainBenefits = function(container, lang) {
+  const pt = lang === 'pt';
+  const id = 'vcb-' + Math.random().toString(36).substr(2,5);
+  const b = [
+    { icon:'🔍', name:pt?'Localiza onde nasce (e morre) o valor':'Locates where value is born (and dies)', desc:pt?'Deixa de discutir "custo do departamento X" e passa a discutir "quanto esta atividade acrescenta ao que o cliente valoriza". Atividades caras que não agregam valor ficam visíveis — candidatas a corte, automação ou terceirização.':'Stops debating "department X\'s cost" and starts debating "how much this activity adds to what the customer values". Expensive activities that add no value become visible — candidates for cutting, automation or outsourcing.' },
+    { icon:'⚖️', name:pt?'Ataca a margem pelos DOIS lados':'Attacks margin on BOTH sides', desc:pt?'Como margem = valor − custo, o modelo abre duas alavancas: a gestão tradicional só puxa o custo; o value chain obriga a perguntar também onde dá pra AUMENTAR a disposição a pagar.':'Since margin = value − cost, the model opens two levers: traditional management only pulls cost; the value chain forces you to also ask where you can RAISE willingness to pay.' },
+    { icon:'💸', name:pt?'Revela os cost drivers':'Reveals the cost drivers', desc:pt?'Ao desagregar em atividades, fica claro O QUE faz o custo subir em cada etapa (escala, aprendizado, localização, uso de capacidade). A estratégia de custo vira gerenciável, não um alvo genérico de "cortar".':'By disaggregating into activities, it becomes clear WHAT drives cost up at each step (scale, learning, location, capacity use). The cost strategy becomes manageable, not a generic "cut" target.' },
+    { icon:'✨', name:pt?'Revela as fontes de diferenciação':'Reveals the sources of differentiation', desc:pt?'Mostra em quais atividades a empresa pode ser ÚNICA de um jeito que o cliente paga — ancora a diferenciação em algo concreto, não em discurso de marca.':'Shows in which activities the firm can be UNIQUE in a way the customer pays for — anchoring differentiation in something concrete, not brand talk.' },
+    { icon:'🧩', name:pt?'Troca a lente contábil pela de SISTEMA':'Swaps the accounting lens for a SYSTEM lens', desc:pt?'Foco em sistemas, não em organograma nem em rubricas contábeis. Faz aparecer o valor que ATRAVESSA áreas — justamente o que se perde nas fronteiras entre departamentos.':'Focus on systems, not the org chart or accounting lines. Surfaces the value that CROSSES areas — precisely what is lost at the borders between departments.' },
+    { icon:'🔗', name:pt?'Expõe os elos (vantagem defensável)':'Exposes the linkages (defensible advantage)', desc:pt?'Uma única intervenção rende em várias frentes (entrega melhor → menos chamados). E elos são difíceis de imitar: o concorrente vê a atividade isolada, não a coordenação.':'A single intervention pays off on several fronts (better delivery → fewer calls). And linkages are hard to imitate: the competitor sees the isolated activity, not the coordination.' },
+    { icon:'🌐', name:pt?'Estende o olhar pro sistema de valor':'Extends the view to the value system', desc:pt?'Ao mapear a própria cadeia, a empresa vê onde se encaixa no sistema maior (fornecedores → firma → canais → cliente) — o que embasa decisões de integração, parceria e terceirização.':'By mapping its own chain, the firm sees where it fits in the larger system (suppliers → firm → channels → customer) — grounding decisions on integration, partnership and outsourcing.' }
+  ];
+  window[id+'_data'] = b;
+  window[id+'_sel'] = function(i){ const x=window[id+'_data'][i]; const bx=document.getElementById(id+'-b'); if(!bx)return; document.querySelectorAll('.'+id+'-c').forEach(function(c){c.style.outline='none';}); document.getElementById(id+'-c'+i).style.outline='2.5px solid #0284C7'; document.getElementById(id+'-n').textContent=x.icon+' '+x.name; document.getElementById(id+'-d').textContent=x.desc; bx.style.display='block'; };
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#0C4A6E;margin-bottom:2px;">
+        ${pt?'Benefícios do modelo (a cobrança)':'Benefits of the model (the task)'}
+      </div>
+      <div style="font-size:7.5px;color:#64748B;margin-bottom:8px;">${pt?'O que o value chain entrega à organização. Clique.':'What the value chain delivers to the organisation. Click.'}</div>
+      <div style="display:flex;flex-direction:column;gap:4px;">
+        ${b.map((x,i)=>`<div id="${id}-c${i}" class="${id}-c" onclick="window['${id}_sel'](${i})" style="display:flex;align-items:center;gap:7px;background:#E0F2FE;border:1px solid #7DD3FC;border-radius:6px;padding:5px 8px;cursor:pointer;transition:outline .12s;"><span style="font-size:12px;">${x.icon}</span><span style="font-size:8px;font-weight:800;color:#0369A1;line-height:1.1;">${x.name}</span></div>`).join('')}
+      </div>
+      <div id="${id}-b" style="display:none;margin-top:8px;background:#F8FAFC;border:1px solid #E5E7EB;border-radius:7px;padding:9px 11px;">
+        <div id="${id}-n" style="font-size:10px;font-weight:800;color:#0369A1;margin-bottom:3px;"></div>
+        <div id="${id}-d" style="font-size:8.5px;color:#374151;line-height:1.6;"></div>
+      </div>
+      <div style="margin-top:7px;font-size:7px;color:#94A3B8;line-height:1.5;">💡 ${pt?'Frase-resumo: quanto mais valor a cadeia cria, maiores os lucros. O modelo mostra ONDE mexer.':'Summary line: the more value the chain creates, the greater the profits. The model shows WHERE to act.'}</div>
+    </div>`;
+};
+
+/* ─── MKT W9: Coca-Cola value chain case (retain vs delegate) ─── */
+window.vis_cocaColaVC = function(container, lang) {
+  const pt = lang === 'pt';
+  const id = 'cok-' + Math.random().toString(36).substr(2,5);
+  const r = [
+    { side:'keep', icon:'🧪', name:pt?'Concentrado / fórmula':'Concentrate / formula', desc:pt?'A matriz fabrica APENAS concentrado, bases e xaropes — não o refrigerante final. É a etapa de margem bruta acima de 60%, protegida por fórmula secreta e contratos.':'HQ makes ONLY concentrate, bases and syrups — not the final drink. It is the >60% gross-margin step, protected by a secret formula and contracts.' },
+    { side:'keep', icon:'🏆', name:pt?'Marca e marketing':'Brand and marketing', desc:pt?'O ativo real. O produto físico é replicável (água com açúcar e gás); o significado cultural (felicidade, estilo de vida) não é. É a atividade primária onde a Coca cria MAIS valor e sustenta o preço-prêmio.':'The real asset. The physical product is replicable (sugar water with gas); the cultural meaning (happiness, lifestyle) is not. It is the primary activity where Coca creates the MOST value and sustains the premium price.' },
+    { side:'keep', icon:'✅', name:pt?'Padrões de qualidade':'Quality standards', desc:pt?'A matriz mantém o controle dos padrões e da estratégia via elos contratuais — mesmo delegando a produção física, ela governa como a marca é entregue no mundo todo.':'HQ keeps control of standards and strategy via contractual linkages — even delegating physical production, it governs how the brand is delivered worldwide.' },
+    { side:'give', icon:'🏭', name:pt?'Envase (bottling)':'Bottling', desc:pt?'Os engarrafadores independentes adicionam água e adoçantes, envasam e embalam. É a etapa intensiva em CAPITAL — a Coca a delega para não imobilizar caixa.':'Independent bottlers add water and sweeteners, fill and package. It is the CAPITAL-intensive step — Coca delegates it to avoid tying up cash.' },
+    { side:'give', icon:'🚚', name:pt?'Frota e distribuição':'Fleet and distribution', desc:pt?'Entrega em 200+ países pelo maior sistema de distribuição de bebidas do mundo — executado pelos engarrafadores e parceiros locais (na África, milhares de micro-distribuidores manuais).':'Delivery to 200+ countries via the world\'s largest beverage distribution system — run by bottlers and local partners (in Africa, thousands of manual micro-distributors).' },
+    { side:'give', icon:'📦', name:pt?'Logística física':'Physical logistics', desc:pt?'Toda a movimentação intensiva em capital e mão de obra fica com os parceiros. A matriz vira uma empresa enxuta de marca+fórmula; o "sistema Coca-Cola" inteiro envolve 700+ mil pessoas.':'All the capital- and labour-intensive movement stays with partners. HQ becomes a lean brand+formula company; the whole "Coca-Cola system" involves 700k+ people.' }
+  ];
+  window[id+'_data'] = r;
+  window[id+'_sel'] = function(i){ const x=window[id+'_data'][i]; const col=x.side==='keep'?'#0C4A6E':'#94A3B8'; const bx=document.getElementById(id+'-b'); if(!bx)return; document.querySelectorAll('.'+id+'-c').forEach(function(c){c.style.outline='none';}); document.getElementById(id+'-c'+i).style.outline='2.5px solid '+col; document.getElementById(id+'-n').textContent=x.icon+' '+x.name; document.getElementById(id+'-n').style.color=col; document.getElementById(id+'-d').textContent=x.desc; bx.style.display='block'; };
+  const tile=(x,i,col,bg)=>`<div id="${id}-c${i}" class="${id}-c" onclick="window['${id}_sel'](${i})" style="display:flex;align-items:center;gap:5px;background:${bg};border:1px solid ${col}44;border-radius:6px;padding:5px 7px;cursor:pointer;transition:outline .12s;"><span style="font-size:11px;">${x.icon}</span><span style="font-size:7.5px;font-weight:800;color:${col};line-height:1.1;">${x.name}</span></div>`;
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#0C4A6E;margin-bottom:2px;">
+        ${pt?'Case Coca-Cola: reter × delegar':'Coca-Cola case: retain × delegate'}
+      </div>
+      <div style="font-size:7.5px;color:#64748B;margin-bottom:8px;">${pt?'Ela NÃO faz o refri que você bebe. Veja a configuração da cadeia. Clique.':'It does NOT make the drink you sip. See the chain configuration. Click.'}</div>
+      <div style="font-size:7px;color:#0C4A6E;font-weight:800;margin:0 0 3px;">${pt?'🔒 RETÉM (alta margem)':'🔒 RETAINS (high margin)'}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;">
+        ${[0,1,2].map(i=>tile(r[i],i,'#0C4A6E','#E0F2FE')).join('')}
+      </div>
+      <div style="font-size:7px;color:#64748B;font-weight:800;margin:8px 0 3px;">${pt?'📤 DELEGA (intensivo em capital)':'📤 DELEGATES (capital-intensive)'}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;">
+        ${[3,4,5].map(i=>tile(r[i],i,'#64748B','#F1F5F9')).join('')}
+      </div>
+      <div id="${id}-b" style="display:none;margin-top:8px;background:#F8FAFC;border:1px solid #E5E7EB;border-radius:7px;padding:9px 11px;">
+        <div id="${id}-n" style="font-size:10px;font-weight:800;margin-bottom:3px;"></div>
+        <div id="${id}-d" style="font-size:8.5px;color:#374151;line-height:1.6;"></div>
+      </div>
+      <div style="margin-top:8px;background:#EFF6FF;border-radius:6px;padding:6px 9px;font-size:7.5px;color:#1E40AF;line-height:1.6;">💡 ${pt?'A lição: a Coca retém as atividades de <b>alta margem e baixo capital</b> (fórmula, marca) e delega as de <b>alto capital</b> (envase, frota) — é uma CONFIGURAÇÃO de cadeia, e o exemplo perfeito de sistema de valor. Detalhe: aqui o "serviço" é B2B (suporte ao engarrafador), não SAC.':'The lesson: Coca retains the <b>high-margin, low-capital</b> activities (formula, brand) and delegates the <b>high-capital</b> ones (bottling, fleet) — it is a chain CONFIGURATION, and the perfect value-system example. Note: here "service" is B2B (bottler support), not consumer care.'}</div>
+    </div>`;
+};
