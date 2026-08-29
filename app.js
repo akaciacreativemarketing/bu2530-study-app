@@ -808,6 +808,13 @@ const VIS_DISPATCH = {
   'placeDistribution':   true,
   'promotionalMix':      true,
   'imcLadder':           true,
+  // Marketing Strategy — Week 7 (The 7 Ps / extended mix)
+  'sevenPs':             true,
+  'serviceIHIP':         true,
+  'peopleLayers':        true,
+  'serviceProcess':      true,
+  'physicalEvidence':    true,
+  'richardMille':        true,
 };
 
 function renderTheoryCard(th) {

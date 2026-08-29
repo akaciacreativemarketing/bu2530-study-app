@@ -3745,3 +3745,196 @@ window.vis_imcLadder = function(container, lang) {
       <div style="margin-top:8px;background:#EFF6FF;border-radius:6px;padding:6px 9px;font-size:7.5px;color:#1E40AF;line-height:1.55;">💡 ${pt?'<b>IMC</b> (Comunicação Integrada): 1 mensagem consistente em vários canais (3 C: <b>C</b>omunicar, <b>C</b>ompetir, <b>C</b>onvencer). Caso <b>trivago</b>: "economize reservando hotel" em TV, outdoor, banner e rádio.':'<b>IMC</b> (Integrated Communication): 1 consistent message across channels (3 Cs: <b>C</b>ommunicate, <b>C</b>ompete, <b>C</b>onvince). <b>trivago</b> case: "save money booking a hotel" on TV, billboard, banner and radio.'}</div>
     </div>`;
 };
+
+/* ═══════════════════════════════════════════════════════════════════
+   MARKETING STRATEGY — WEEK 7 (course Week 17): THE 7 Ps (EXTENDED MIX)
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ─── MKT W7: the 7 Ps ──────────────────────────────────────────── */
+window.vis_sevenPs = function(container, lang) {
+  const pt = lang === 'pt';
+  const id = 'svp-' + Math.random().toString(36).substr(2,5);
+  const ps = [
+    { icon:'📦', grp:'trad', name:'Product', desc:pt?'O que se oferece pra satisfazer a necessidade, diferenciado da concorrência (Semana 16).':'What is offered to satisfy the need, differentiated from competitors (Week 16).' },
+    { icon:'💰', grp:'trad', name:'Price', desc:pt?'O valor monetário — o único P que gera receita (Semana 16).':'The monetary value — the only P that generates revenue (Week 16).' },
+    { icon:'📍', grp:'trad', name:'Place', desc:pt?'Onde/como o produto fica acessível: canais, distribuição (Semana 16).':'Where/how the product is accessible: channels, distribution (Week 16).' },
+    { icon:'📣', grp:'trad', name:'Promotion', desc:pt?'Comunicar o benefício e persuadir (Semana 16).':'Communicate the benefit and persuade (Week 16).' },
+    { icon:'👥', grp:'new', name:'People', desc:pt?'QUEM entrega: todos os envolvidos, direta ou indiretamente. Quando os produtos são iguais, people diferencia.':'WHO delivers: everyone involved, directly or indirectly. When products are alike, people differentiates.' },
+    { icon:'🔄', grp:'new', name:'Process', desc:pt?'COMO entrega: o fluxo de etapas da interação cliente-empresa. Garante consistência (SOP).':'HOW they deliver: the flow of steps in the customer-firm interaction. Ensures consistency (SOP).' },
+    { icon:'🏛️', grp:'new', name:'Physical Evidence', desc:pt?'EM QUE CENÁRIO entrega: os elementos físicos que tornam o serviço tangível e posicionam a marca.':'IN WHAT SETTING they deliver: the physical elements that make the service tangible and position the brand.' }
+  ];
+  window[id+'_data'] = ps;
+  window[id+'_sel'] = function(i){ const p=window[id+'_data'][i]; const b=document.getElementById(id+'-b'); if(!b)return; document.querySelectorAll('.'+id+'-c').forEach(function(x){x.style.outline='none';}); document.getElementById(id+'-c'+i).style.outline='2.5px solid '+(p.grp==='new'?'#0C4A6E':'#0EA5E9'); document.getElementById(id+'-n').textContent=p.icon+' '+p.name; document.getElementById(id+'-n').style.color=(p.grp==='new'?'#0C4A6E':'#0369A1'); document.getElementById(id+'-d').textContent=p.desc; b.style.display='block'; };
+  const tile = (p,i) => `<div id="${id}-c${i}" class="${id}-c" onclick="window['${id}_sel'](${i})" style="background:${p.grp==='new'?'#0C4A6E':'#E0F2FE'};color:${p.grp==='new'?'#fff':'#0369A1'};border:1px solid ${p.grp==='new'?'#0C4A6E':'#7DD3FC'};border-radius:6px;padding:7px 3px;cursor:pointer;text-align:center;transition:outline .12s;"><div style="font-size:14px;">${p.icon}</div><div style="font-size:6.5px;font-weight:800;line-height:1.1;margin-top:2px;">${p.name}</div></div>`;
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#0C4A6E;margin-bottom:2px;">
+        ${pt?'Os 7 Ps (mix estendido)':'The 7 Ps (extended mix)'}
+      </div>
+      <div style="font-size:7px;color:#64748B;font-weight:700;margin:4px 0 3px;">${pt?'4 TRADICIONAIS (Semana 16)':'4 TRADITIONAL (Week 16)'}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:4px;">
+        ${[0,1,2,3].map(i=>tile(ps[i],i)).join('')}
+      </div>
+      <div style="font-size:7px;color:#0C4A6E;font-weight:700;margin:8px 0 3px;">${pt?'+ 3 DOS SERVIÇOS (Booms & Bitner, 1981)':'+ 3 SERVICE Ps (Booms & Bitner, 1981)'}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;">
+        ${[4,5,6].map(i=>tile(ps[i],i)).join('')}
+      </div>
+      <div id="${id}-b" style="display:none;margin-top:8px;background:#F8FAFC;border:1px solid #E5E7EB;border-radius:7px;padding:9px 11px;">
+        <div id="${id}-n" style="font-size:10px;font-weight:800;margin-bottom:3px;"></div>
+        <div id="${id}-d" style="font-size:8.5px;color:#374151;line-height:1.6;"></div>
+      </div>
+      <div style="margin-top:7px;font-size:7px;color:#94A3B8;line-height:1.5;">💡 ${pt?'Em serviço, a EXPERIÊNCIA DE ENTREGA é o produto: quem (people), como (process) e onde (physical evidence).':'In a service, the DELIVERY EXPERIENCE is the product: who (people), how (process) and where (physical evidence).'}</div>
+    </div>`;
+};
+
+/* ─── MKT W7: IHIP — why services need the 7 Ps ─────────────────── */
+window.vis_serviceIHIP = function(container, lang) {
+  const pt = lang === 'pt';
+  const id = 'ihip-' + Math.random().toString(36).substr(2,5);
+  const rows = [
+    { L:'I', color:'#0EA5E9', name:pt?'Intangibilidade':'Intangibility', fix:'→ Physical Evidence', desc:pt?'Não dá pra ver/tocar/testar antes de comprar → risco percebido alto. A evidência física dá pistas tangíveis (ambiente, uniforme, limpeza) que o cliente usa pra julgar a qualidade.':'You cannot see/touch/test before buying → high perceived risk. Physical evidence gives tangible cues (environment, uniform, cleanliness) the customer uses to judge quality.' },
+    { L:'H', color:'#0284C7', name:pt?'Heterogeneidade':'Heterogeneity', fix:'→ People + Process', desc:pt?'Cada entrega sai diferente, porque depende de pessoas → inconsistência. People (treino, seleção) e Process (padronização, SOP) trazem consistência.':'Each delivery differs, because it depends on people → inconsistency. People (training, selection) and Process (standardization, SOP) bring consistency.' },
+    { L:'I', color:'#0891B2', name:pt?'Inseparabilidade':'Inseparability', fix:'→ People + Process', desc:pt?'Produção e consumo ao mesmo tempo, com o cliente PRESENTE → não há controle de qualidade "na fábrica", o erro acontece na frente dele. A qualidade tem que ser construída no momento da entrega.':'Production and consumption at once, with the customer PRESENT → there is no "factory" quality control, the error happens in front of them. Quality must be built at the moment of delivery.' },
+    { L:'P', color:'#0C4A6E', name:pt?'Perecibilidade':'Perishability', fix:'→ Process + Price', desc:pt?'Não se estoca; assento vazio = receita perdida pra sempre → descasamento oferta/demanda. Process (fila, agendamento, capacidade) + Price (preço dinâmico/yield) reequilibram.':'Cannot be stocked; empty seat = revenue lost forever → supply/demand mismatch. Process (queuing, scheduling, capacity) + Price (dynamic/yield pricing) rebalance it.' }
+  ];
+  window[id+'_data'] = rows;
+  window[id+'_sel'] = function(i){ const r=window[id+'_data'][i]; const b=document.getElementById(id+'-b'); if(!b)return; document.querySelectorAll('.'+id+'-c').forEach(function(x){x.style.outline='none';}); document.getElementById(id+'-c'+i).style.outline='2.5px solid '+r.color; document.getElementById(id+'-n').textContent=r.L+' · '+r.name; document.getElementById(id+'-n').style.color=r.color; document.getElementById(id+'-f').textContent=r.fix; document.getElementById(id+'-d').textContent=r.desc; b.style.display='block'; };
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#0C4A6E;margin-bottom:2px;">
+        ${pt?'IHIP: por que serviço precisa dos 7 Ps':'IHIP: why services need the 7 Ps'}
+      </div>
+      <div style="font-size:7.5px;color:#64748B;margin-bottom:8px;">${pt?'Cada característica quebra os 4 Ps — e um P novo conserta. Clique.':'Each characteristic breaks the 4 Ps — and a new P fixes it. Click.'}</div>
+      <div style="display:flex;flex-direction:column;gap:4px;">
+        ${rows.map((r,i)=>`<div id="${id}-c${i}" class="${id}-c" onclick="window['${id}_sel'](${i})" style="display:flex;align-items:center;gap:8px;background:${r.color}0D;border:1px solid ${r.color}33;border-radius:6px;padding:6px 9px;cursor:pointer;transition:outline .12s;"><span style="flex:none;width:20px;height:20px;border-radius:5px;background:${r.color};color:#fff;font-size:11px;font-weight:900;display:flex;align-items:center;justify-content:center;">${r.L}</span><span style="font-size:8.5px;font-weight:800;color:${r.color};flex:1;">${r.name}</span><span style="font-size:6.5px;font-weight:700;color:#16A34A;">${r.fix}</span></div>`).join('')}
+      </div>
+      <div id="${id}-b" style="display:none;margin-top:8px;background:#F8FAFC;border:1px solid #E5E7EB;border-radius:7px;padding:9px 11px;">
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;">
+          <span id="${id}-n" style="font-size:10px;font-weight:800;"></span>
+          <span id="${id}-f" style="font-size:7px;font-weight:800;color:#16A34A;"></span>
+        </div>
+        <div id="${id}-d" style="font-size:8.5px;color:#374151;line-height:1.6;"></div>
+      </div>
+      <div style="margin-top:7px;font-size:7px;color:#94A3B8;line-height:1.5;">💡 ${pt?'Frase de ouro: "in services, the delivery experience IS the product". (Booms & Bitner, 1981.)':'Golden line: "in services, the delivery experience IS the product". (Booms & Bitner, 1981.)'}</div>
+    </div>`;
+};
+
+/* ─── MKT W7: the 3 layers of people ────────────────────────────── */
+window.vis_peopleLayers = function(container, lang) {
+  const pt = lang === 'pt';
+  const id = 'ppl-' + Math.random().toString(36).substr(2,5);
+  const layers = [
+    { icon:'🛠️', color:'#0EA5E9', name:pt?'Quem FAZ':'Who MAKES', desc:pt?'Designers, engenheiros, pesquisa de mercado, cadeia de suprimentos. Muitos NUNCA veem o cliente, mas determinam se existe algo bom pra vender. Num serviço digital, é o engenheiro que define a experiência.':'Designers, engineers, market research, supply chain. Many NEVER see the customer, but they determine whether there is something good to sell. In a digital service, it is the engineer who defines the experience.' },
+    { icon:'🚚', color:'#0284C7', name:pt?'Quem LEVA':'Who BRINGS', desc:pt?'Distribuição e vendas — tornam o produto acessível. Precisam entender o que o cliente quer e COMO ele prefere comprar. Se falham, a empresa não constrói base de clientes, por melhor que seja o produto.':'Distribution and sales — they make the product accessible. They must understand what the customer wants and HOW they prefer to buy. If they fail, the firm builds no customer base, however good the product.' },
+    { icon:'💬', color:'#0C4A6E', name:pt?'Quem FALA':'Who TALKS', desc:pt?'Atendimento e suporte — os pontos de contato e solucionadores de problema. É a camada que vira DIFERENCIAL competitivo quando os produtos são parecidos. Treino = dupla competência (técnica + interpessoal).':'Service and support — the contact points and problem-solvers. It is the layer that becomes the competitive DIFFERENTIATOR when products are alike. Training = dual competence (technical + interpersonal).' }
+  ];
+  window[id+'_data'] = layers;
+  window[id+'_sel'] = function(i){ const l=window[id+'_data'][i]; const b=document.getElementById(id+'-b'); if(!b)return; document.querySelectorAll('.'+id+'-c').forEach(function(x){x.style.outline='none';}); document.getElementById(id+'-c'+i).style.outline='2.5px solid '+l.color; document.getElementById(id+'-n').textContent=l.icon+' '+l.name; document.getElementById(id+'-n').style.color=l.color; document.getElementById(id+'-d').textContent=l.desc; b.style.display='block'; };
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#0C4A6E;margin-bottom:2px;">
+        ${pt?'As 3 Camadas de People':'The 3 Layers of People'}
+      </div>
+      <div style="font-size:7.5px;color:#64748B;margin-bottom:8px;">${pt?'"People" NÃO é só atendimento. Clique.':'"People" is NOT just service staff. Click.'}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;">
+        ${layers.map((l,i)=>`<div id="${id}-c${i}" class="${id}-c" onclick="window['${id}_sel'](${i})" style="background:${l.color}0D;border:1px solid ${l.color}33;border-radius:6px;padding:8px 4px;cursor:pointer;text-align:center;transition:outline .12s;"><div style="font-size:16px;">${l.icon}</div><div style="font-size:7.5px;font-weight:800;color:${l.color};margin-top:2px;">${l.name}</div></div>`).join('')}
+      </div>
+      <div id="${id}-b" style="display:none;margin-top:8px;background:#F8FAFC;border:1px solid #E5E7EB;border-radius:7px;padding:9px 11px;">
+        <div id="${id}-n" style="font-size:10px;font-weight:800;margin-bottom:3px;"></div>
+        <div id="${id}-d" style="font-size:8.5px;color:#374151;line-height:1.6;"></div>
+      </div>
+      <div style="margin-top:7px;font-size:7px;color:#94A3B8;line-height:1.5;">💡 ${pt?'É o internal branding (Sem. 15) por outro ângulo. O próprio cliente também é "people" (coprodutor).':'It is internal branding (Week 15) from another angle. The customer is also "people" (co-producer).'}</div>
+    </div>`;
+};
+
+/* ─── MKT W7: process distinctions ──────────────────────────────── */
+window.vis_serviceProcess = function(container, lang) {
+  const pt = lang === 'pt';
+  const id = 'spr-' + Math.random().toString(36).substr(2,5);
+  const d = [
+    { color:'#0EA5E9', name:pt?'Direto × Indireto':'Direct × Indirect', desc:pt?'DIRETO = interação com o cliente em tempo real, feedback imediato (o atendente na sua frente). INDIRETO / back-office = apoio SEM contato, invisível ao cliente (análise de crédito, antifraude, logística). A "linha de visibilidade" do service blueprint separa os dois.':'DIRECT = real-time customer interaction, immediate feedback (the agent in front of you). INDIRECT / back-office = support with NO contact, invisible to the customer (credit analysis, anti-fraud, logistics). The service blueprint\'s "line of visibility" separates the two.' },
+    { color:'#0284C7', name:pt?'Sequencial × Paralelo':'Sequential × Parallel', desc:pt?'SEQUENCIAL = uma etapa só começa quando a anterior termina. PARALELO = várias etapas ao mesmo tempo — o caixa registra o pedido enquanto a cozinha já monta, encurtando o tempo total do cliente.':'SEQUENTIAL = a step only starts when the previous one ends. PARALLEL = several steps at once — the till rings up the order while the kitchen already assembles, shortening the customer\'s total time.' },
+    { color:'#0C4A6E', name:pt?'Padronização × Customização':'Standardization × Customization', desc:pt?'O trade-off central. PADRONIZAR dá eficiência e consistência (McDonald\'s, SOP rígido). CUSTOMIZAR dá valor e relevância (consultoria). O elegante: padronizar o INVISÍVEL (componentes) e customizar o VISÍVEL (montagem, série limitada) — como a Richard Mille.':'The central trade-off. STANDARDIZE for efficiency and consistency (McDonald\'s, rigid SOP). CUSTOMIZE for value and relevance (consulting). The elegant way: standardize the INVISIBLE (components) and customize the VISIBLE (assembly, limited series) — like Richard Mille.' }
+  ];
+  window[id+'_data'] = d;
+  window[id+'_sel'] = function(i){ const x=window[id+'_data'][i]; const b=document.getElementById(id+'-b'); if(!b)return; document.querySelectorAll('.'+id+'-c').forEach(function(c){c.style.outline='none';}); document.getElementById(id+'-c'+i).style.outline='2.5px solid '+x.color; document.getElementById(id+'-n').textContent=x.name; document.getElementById(id+'-n').style.color=x.color; document.getElementById(id+'-d').textContent=x.desc; b.style.display='block'; };
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#0C4A6E;margin-bottom:2px;">
+        ${pt?'Process: as distinções que importam':'Process: the distinctions that matter'}
+      </div>
+      <div style="font-size:7.5px;color:#64748B;margin-bottom:8px;">${pt?'Como o serviço acontece, passo a passo. Clique.':'How the service happens, step by step. Click.'}</div>
+      <div style="display:flex;flex-direction:column;gap:5px;">
+        ${d.map((x,i)=>`<div id="${id}-c${i}" class="${id}-c" onclick="window['${id}_sel'](${i})" style="background:${x.color}0D;border:1px solid ${x.color}33;border-radius:6px;padding:8px 10px;cursor:pointer;text-align:center;transition:outline .12s;"><span style="font-size:9px;font-weight:800;color:${x.color};">${x.name}</span></div>`).join('')}
+      </div>
+      <div id="${id}-b" style="display:none;margin-top:8px;background:#F8FAFC;border:1px solid #E5E7EB;border-radius:7px;padding:9px 11px;">
+        <div id="${id}-n" style="font-size:10px;font-weight:800;margin-bottom:3px;"></div>
+        <div id="${id}-d" style="font-size:8.5px;color:#374151;line-height:1.6;"></div>
+      </div>
+      <div style="margin-top:7px;font-size:7px;color:#94A3B8;line-height:1.5;">💡 ${pt?'O process garante experiência CONSISTENTE (via SOP). Liga com o Design de Processos de Operações (Sem. 4).':'Process ensures a CONSISTENT experience (via SOP). It links to Operations\' Process Design (Week 4).'}</div>
+    </div>`;
+};
+
+/* ─── MKT W7: physical evidence ─────────────────────────────────── */
+window.vis_physicalEvidence = function(container, lang) {
+  const pt = lang === 'pt';
+  const id = 'phe-' + Math.random().toString(36).substr(2,5);
+  const data = [
+    { color:'#0EA5E9', name:pt?'Essencial':'Essential', desc:pt?'NECESSÁRIA para o serviço existir — forma a base da oferta. Ex: as macas e óleos de um spa; o tecido de uma roupa; o equipamento de imagem de um hospital. Sem ela, não há serviço.':'NECESSARY for the service to exist — it forms the basis of the offer. E.g. a spa\'s tables and oils; the fabric of a garment; a hospital\'s imaging equipment. Without it, there is no service.' },
+    { color:'#0284C7', name:pt?'Periférica':'Peripheral', desc:pt?'COMPLEMENTA e agrega valor, mas NÃO é indispensável. Ex: decoração, uniforme, guardanapo, embalagem, sala de espera confortável. Muitas vezes é ela que domina a percepção do cliente.':'COMPLEMENTS and adds value, but is NOT indispensable. E.g. décor, uniform, napkin, packaging, a comfortable waiting room. Often it is this that dominates the customer\'s perception.' },
+    { color:'#7DD3FC', name:pt?'Ambiente':'Environment', desc:pt?'O ambiente físico: cores, iluminação, mobiliário, design de interiores — os elementos CONCRETOS (o que está lá).':'The physical environment: colours, lighting, furniture, interior design — the CONCRETE elements (what is there).' },
+    { color:'#38BDF8', name:'Layout', desc:pt?'A disposição de móveis e equipamentos (ex: a configuração das mesas num restaurante).':'The arrangement of furniture and equipment (e.g. table layout in a restaurant).' },
+    { color:'#0EA5E9', name:pt?'Ambiência':'Ambience', desc:pt?'O CLIMA sensorial (música, iluminação, aroma) que molda a resposta EMOCIONAL e a decisão de compra. É o efeito que os elementos criam, não os objetos.':'The sensory MOOD (music, lighting, scent) that shapes the EMOTIONAL response and buying decision. It is the effect the elements create, not the objects.' },
+    { color:'#0284C7', name:'Branding', desc:pt?'Logo, esquema de cores, decoração — a identidade visual que cria impressão duradoura.':'Logo, colour scheme, décor — the visual identity that creates a lasting impression.' },
+    { color:'#0C4A6E', name:pt?'Consistência':'Consistency', desc:pt?'Entrega uniforme entre unidades (mesmos preços, mesmo padrão, mesmo comportamento). É o que faz a evidência física virar MARCA, não decoração.':'Uniform delivery across units (same prices, same standard, same behaviour). It is what makes physical evidence a BRAND, not just décor.' }
+  ];
+  window[id+'_data'] = data;
+  window[id+'_sel'] = function(i){ const x=window[id+'_data'][i]; const b=document.getElementById(id+'-b'); if(!b)return; document.querySelectorAll('.'+id+'-c').forEach(function(c){c.style.outline='none';}); document.getElementById(id+'-c'+i).style.outline='2.5px solid '+x.color; document.getElementById(id+'-n').textContent=x.name; document.getElementById(id+'-n').style.color=(i===2?'#0369A1':x.color); document.getElementById(id+'-d').textContent=x.desc; b.style.display='block'; };
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#0C4A6E;margin-bottom:2px;">
+        ${pt?'Physical Evidence: tornar tangível':'Physical Evidence: make it tangible'}
+      </div>
+      <div style="font-size:7px;color:#64748B;font-weight:700;margin:4px 0 3px;">${pt?'2 TIPOS':'2 TYPES'}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+        ${[0,1].map(i=>{const x=data[i];return `<div id="${id}-c${i}" class="${id}-c" onclick="window['${id}_sel'](${i})" style="background:${x.color}0D;border:1px solid ${x.color}44;border-radius:6px;padding:8px;cursor:pointer;text-align:center;transition:outline .12s;"><div style="font-size:9px;font-weight:800;color:${x.color};">${x.name}</div></div>`;}).join('')}
+      </div>
+      <div style="font-size:7px;color:#64748B;font-weight:700;margin:8px 0 3px;">${pt?'5 COMPONENTES (servicescape · Bitner 1992)':'5 COMPONENTS (servicescape · Bitner 1992)'}</div>
+      <div style="display:flex;flex-wrap:wrap;gap:4px;">
+        ${[2,3,4,5,6].map(i=>{const x=data[i];return `<div id="${id}-c${i}" class="${id}-c" onclick="window['${id}_sel'](${i})" style="flex:1;min-width:52px;background:${x.color}1A;border:1px solid ${x.color};border-radius:5px;padding:5px 2px;cursor:pointer;text-align:center;transition:outline .12s;"><div style="font-size:6.5px;font-weight:800;color:${i===2?'#0369A1':'#075985'};">${x.name}</div></div>`;}).join('')}
+      </div>
+      <div id="${id}-b" style="display:none;margin-top:8px;background:#F8FAFC;border:1px solid #E5E7EB;border-radius:7px;padding:9px 11px;">
+        <div id="${id}-n" style="font-size:10px;font-weight:800;margin-bottom:3px;"></div>
+        <div id="${id}-d" style="font-size:8.5px;color:#374151;line-height:1.6;"></div>
+      </div>
+      <div style="margin-top:7px;font-size:7px;color:#94A3B8;line-height:1.5;">💡 ${pt?'É gestão sensorial (5 sentidos) e justifica o preço. No hospital, reduz MEDO; no luxo, vende DESEJO.':'It is sensory management (5 senses) and justifies the price. In a hospital it reduces FEAR; in luxury it sells DESIRE.'}</div>
+    </div>`;
+};
+
+/* ─── MKT W7: Richard Mille case (3 service Ps) ─────────────────── */
+window.vis_richardMille = function(container, lang) {
+  const pt = lang === 'pt';
+  const id = 'rm-' + Math.random().toString(36).substr(2,5);
+  const ps = [
+    { icon:'👥', color:'#0EA5E9', name:'People', desc:pt?'O vendedor da boutique ENCARNA os códigos do luxo — atitude e vestuário viram evidência física ambulante. Conhece cada cliente fiel (personalização, não script) e organiza eventos de comunidade. No luxo, people busca SINGULARIDADE, não consistência de massa.':'The boutique salesperson EMBODIES the luxury codes — attitude and dress become walking physical evidence. They know each loyal client (personalization, not a script) and run community events. In luxury, people seeks UNIQUENESS, not mass consistency.' },
+    { icon:'🔄', color:'#0284C7', name:'Process', desc:pt?'PADRONIZA os componentes invisíveis (precisão de fabricação) e CUSTOMIZA a montagem manual das séries limitadas — e COMUNICA o processo como valor: o mostrador esqueletado mostra o mecanismo ao cliente. Modernidade (diferenciação) + tradição suíça (garantia de qualidade).':'STANDARDIZES the invisible components (manufacturing precision) and CUSTOMIZES the hand assembly of limited series — and COMMUNICATES the process as value: the skeleton dial shows the mechanism to the customer. Modernity (differentiation) + Swiss tradition (quality guarantee).' },
+    { icon:'🏛️', color:'#0C4A6E', name:'Physical Evidence', desc:pt?'Boutique de materiais nobres, tons preto e branco, vidro + madeira + metal (o MESMO material do relógio — o cenário RIMA com o produto), e alcovas privativas que preservam a privacidade (exclusividade virou matéria). Comprar sem ser visto é parte do serviço.':'A boutique of noble materials, black-and-white tones, glass + wood + metal (the SAME materials as the watch — the setting RHYMES with the product), and private alcoves that preserve privacy (exclusivity made material). Buying unseen is part of the service.' }
+  ];
+  window[id+'_data'] = ps;
+  window[id+'_sel'] = function(i){ const p=window[id+'_data'][i]; const b=document.getElementById(id+'-b'); if(!b)return; document.querySelectorAll('.'+id+'-c').forEach(function(x){x.style.outline='none';}); document.getElementById(id+'-c'+i).style.outline='2.5px solid '+p.color; document.getElementById(id+'-n').textContent=p.icon+' '+p.name; document.getElementById(id+'-n').style.color=p.color; document.getElementById(id+'-d').textContent=p.desc; b.style.display='block'; };
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#0C4A6E;margin-bottom:2px;">
+        ${pt?'Case Richard Mille — os 3 Ps de serviço':'Richard Mille case — the 3 service Ps'}
+      </div>
+      <div style="font-size:7.5px;color:#64748B;margin-bottom:8px;">${pt?'Relógio ~€150 mil. Veja os 3 Ps rimando. Clique.':'Watch ~€150k. See the 3 Ps rhyme. Click.'}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;">
+        ${ps.map((p,i)=>`<div id="${id}-c${i}" class="${id}-c" onclick="window['${id}_sel'](${i})" style="background:${p.color}0D;border:1px solid ${p.color}33;border-radius:6px;padding:8px 4px;cursor:pointer;text-align:center;transition:outline .12s;"><div style="font-size:16px;">${p.icon}</div><div style="font-size:7.5px;font-weight:800;color:${p.color};margin-top:2px;line-height:1.1;">${p.name}</div></div>`).join('')}
+      </div>
+      <div id="${id}-b" style="display:none;margin-top:8px;background:#F8FAFC;border:1px solid #E5E7EB;border-radius:7px;padding:9px 11px;">
+        <div id="${id}-n" style="font-size:10px;font-weight:800;margin-bottom:3px;"></div>
+        <div id="${id}-d" style="font-size:8.5px;color:#374151;line-height:1.6;"></div>
+      </div>
+      <div style="margin-top:8px;background:#EFF6FF;border-radius:6px;padding:6px 9px;font-size:7.5px;color:#1E40AF;line-height:1.55;">💡 ${pt?'A lição: num serviço de alto valor, os 7 Ps têm que <b>RIMAR</b> entre si — o intangível vira tangível de forma coerente.':'The lesson: in a high-value service, the 7 Ps must <b>RHYME</b> with each other — the intangible becomes tangible coherently.'}</div>
+    </div>`;
+};
