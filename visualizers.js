@@ -4363,3 +4363,191 @@ window.vis_cocaColaVC = function(container, lang) {
       <div style="margin-top:8px;background:#EFF6FF;border-radius:6px;padding:6px 9px;font-size:7.5px;color:#1E40AF;line-height:1.6;">💡 ${pt?'A lição: a Coca retém as atividades de <b>alta margem e baixo capital</b> (fórmula, marca) e delega as de <b>alto capital</b> (envase, frota) — é uma CONFIGURAÇÃO de cadeia, e o exemplo perfeito de sistema de valor. Detalhe: aqui o "serviço" é B2B (suporte ao engarrafador), não SAC.':'The lesson: Coca retains the <b>high-margin, low-capital</b> activities (formula, brand) and delegates the <b>high-capital</b> ones (bottling, fleet) — it is a chain CONFIGURATION, and the perfect value-system example. Note: here "service" is B2B (bottler support), not consumer care.'}</div>
     </div>`;
 };
+
+/* ═══════════════ MKT W10 (course Week 20): Ethical marketing, CSR & Sustainability ═══════════════ */
+
+/* ─── MKT W10: the 3 nested levels (ethics / CSR / sustainability) ─── */
+window.vis_ethicsLevels = function(container, lang) {
+  const pt = lang === 'pt';
+  const id = 'etl-' + Math.random().toString(36).substr(2,5);
+  const lv = [
+    { icon:'👤', color:'#0EA5E9', name:pt?'Ética de marketing':'Marketing ethics', scope:pt?'nível: indivíduo':'level: individual', desc:pt?'Os morais aplicados às decisões e comportamentos de marketing, no nível macro (a empresa na sociedade) e micro (o dia a dia). É transparência, práticas justas e uso aceitável dos dados do cliente. Opera na cabeça de quem DECIDE — preço, anúncio, público.':'Morals applied to marketing decisions and behaviours, at the macro level (the firm in society) and micro (day-to-day). It is transparency, fair practices and acceptable use of customer data. It operates in the mind of whoever DECIDES — price, ad, audience.' },
+    { icon:'🏢', color:'#0284C7', name:'CSR', scope:pt?'nível: organização':'level: organisation', desc:pt?'Responsabilidade Social Corporativa: um conceito de GESTÃO pelo qual a empresa integra preocupações sociais e ambientais nas operações e nas interações com stakeholders (UNIDO). É a formalização, no nível da empresa, do que a ética trata no nível da pessoa. Busca o equilíbrio do Triple Bottom Line.':'Corporate Social Responsibility: a MANAGEMENT concept whereby the firm integrates social and environmental concerns into operations and stakeholder interactions (UNIDO). It is the firm-level formalisation of what ethics handles at the personal level. It seeks the Triple Bottom Line balance.' },
+    { icon:'🌍', color:'#0C4A6E', name:pt?'Sustentabilidade':'Sustainability', scope:pt?'nível: sistema':'level: system', desc:pt?'O estado ecológico e social que se quer preservar no longo prazo — o mais amplo dos três. No sentido estrito é conceito de ciências naturais (limites ecológicos) e por isso pode até EXCLUIR a ética: dá pra ser "sustentável" (eficiente em carbono) e antiético (trabalho forçado na cadeia). Por isso os três não são sinônimos.':'The ecological and social state to be preserved over the long term — the broadest of the three. Strictly it is a natural-sciences concept (ecological limits) and can even EXCLUDE ethics: you can be "sustainable" (carbon-efficient) and unethical (forced labour in the chain). That is why the three are not synonyms.' }
+  ];
+  window[id+'_data'] = lv;
+  window[id+'_sel'] = function(i){ const x=window[id+'_data'][i]; const bx=document.getElementById(id+'-b'); if(!bx)return; document.querySelectorAll('.'+id+'-c').forEach(function(c){c.style.outline='none';}); document.getElementById(id+'-c'+i).style.outline='2.5px solid '+x.color; document.getElementById(id+'-n').textContent=x.icon+' '+x.name; document.getElementById(id+'-n').style.color=x.color; document.getElementById(id+'-s').textContent=x.scope; document.getElementById(id+'-d').textContent=x.desc; bx.style.display='block'; };
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#0C4A6E;margin-bottom:2px;">
+        ${pt?'Ética × CSR × Sustentabilidade':'Ethics × CSR × Sustainability'}
+      </div>
+      <div style="font-size:7.5px;color:#64748B;margin-bottom:8px;">${pt?'Não são sinônimos — 3 níveis diferentes. Clique.':'Not synonyms — 3 different levels. Click.'}</div>
+      <div style="display:flex;flex-direction:column;gap:5px;">
+        ${lv.map((x,i)=>`<div id="${id}-c${i}" class="${id}-c" onclick="window['${id}_sel'](${i})" style="display:flex;align-items:center;gap:8px;background:${x.color}0D;border:1px solid ${x.color}44;border-radius:6px;padding:7px 9px;cursor:pointer;transition:outline .12s;"><span style="font-size:16px;">${x.icon}</span><span style="font-size:8.5px;font-weight:800;color:${x.color};flex:1;">${x.name}</span><span style="font-size:6.5px;font-weight:700;color:#94A3B8;">${x.scope}</span></div>`).join('')}
+      </div>
+      <div id="${id}-b" style="display:none;margin-top:8px;background:#F8FAFC;border:1px solid #E5E7EB;border-radius:7px;padding:9px 11px;">
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;">
+          <span id="${id}-n" style="font-size:10px;font-weight:800;"></span>
+          <span id="${id}-s" style="font-size:6.5px;font-weight:700;color:#94A3B8;"></span>
+        </div>
+        <div id="${id}-d" style="font-size:8.5px;color:#374151;line-height:1.6;"></div>
+      </div>
+      <div style="margin-top:7px;font-size:7px;color:#94A3B8;line-height:1.5;">💡 ${pt?'Macete: ética = pessoa · CSR = empresa · sustentabilidade = planeta. O fio que costura os três é a CONFIANÇA (trust).':'Mnemonic: ethics = person · CSR = firm · sustainability = planet. The thread binding all three is TRUST.'}</div>
+    </div>`;
+};
+
+/* ─── MKT W10: universalism vs relativism ─── */
+window.vis_universalismRelativism = function(container, lang) {
+  const pt = lang === 'pt';
+  const id = 'unr-' + Math.random().toString(36).substr(2,5);
+  const t = [
+    { icon:'🌐', color:'#0284C7', name:pt?'Universalismo':'Universalism', desc:pt?'Existe um código UNIVERSAL do certo e do errado, que não muda com o contexto. Ex: suborno e extorsão são sempre errados, independentemente de raça, país ou ambiente. É o piso ético que uma multinacional precisa manter em qualquer lugar.':'There is a UNIVERSAL code of right and wrong that does not change with context. E.g. bribery and extortion are always wrong, regardless of race, country or environment. It is the ethical floor a multinational must keep everywhere.' },
+    { icon:'🎭', color:'#0C4A6E', name:pt?'Relativismo':'Relativism', desc:pt?'As crenças éticas VARIAM conforme a perspectiva — de pessoa para pessoa, de sociedade para sociedade. O que é visto como antiético num lugar pode ser aceito em outro. Explica por que dilemas éticos existem quando culturas diferentes se encontram.':'Ethical beliefs VARY with perspective — from person to person, society to society. What is seen as unethical in one place may be accepted in another. It explains why ethical dilemmas arise when different cultures meet.' }
+  ];
+  window[id+'_data'] = t;
+  window[id+'_sel'] = function(i){ const x=window[id+'_data'][i]; const bx=document.getElementById(id+'-b'); if(!bx)return; document.querySelectorAll('.'+id+'-c').forEach(function(c){c.style.outline='none';}); document.getElementById(id+'-c'+i).style.outline='2.5px solid '+x.color; document.getElementById(id+'-n').textContent=x.icon+' '+x.name; document.getElementById(id+'-n').style.color=x.color; document.getElementById(id+'-d').textContent=x.desc; bx.style.display='block'; };
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#0C4A6E;margin-bottom:2px;">
+        ${pt?'As 2 posturas éticas':'The 2 ethical stances'}
+      </div>
+      <div style="font-size:7.5px;color:#64748B;margin-bottom:8px;">${pt?'O certo e o errado são fixos ou variam? Clique.':'Are right and wrong fixed or do they vary? Click.'}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+        ${t.map((x,i)=>`<div id="${id}-c${i}" class="${id}-c" onclick="window['${id}_sel'](${i})" style="background:${x.color}0D;border:1px solid ${x.color}44;border-radius:6px;padding:9px 4px;cursor:pointer;text-align:center;transition:outline .12s;"><div style="font-size:18px;">${x.icon}</div><div style="font-size:8.5px;font-weight:800;color:${x.color};margin-top:3px;">${x.name}</div></div>`).join('')}
+      </div>
+      <div id="${id}-b" style="display:none;margin-top:8px;background:#F8FAFC;border:1px solid #E5E7EB;border-radius:7px;padding:9px 11px;">
+        <div id="${id}-n" style="font-size:10px;font-weight:800;margin-bottom:3px;"></div>
+        <div id="${id}-d" style="font-size:8.5px;color:#374151;line-height:1.6;"></div>
+      </div>
+      <div style="margin-top:7px;font-size:7px;color:#94A3B8;line-height:1.5;">💡 ${pt?'O marketing global vive NA TENSÃO entre os dois: precisa de um piso universal (não mentir, não subornar) mas adapta ao contexto local.':'Global marketing lives IN THE TENSION between the two: it needs a universal floor (no lying, no bribery) but adapts to local context.'}</div>
+    </div>`;
+};
+
+/* ─── MKT W10: Triple Bottom Line (People/Planet/Profit) ─── */
+window.vis_tripleBottomLine = function(container, lang) {
+  const pt = lang === 'pt';
+  const id = 'tbl-' + Math.random().toString(36).substr(2,5);
+  const p = [
+    { icon:'👥', color:'#0EA5E9', name:pt?'People (social)':'People (social)', desc:pt?'A empresa trata bem pessoas e comunidades? Condições de trabalho, direitos humanos, impacto na comunidade, publicidade honesta. É a dimensão que a redução de CSR a "verde" costuma esquecer.':'Does the firm treat people and communities well? Working conditions, human rights, community impact, honest advertising. It is the dimension that reducing CSR to "green" tends to forget.' },
+    { icon:'🌱', color:'#0284C7', name:pt?'Planet (ambiental)':'Planet (environmental)', desc:pt?'A operação respeita os limites ambientais? Emissões, resíduos, uso de recursos, cadeia de suprimentos. É a dimensão mais visível — e por isso a mais sujeita a greenwashing.':'Does the operation respect environmental limits? Emissions, waste, resource use, supply chain. It is the most visible dimension — and therefore the most exposed to greenwashing.' },
+    { icon:'💰', color:'#0C4A6E', name:pt?'Profit (econômica)':'Profit (economic)', desc:pt?'A empresa é financeiramente viável e gera valor? Sem essa base não há CSR possível (é a base da pirâmide de Carroll). A UNIDO fala em EQUILÍBRIO dos três, não em sacrificar lucro — o que é bem mais exigente que "compensar".':'Is the firm financially viable and creating value? Without this base, no CSR is possible (it is the base of Carroll\'s pyramid). UNIDO speaks of BALANCING the three, not sacrificing profit — which is far more demanding than "offsetting".' }
+  ];
+  window[id+'_data'] = p;
+  window[id+'_sel'] = function(i){ const x=window[id+'_data'][i]; const bx=document.getElementById(id+'-b'); if(!bx)return; document.querySelectorAll('.'+id+'-c').forEach(function(c){c.style.outline='none';}); document.getElementById(id+'-c'+i).style.outline='2.5px solid '+x.color; document.getElementById(id+'-n').textContent=x.icon+' '+x.name; document.getElementById(id+'-n').style.color=x.color; document.getElementById(id+'-d').textContent=x.desc; bx.style.display='block'; };
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#0C4A6E;margin-bottom:2px;">
+        ${pt?'Triple Bottom Line (CSR)':'Triple Bottom Line (CSR)'}
+      </div>
+      <div style="font-size:7.5px;color:#64748B;margin-bottom:8px;">${pt?'Os 3 Ps que a CSR precisa EQUILIBRAR. Clique.':'The 3 Ps CSR must BALANCE. Click.'}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;">
+        ${p.map((x,i)=>`<div id="${id}-c${i}" class="${id}-c" onclick="window['${id}_sel'](${i})" style="background:${x.color}0D;border:1px solid ${x.color}44;border-radius:6px;padding:8px 3px;cursor:pointer;text-align:center;transition:outline .12s;"><div style="font-size:16px;">${x.icon}</div><div style="font-size:7px;font-weight:800;color:${x.color};margin-top:2px;line-height:1.1;">${x.name}</div></div>`).join('')}
+      </div>
+      <div id="${id}-b" style="display:none;margin-top:8px;background:#F8FAFC;border:1px solid #E5E7EB;border-radius:7px;padding:9px 11px;">
+        <div id="${id}-n" style="font-size:10px;font-weight:800;margin-bottom:3px;"></div>
+        <div id="${id}-d" style="font-size:8.5px;color:#374151;line-height:1.6;"></div>
+      </div>
+      <div style="margin-top:8px;background:#0C4A6E;border-radius:6px;padding:6px 9px;font-size:7.5px;color:#E0F2FE;line-height:1.6;">🔑 <b>Shareholders ≠ stakeholders:</b> ${pt?'shareholders = acionistas (grana); stakeholders = TODOS os afetados (funcionários, fornecedores, comunidade, meio ambiente). A CSR ACRESCENTA a obrigação com os stakeholders — não substitui a com o acionista.':'shareholders = investors (money); stakeholders = ALL affected (employees, suppliers, community, environment). CSR ADDS the obligation to stakeholders — it does not replace the one to shareholders.'}</div>
+    </div>`;
+};
+
+/* ─── MKT W10: Carroll's CSR pyramid ─── */
+window.vis_carrollPyramid = function(container, lang) {
+  const pt = lang === 'pt';
+  const id = 'crl-' + Math.random().toString(36).substr(2,5);
+  const lv = [
+    { icon:'🎁', color:'#7DD3FC', w:'55%', name:pt?'Filantrópica':'Philanthropic', tag:pt?'a sociedade DESEJA':'society DESIRES', desc:pt?'Discricionária: doações, voluntariado, desenvolvimento comunitário. É o topo — o que a empresa faz de bônus. Diferença-chave: filantropia é o que você faz com o dinheiro DEPOIS; ética (a camada abaixo) é COMO você ganha.':'Discretionary: donations, volunteering, community development. It is the top — what the firm does as a bonus. Key difference: philanthropy is what you do with the money AFTER; ethics (the layer below) is HOW you earn it.' },
+    { icon:'⚖️', color:'#38BDF8', w:'70%', name:pt?'Ética':'Ethical', tag:pt?'a sociedade ESPERA':'society EXPECTS', desc:pt?'Agir com justiça mesmo onde a lei é OMISSA — responder ao espírito da lei, não só à letra. É AQUI que mora todo o marketing ético da semana: publicidade que é legal mas desonesta cai exatamente nesta camada.':'Act fairly even where the law is SILENT — answer the spirit of the law, not just the letter. This is WHERE all the week\'s marketing ethics lives: advertising that is legal but dishonest falls exactly in this layer.' },
+    { icon:'📜', color:'#0EA5E9', w:'85%', name:'Legal', tag:pt?'a sociedade EXIGE':'society REQUIRES', desc:pt?'Cumprir leis e regulações. Carroll chama a lei de "ética codificada" — a expectativa social que já virou regra formal. Obrigatória, não opcional.':'Comply with laws and regulations. Carroll calls the law "codified ethics" — the social expectation already turned into a formal rule. Mandatory, not optional.' },
+    { icon:'💰', color:'#0C4A6E', w:'100%', name:pt?'Econômica':'Economic', tag:pt?'a sociedade EXIGE':'society REQUIRES', desc:pt?'A BASE que sustenta tudo: produzir e vender o que a sociedade precisa, com lucro. Empresa que quebra não paga salário, não recolhe imposto, não doa. Lucro não é o oposto de responsabilidade — é a CONDIÇÃO dela.':'The BASE that supports everything: producing and selling what society needs, at a profit. A firm that fails pays no wages, no taxes, donates nothing. Profit is not the opposite of responsibility — it is its CONDITION.' }
+  ];
+  window[id+'_data'] = lv;
+  window[id+'_sel'] = function(i){ const x=window[id+'_data'][i]; const bx=document.getElementById(id+'-b'); if(!bx)return; document.querySelectorAll('.'+id+'-c').forEach(function(c){c.style.outline='none';}); document.getElementById(id+'-c'+i).style.outline='2.5px solid '+(i===0?'#0369A1':x.color); document.getElementById(id+'-n').textContent=x.icon+' '+x.name; document.getElementById(id+'-n').style.color=(i===0?'#0369A1':x.color); document.getElementById(id+'-t').textContent=x.tag; document.getElementById(id+'-d').textContent=x.desc; bx.style.display='block'; };
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#0C4A6E;margin-bottom:2px;">
+        ${pt?'A Pirâmide de Carroll (CSR)':'Carroll\'s CSR Pyramid'}
+      </div>
+      <div style="font-size:7.5px;color:#64748B;margin-bottom:8px;">${pt?'4 responsabilidades — a base sustenta o topo. Clique.':'4 responsibilities — the base supports the top. Click.'}</div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:3px;">
+        ${lv.map((x,i)=>`<div id="${id}-c${i}" class="${id}-c" onclick="window['${id}_sel'](${i})" style="width:${x.w};background:${x.color};border-radius:4px;padding:5px 4px;cursor:pointer;text-align:center;transition:outline .12s;"><span style="font-size:8px;font-weight:800;color:${i===0?'#0C4A6E':(i===1?'#0C4A6E':'#fff')};">${x.icon} ${x.name}</span></div>`).join('')}
+      </div>
+      <div id="${id}-b" style="display:none;margin-top:8px;background:#F8FAFC;border:1px solid #E5E7EB;border-radius:7px;padding:9px 11px;">
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;">
+          <span id="${id}-n" style="font-size:10px;font-weight:800;"></span>
+          <span id="${id}-t" style="font-size:6.5px;font-weight:800;color:#94A3B8;text-transform:uppercase;"></span>
+        </div>
+        <div id="${id}-d" style="font-size:8.5px;color:#374151;line-height:1.6;"></div>
+      </div>
+      <div style="margin-top:7px;font-size:7px;color:#94A3B8;line-height:1.5;">💡 ${pt?'⚠️ Visser: a pirâmide é situada nos EUA — em países em desenvolvimento a filantropia às vezes vem em 2º. Dialoga com o relativismo.':'⚠️ Visser: the pyramid is US-situated — in developing countries philanthropy sometimes ranks 2nd. It dialogues with relativism.'}</div>
+    </div>`;
+};
+
+/* ─── MKT W10: sustainable marketing (Fuller + 3 E's) ─── */
+window.vis_sustainableMarketing = function(container, lang) {
+  const pt = lang === 'pt';
+  const id = 'sm-' + Math.random().toString(36).substr(2,5);
+  const e = [
+    { icon:'🌱', color:'#0EA5E9', name:'Ecological', desc:pt?'As atividades de marketing NÃO devem ter efeitos negativos sobre o meio ambiente. É o E mais óbvio — mas sozinho não basta.':'Marketing activities must NOT have negative effects on the environment. It is the most obvious E — but alone it is not enough.' },
+    { icon:'⚖️', color:'#0284C7', name:'Equitable', desc:pt?'As atividades de marketing NÃO devem encorajar práticas sociais iníquas. É a dimensão SOCIAL da sustentabilidade — a que mais se esquece.':'Marketing activities must NOT encourage inequitable social practices. It is the SOCIAL dimension of sustainability — the one most forgotten.' },
+    { icon:'📈', color:'#0C4A6E', name:'Economic', desc:pt?'As atividades devem visar desenvolvimento econômico de LONGO PRAZO, não ganho de curto prazo. Sustentabilidade inclui saúde financeira duradoura, não só o meio ambiente.':'Activities must aim at LONG-TERM economic development, not short-term gain. Sustainability includes lasting financial health, not just the environment.' }
+  ];
+  window[id+'_data'] = e;
+  window[id+'_sel'] = function(i){ const x=window[id+'_data'][i]; const bx=document.getElementById(id+'-b'); if(!bx)return; document.querySelectorAll('.'+id+'-c').forEach(function(c){c.style.outline='none';}); document.getElementById(id+'-c'+i).style.outline='2.5px solid '+x.color; document.getElementById(id+'-n').textContent=x.icon+' '+x.name; document.getElementById(id+'-n').style.color=x.color; document.getElementById(id+'-d').textContent=x.desc; bx.style.display='block'; };
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#0C4A6E;margin-bottom:2px;">
+        ${pt?'Marketing sustentável (Fuller)':'Sustainable marketing (Fuller)'}
+      </div>
+      <div style="background:#E0F2FE;border:1px solid #7DD3FC;border-radius:6px;padding:6px 8px;margin:4px 0 7px;font-size:7.5px;color:#0C4A6E;line-height:1.5;">${pt?'Planejar, precificar, promover e distribuir de modo que: (1) as necessidades do cliente sejam atendidas · (2) as metas da empresa sejam atingidas · (3) o processo seja COMPATÍVEL COM OS ECOSSISTEMAS.':'Plan, price, promote and distribute so that: (1) customer needs are met · (2) organisational goals are attained · (3) the process is COMPATIBLE WITH ECOSYSTEMS.'}</div>
+      <div style="font-size:7px;color:#0C4A6E;font-weight:800;margin:0 0 3px;">${pt?'OS 3 Es DA SUSTENTABILIDADE':'THE 3 Es OF SUSTAINABILITY'}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;">
+        ${e.map((x,i)=>`<div id="${id}-c${i}" class="${id}-c" onclick="window['${id}_sel'](${i})" style="background:${x.color}0D;border:1px solid ${x.color}44;border-radius:6px;padding:8px 3px;cursor:pointer;text-align:center;transition:outline .12s;"><div style="font-size:15px;">${x.icon}</div><div style="font-size:7.5px;font-weight:800;color:${x.color};margin-top:2px;">${x.name}</div></div>`).join('')}
+      </div>
+      <div id="${id}-b" style="display:none;margin-top:8px;background:#F8FAFC;border:1px solid #E5E7EB;border-radius:7px;padding:9px 11px;">
+        <div id="${id}-n" style="font-size:10px;font-weight:800;margin-bottom:3px;"></div>
+        <div id="${id}-d" style="font-size:8.5px;color:#374151;line-height:1.6;"></div>
+      </div>
+      <div style="margin-top:7px;font-size:7px;color:#94A3B8;line-height:1.5;">💡 ${pt?'Cases: 🧼 Lush "Bring it back" (50p por embalagem devolvida) · 🏄 Finisterre (serviço de reparo pra evitar o aterro). Fuller: sustentável é FAZER, não só comunicar.':'Cases: 🧼 Lush "Bring it back" (50p per returned container) · 🏄 Finisterre (repair service to avoid landfill). Fuller: sustainable is DOING, not just communicating.'}</div>
+    </div>`;
+};
+
+/* ─── MKT W10: greenwashing (the critical counterpoint) ─── */
+window.vis_greenwashing = function(container, lang) {
+  const pt = lang === 'pt';
+  const id = 'gw-' + Math.random().toString(36).substr(2,5);
+  const d = [
+    { grp:'case', icon:'🚗', color:'#DC2626', name:pt?'VW "Clean Diesel"':'VW "Clean Diesel"', desc:pt?'FRAUDE deliberada (má-fé). Um software detectava o teste de emissão e ligava os controles só nele; na estrada, emitia NOx até 40× o limite. A FTC condenou a publicidade que alegava "baixa emissão". Acordo de até US$ 14,7 bi. ⚠️ E a VW tinha CSR EXEMPLAR — a prova de que CSR formal não garante ética.':'Deliberate FRAUD (bad faith). A device detected the emissions test and switched full controls on only then; on the road it emitted NOx up to 40× the limit. The FTC condemned the ads claiming "low emission". Settlement up to US$14.7bn. ⚠️ And VW had EXEMPLARY CSR — proof that formal CSR does not guarantee ethics.' },
+    { grp:'case', icon:'✈️', color:'#F59E0B', name:pt?'KLM "CO2ZERO"':'KLM "CO2ZERO"', desc:pt?'EXAGERO de boa-fé (sem fraude). A KLM realmente comprava offset e usava algum combustível sustentável — mas EXAGEROU o efeito ("neutralize seu CO₂" quando era mínimo). Tribunal de Amsterdã (2024): 15 de 19 alegações enganosas. Ensina que greenwashing NÃO exige má-fé: basta prometer mais do que a operação entrega.':'GOOD-faith EXAGGERATION (no fraud). KLM really did buy offsets and use some sustainable fuel — but EXAGGERATED the effect ("neutralise your CO₂" when it was minimal). Amsterdam court (2024): 15 of 19 claims misleading. It teaches that greenwashing does NOT require bad faith: just promising more than the operation delivers.' },
+    { grp:'sin', icon:'🎭', color:'#0891B2', name:pt?'Vagueza':'Vagueness', desc:pt?'Alegação tão ampla que o consumidor entende errado. Ex: "totalmente natural" — arsênio também é natural.':'A claim so broad the consumer misreads it. E.g. "all natural" — arsenic is natural too.' },
+    { grp:'sin', icon:'🚫', color:'#0891B2', name:pt?'Sem prova':'No proof', desc:pt?'Alegação que não pode ser comprovada por informação acessível nem por certificação de terceiro confiável.':'A claim that cannot be verified by accessible information nor by a trustworthy third-party certification.' },
+    { grp:'sin', icon:'🙈', color:'#0891B2', name:pt?'Compensação oculta':'Hidden trade-off', desc:pt?'Sugerir que é "verde" por um atributo estreito, ignorando o impacto principal. Ex: papel de floresta manejada, mas fabricação poluente.':'Suggesting it is "green" via one narrow attribute while ignoring the main impact. E.g. sustainably-forested paper, but polluting manufacture.' },
+    { grp:'sin', icon:'🤷', color:'#0891B2', name:pt?'Irrelevância':'Irrelevance', desc:pt?'Alegação verdadeira porém inútil. Ex: anunciar "livre de CFC" quando CFC já é proibido por lei.':'A true but useless claim. E.g. advertising "CFC-free" when CFCs are already banned by law.' },
+    { grp:'sin', icon:'😈', color:'#0891B2', name:pt?'Menor dos males':'Lesser of two evils', desc:pt?'Verdadeiro dentro da categoria, mas distrai do impacto da categoria toda. Ex: cigarro orgânico; SUV econômico.':'True within the category, but distracts from the whole category\'s impact. E.g. organic cigarettes; a fuel-efficient SUV.' },
+    { grp:'sin', icon:'🤥', color:'#0891B2', name:pt?'Mentira':'Fibbing', desc:pt?'O mais raro: alegação ambiental simplesmente falsa. Ex: selo Energy Star que o produto não possui. (Foi o pecado da VW.)':'The rarest: a simply false environmental claim. E.g. an Energy Star label the product does not hold. (VW\'s sin.)' },
+    { grp:'sin', icon:'🏷️', color:'#0891B2', name:pt?'Falsos selos':'False labels', desc:pt?'Dar impressão de endosso de terceiro onde ele não existe — selo ou imagem que imita certificação.':'Giving the impression of third-party endorsement where none exists — a seal or image mimicking certification.' }
+  ];
+  window[id+'_data'] = d;
+  window[id+'_sel'] = function(i){ const x=window[id+'_data'][i]; const bx=document.getElementById(id+'-b'); if(!bx)return; document.querySelectorAll('.'+id+'-c').forEach(function(c){c.style.outline='none';}); document.getElementById(id+'-c'+i).style.outline='2.5px solid '+x.color; document.getElementById(id+'-n').textContent=x.icon+' '+x.name; document.getElementById(id+'-n').style.color=x.color; document.getElementById(id+'-d').textContent=x.desc; bx.style.display='block'; };
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#0C4A6E;margin-bottom:2px;">
+        ${pt?'Greenwashing (o que o curso pula)':'Greenwashing (what the course skips)'}
+      </div>
+      <div style="background:#FEF2F2;border:1px solid #FCA5A5;border-radius:6px;padding:6px 8px;margin:4px 0 7px;font-size:7.5px;color:#991B1B;line-height:1.5;">🚨 ${pt?'A pegadinha: se marketing sustentável é só COMUNICAR um compromisso (como diz a resposta-modelo do curso), então comunicar bem um compromisso que não se cumpre é greenwashing. Fuller diz que é FAZER, não dizer.':'The trap: if sustainable marketing is just COMMUNICATING a commitment (as the course model answer says), then communicating well a commitment you do not keep is greenwashing. Fuller says it is DOING, not saying.'}</div>
+      <div style="font-size:7px;color:#0C4A6E;font-weight:800;margin:0 0 3px;">${pt?'2 CASOS (o espectro: fraude × exagero)':'2 CASES (the spectrum: fraud × exaggeration)'}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;">
+        ${[0,1].map(i=>{const x=d[i];return `<div id="${id}-c${i}" class="${id}-c" onclick="window['${id}_sel'](${i})" style="background:${x.color}12;border:1px solid ${x.color}55;border-radius:6px;padding:7px 4px;cursor:pointer;text-align:center;transition:outline .12s;"><div style="font-size:14px;">${x.icon}</div><div style="font-size:7.5px;font-weight:800;color:${x.color};margin-top:2px;line-height:1.1;">${x.name}</div></div>`;}).join('')}
+      </div>
+      <div style="font-size:7px;color:#0369A1;font-weight:800;margin:8px 0 3px;">${pt?'OS 7 PECADOS (checklist)':'THE 7 SINS (checklist)'}</div>
+      <div style="display:flex;flex-wrap:wrap;gap:4px;">
+        ${[2,3,4,5,6,7,8].map(i=>{const x=d[i];return `<div id="${id}-c${i}" class="${id}-c" onclick="window['${id}_sel'](${i})" style="flex:1;min-width:58px;background:#0891B21A;border:1px solid #0891B2;border-radius:5px;padding:5px 2px;cursor:pointer;text-align:center;transition:outline .12s;"><span style="font-size:10px;">${x.icon}</span><div style="font-size:6px;font-weight:800;color:#0369A1;line-height:1;margin-top:1px;">${x.name}</div></div>`;}).join('')}
+      </div>
+      <div id="${id}-b" style="display:none;margin-top:8px;background:#F8FAFC;border:1px solid #E5E7EB;border-radius:7px;padding:9px 11px;">
+        <div id="${id}-n" style="font-size:10px;font-weight:800;margin-bottom:3px;"></div>
+        <div id="${id}-d" style="font-size:8.5px;color:#374151;line-height:1.6;"></div>
+      </div>
+      <div style="margin-top:8px;background:#0C4A6E;border-radius:6px;padding:6px 9px;font-size:7.5px;color:#E0F2FE;line-height:1.6;">💡 ${pt?'CSR real é a que a empresa continuaria fazendo se ninguém estivesse olhando; greenwashing é a que só existe porque alguém está. (42% das alegações verdes na UE em 2021 = falsas/exageradas.)':'Real CSR is what the firm would keep doing if no one were watching; greenwashing only exists because someone is. (42% of EU green claims in 2021 = false/exaggerated.)'}</div>
+    </div>`;
+};

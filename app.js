@@ -829,6 +829,13 @@ const VIS_DISPATCH = {
   'valueChainSteps':     true,
   'valueChainBenefits':  true,
   'cocaColaVC':          true,
+  // Marketing Strategy — Week 10 (Ethical marketing, CSR & Sustainability)
+  'ethicsLevels':        true,
+  'universalismRelativism': true,
+  'tripleBottomLine':    true,
+  'carrollPyramid':      true,
+  'sustainableMarketing':true,
+  'greenwashing':        true,
 };
 
 function renderTheoryCard(th) {
