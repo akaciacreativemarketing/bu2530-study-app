@@ -794,6 +794,13 @@ const VIS_DISPATCH = {
   'brandEquityDrivers':  true,
   'brandFinance500':     true,
   'kellerPyramid':       true,
+  // Marketing Strategy — Week 5 (Internal & External Branding)
+  'insideOut':               true,
+  'internalVsExternal':      true,
+  'internalBrandingLadder':  true,
+  'internalStrategies':      true,
+  'jabesEvidence':           true,
+  'externalRefresh':         true,
 };
 
 function renderTheoryCard(th) {

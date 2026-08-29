@@ -3357,3 +3357,197 @@ window.vis_kellerPyramid = function(container, lang) {
       <div style="margin-top:7px;background:#EFF6FF;border-radius:6px;padding:6px 9px;font-size:7.5px;color:#1E40AF;line-height:1.55;">💡 ${pt?'As 4 perguntas do cliente, subindo: <b>Quem é você?</b> (identidade) → <b>O que é você?</b> (significado) → <b>O que acho de você?</b> (resposta) → <b>E nós dois?</b> (relação). O objetivo é chegar na RESSONÂNCIA.':'The customer\'s 4 climbing questions: <b>Who are you?</b> (identity) → <b>What are you?</b> (meaning) → <b>What about you?</b> (response) → <b>What about you and me?</b> (relationship). The goal is to reach RESONANCE.'}</div>
     </div>`;
 };
+
+/* ═══════════════════════════════════════════════════════════════════
+   MARKETING STRATEGY — WEEK 5 (course Week 15): INTERNAL & EXTERNAL BRANDING
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ─── MKT W5: brands grow from the inside out ───────────────────── */
+window.vis_insideOut = function(container, lang) {
+  const pt = lang === 'pt';
+  const id = 'iout-' + Math.random().toString(36).substr(2,5);
+  const items = [
+    { name:pt?'INTERNO (o núcleo)':'INTERNAL (the core)', color:'#0369A1', desc:pt?'O funcionário no centro: ele VIVE e ENTREGA a promessa da marca. É daqui que a marca cresce — sem o funcionário vivendo a marca, a promessa externa não se sustenta.':'The employee at the centre: they LIVE and DELIVER the brand promise. This is where the brand grows from — without the employee living the brand, the external promise does not hold.' },
+    { name:pt?'EXTERNO (a borda)':'EXTERNAL (the edge)', color:'#0EA5E9', desc:pt?'A vitrine que o cliente vê (logo, cores, propaganda). O marketing externo cria a EXPECTATIVA e a consciência — mas é só a promessa, ainda não a entrega.':'The window the customer sees (logo, colours, advertising). External marketing creates the EXPECTATION and awareness — but it is only the promise, not yet the delivery.' },
+    { name:pt?'✅ Alinhado = integridade':'✅ Aligned = integrity', color:'#16A34A', desc:pt?'Quando interno e externo estão alinhados, a marca comunica INTEGRIDADE e cresce: a promessa da vitrine é cumprida no balcão.':'When internal and external are aligned, the brand communicates INTEGRITY and grows: the window\'s promise is kept at the counter.' },
+    { name:pt?'⚠️ Desalinhado = risco':'⚠️ Misaligned = risk', color:'#DC2626', desc:pt?'Vitrine linda + bastidor incoerente = o funcionário MINA a expectativa criada externamente. A incoerência vaza pra fora (e a tecnologia expõe em tempo real).':'Great window + incoherent backstage = the employee UNDERMINES the externally-created expectation. The incoherence leaks out (and technology exposes it in real time).' }
+  ];
+  window[id+'_data'] = items;
+  window[id+'_sel'] = function(i){ const t=window[id+'_data'][i]; const b=document.getElementById(id+'-b'); if(!b)return; document.querySelectorAll('.'+id+'-c').forEach(function(x){x.style.outline='none';}); const el=document.getElementById(id+'-c'+i); if(el) el.style.outline='2.5px solid '+t.color; document.getElementById(id+'-n').textContent=t.name; document.getElementById(id+'-n').style.color=t.color; document.getElementById(id+'-d').textContent=t.desc; b.style.display='block'; };
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#0C4A6E;margin-bottom:2px;">
+        ${pt?'Brands grow from the inside out':'Brands grow from the inside out'}
+      </div>
+      <div style="font-size:7.5px;color:#64748B;margin-bottom:4px;">${pt?'O funcionário entrega; o cliente recebe. Clique nas camadas e nos status.':'The employee delivers; the customer receives. Click the layers and the statuses.'}</div>
+      <svg viewBox="0 0 300 180" style="width:100%;height:auto;max-width:300px;display:block;margin:0 auto;">
+        <circle id="${id}-c1" class="${id}-c" cx="150" cy="90" r="82" fill="#E0F2FE" stroke="#7DD3FC" stroke-width="1.5" style="cursor:pointer" onclick="window['${id}_sel'](1)"/>
+        <circle id="${id}-c0" class="${id}-c" cx="150" cy="90" r="44" fill="#0EA5E9" style="cursor:pointer" onclick="window['${id}_sel'](0)"/>
+        <text x="150" y="24" text-anchor="middle" font-size="8" font-weight="800" fill="#0369A1" style="cursor:pointer" onclick="window['${id}_sel'](1)">${pt?'EXTERNO · o cliente vê':'EXTERNAL · customer sees'}</text>
+        <text x="150" y="86" text-anchor="middle" font-size="8.5" font-weight="800" fill="#fff" style="cursor:pointer;pointer-events:none;">${pt?'INTERNO':'INTERNAL'}</text>
+        <text x="150" y="98" text-anchor="middle" font-size="6.5" font-weight="700" fill="#E0F2FE" style="pointer-events:none;">${pt?'entrega a promessa':'delivers the promise'}</text>
+        <text x="248" y="93" text-anchor="middle" font-size="15" fill="#16A34A" style="pointer-events:none;">→</text>
+        <text x="150" y="168" text-anchor="middle" font-size="6.5" font-weight="700" fill="#64748B" style="pointer-events:none;">${pt?'de dentro (entrega) → pra fora (expectativa)':'from inside (delivery) → out (expectation)'}</text>
+      </svg>
+      <div style="display:flex;gap:6px;margin-top:4px;">
+        <div id="${id}-c2" class="${id}-c" onclick="window['${id}_sel'](2)" style="flex:1;background:#F0FDF4;border:1px solid #16A34A33;border-radius:6px;padding:6px;text-align:center;font-size:7.5px;font-weight:800;color:#16A34A;cursor:pointer;">${pt?'✅ Alinhado = integridade':'✅ Aligned = integrity'}</div>
+        <div id="${id}-c3" class="${id}-c" onclick="window['${id}_sel'](3)" style="flex:1;background:#FEF2F2;border:1px solid #DC262633;border-radius:6px;padding:6px;text-align:center;font-size:7.5px;font-weight:800;color:#DC2626;cursor:pointer;">${pt?'⚠️ Desalinhado = risco':'⚠️ Misaligned = risk'}</div>
+      </div>
+      <div id="${id}-b" style="display:none;margin-top:8px;background:#F8FAFC;border:1px solid #E5E7EB;border-radius:7px;padding:9px 11px;">
+        <div id="${id}-n" style="font-size:10px;font-weight:800;margin-bottom:3px;"></div>
+        <div id="${id}-d" style="font-size:8.5px;color:#374151;line-height:1.6;"></div>
+      </div>
+    </div>`;
+};
+
+/* ─── MKT W5: internal vs external branding ─────────────────────── */
+window.vis_internalVsExternal = function(container, lang) {
+  const pt = lang === 'pt';
+  const id = 'ive-' + Math.random().toString(36).substr(2,5);
+  const sides = [
+    { icon:'🪟', color:'#0EA5E9', bg:'#F0F9FF', title:pt?'Branding EXTERNO':'EXTERNAL Branding', tag:pt?'o que o público vê':'what the public sees', desc:pt?'A vitrine da marca. Manifestações: logo, tema, paleta de cores, design do site, material impresso. Audiência: o cliente / o mercado. É como o mundo reconhece a marca — mas é só a promessa.':'The brand\'s window. Manifestations: logo, theme, colour palette, website design, printed material. Audience: the customer / the market. It is how the world recognises the brand — but it is only the promise.' },
+    { icon:'🎭', color:'#0C4A6E', bg:'#EFF6FF', title:pt?'Branding INTERNO':'INTERNAL Branding', tag:pt?'o que vive no funcionário':'what lives in the employee', desc:pt?'A marca vivendo dentro do funcionário. Manifestações: a compreensão dos valores e a visão da marca transmitida na forma como o serviço é ENTREGUE. Audiência: o cliente interno (o funcionário). É quem cumpre a promessa.':'The brand living inside the employee. Manifestations: the understanding of values and the brand vision conveyed in how the service is DELIVERED. Audience: the internal customer (the employee). It is who keeps the promise.' }
+  ];
+  window[id+'_data'] = sides;
+  window[id+'_sel'] = function(i){ const s=window[id+'_data'][i]; const b=document.getElementById(id+'-b'); if(!b)return; document.querySelectorAll('.'+id+'-c').forEach(function(x){x.style.outline='none';}); document.getElementById(id+'-c'+i).style.outline='2.5px solid '+s.color; document.getElementById(id+'-n').textContent=s.icon+' '+s.title; document.getElementById(id+'-n').style.color=s.color; document.getElementById(id+'-t').textContent=s.tag; document.getElementById(id+'-t').style.background=s.color; document.getElementById(id+'-d').textContent=s.desc; b.style.display='block'; };
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#0C4A6E;margin-bottom:2px;">
+        ${pt?'Branding Interno vs Externo':'Internal vs External Branding'}
+      </div>
+      <div style="font-size:7.5px;color:#64748B;margin-bottom:8px;">${pt?'Os dois lados da marca. Clique.':'The two sides of the brand. Click.'}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        ${sides.map((s,i)=>`<div id="${id}-c${i}" class="${id}-c" onclick="window['${id}_sel'](${i})" style="background:${s.bg};border:1px solid ${s.color}44;border-radius:8px;padding:11px 8px;cursor:pointer;text-align:center;transition:outline .12s;"><div style="font-size:20px;">${s.icon}</div><div style="font-size:9.5px;font-weight:800;color:${s.color};margin-top:3px;">${s.title}</div><div style="font-size:6.5px;color:#64748B;font-weight:700;margin-top:2px;">${s.tag}</div></div>`).join('')}
+      </div>
+      <div id="${id}-b" style="display:none;margin-top:8px;background:#F8FAFC;border:1px solid #E5E7EB;border-radius:7px;padding:9px 11px;">
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;">
+          <span id="${id}-n" style="font-size:10px;font-weight:800;"></span>
+          <span id="${id}-t" style="font-size:6px;font-weight:700;color:#fff;padding:2px 6px;border-radius:10px;"></span>
+        </div>
+        <div id="${id}-d" style="font-size:8.5px;color:#374151;line-height:1.6;"></div>
+      </div>
+      <div style="margin-top:8px;background:#EFF6FF;border-radius:6px;padding:6px 9px;font-size:7.5px;color:#1E40AF;line-height:1.55;">💡 ${pt?'Externo cria a EXPECTATIVA; interno ENTREGA. Os dois alinhados = integridade.':'External creates the EXPECTATION; internal DELIVERS. The two aligned = integrity.'}</div>
+    </div>`;
+};
+
+/* ─── MKT W5: 4 stages of internal communication ────────────────── */
+window.vis_internalBrandingLadder = function(container, lang) {
+  const pt = lang === 'pt';
+  const id = 'ibl-' + Math.random().toString(36).substr(2,5);
+  const steps = [
+    { n:'1', color:'#7DD3FC', name:pt?'Consciência':'Awareness', desc:pt?'Gerar awareness via pontos de contato físicos: pôsteres, wallpaper corporativo, protetores de tela. O funcionário passa a saber que existe uma marca a viver.':'Build awareness via physical touchpoints: posters, corporate wallpaper, screensavers. The employee starts to know there is a brand to live.' },
+    { n:'2', color:'#38BDF8', name:pt?'Mudar percepção':'Change perception', desc:pt?'Via materiais de comunicação corporativa, muda-se como o funcionário PERCEBE a marca — de logo na parede para algo que faz sentido.':'Via corporate communication materials, you change how the employee PERCEIVES the brand — from a logo on the wall to something that makes sense.' },
+    { n:'3', color:'#0EA5E9', name:pt?'Buy-in':'Buy-in', desc:pt?'O funcionário passa a CONCORDAR e comprar a ideia. Deixa de tolerar a marca e começa a acreditar nela.':'The employee comes to AGREE and buy the idea. They stop merely tolerating the brand and start believing in it.' },
+    { n:'4', color:'#0369A1', name:pt?'Mudar comportamento':'Change behaviour', desc:pt?'Entregar a brand promise de fato. É o estágio mais difícil e é dirigido pela LIDERANÇA — o CEO precisa ser o brand champion, "driven from the top, cascaded down".':'Actually deliver the brand promise. It is the hardest stage and is led by LEADERSHIP — the CEO must be the brand champion, "driven from the top, cascaded down".' }
+  ];
+  window[id+'_data'] = steps;
+  window[id+'_sel'] = function(i){ const s=window[id+'_data'][i]; const b=document.getElementById(id+'-b'); if(!b)return; document.querySelectorAll('.'+id+'-c').forEach(function(x){x.style.outline='none';}); document.getElementById(id+'-c'+i).style.outline='2.5px solid '+s.color; document.getElementById(id+'-n').textContent=s.n+' · '+s.name; document.getElementById(id+'-n').style.color=(i===0?'#0369A1':s.color); document.getElementById(id+'-d').textContent=s.desc; b.style.display='block'; };
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#0C4A6E;margin-bottom:2px;">
+        ${pt?'Os 4 Estágios da Comunicação Interna':'The 4 Stages of Internal Communication'}
+      </div>
+      <div style="font-size:7.5px;color:#64748B;margin-bottom:8px;">${pt?'A escada do internal branding (leva ~2 anos). Clique.':'The internal branding ladder (takes ~2 years). Click.'}</div>
+      <div style="display:flex;align-items:stretch;gap:3px;">
+        ${steps.map((s,i)=>`${i>0?'<div style="align-self:center;font-size:11px;color:#94A3B8;">→</div>':''}<div id="${id}-c${i}" class="${id}-c" onclick="window['${id}_sel'](${i})" style="flex:1;background:${s.color}1A;border:1px solid ${s.color};border-radius:6px;padding:7px 3px;cursor:pointer;text-align:center;transition:outline .12s;"><div style="width:17px;height:17px;margin:0 auto;border-radius:50%;background:${s.color};color:#fff;font-size:9px;font-weight:900;display:flex;align-items:center;justify-content:center;">${s.n}</div><div style="font-size:6.5px;font-weight:700;color:${i===0?'#0369A1':s.color};line-height:1.15;margin-top:3px;">${s.name}</div></div>`).join('')}
+      </div>
+      <div id="${id}-b" style="display:none;margin-top:8px;background:#F0F9FF;border:1px solid #BAE6FD;border-radius:7px;padding:9px 11px;">
+        <div id="${id}-n" style="font-size:10px;font-weight:800;margin-bottom:3px;"></div>
+        <div id="${id}-d" style="font-size:8.5px;color:#374151;line-height:1.6;"></div>
+      </div>
+      <div style="margin-top:7px;font-size:7px;color:#94A3B8;line-height:1.5;">🏢 ${pt?'Casos: Werth (2 anos, +paixão +vendas na recessão) e TFMC (10 anos, resiliência).':'Cases: Werth (2 years, +passion +sales in recession) and TFMC (10 years, resilience).'}</div>
+    </div>`;
+};
+
+/* ─── MKT W5: 5 internal branding strategies ────────────────────── */
+window.vis_internalStrategies = function(container, lang) {
+  const pt = lang === 'pt';
+  const id = 'ist-' + Math.random().toString(36).substr(2,5);
+  const st = [
+    { icon:'📋', color:'#0EA5E9', name:pt?'Planejar a estratégia':'Plan the strategy', desc:pt?'Ir além de memorando e newsletter: workshops engajantes, eventos corporativos, e a marca aplicada em decks, templates, faturas e documentos internos.':'Go beyond memos and newsletters: engaging workshops, corporate events, and the brand applied to decks, templates, invoices and internal documents.' },
+    { icon:'🔗', color:'#0284C7', name:pt?'Conectar interno↔externo':'Connect internal↔external', desc:pt?'Alinhar a identidade interna com a marca externa para gerar autenticidade e transparência. Os dois lados têm que contar a mesma história.':'Align the internal identity with the external brand to create authenticity and transparency. Both sides must tell the same story.' },
+    { icon:'🤝', color:'#0891B2', name:pt?'Engajar pessoalmente':'Engage personally', desc:pt?'Pesquisas, conversas, sessões de Q&A; identificar interesses e valores individuais e sincronizar a motivação pessoal com a missão da marca.':'Surveys, conversations, Q&A sessions; identify individual interests and values and sync personal motivation with the brand mission.' },
+    { icon:'🏅', color:'#16A34A', name:pt?'Recompensar':'Reward', desc:pt?'Programas de reconhecimento para quem demonstra os valores da marca. Dar um motivo para trabalhar ali que vá além do salário.':'Recognition programmes for those who demonstrate the brand values. Give a reason to work there that goes beyond salary.' },
+    { icon:'💻', color:'#7C3AED', name:pt?'Usar tecnologia':'Use technology', desc:pt?'Software para manter a consistência da marca na comunicação interna (ex: Templafy, que automatiza a atualização da identidade em todos os materiais).':'Software to keep brand consistency in internal communication (e.g. Templafy, which automates identity updates across all materials).' }
+  ];
+  window[id+'_data'] = st;
+  window[id+'_sel'] = function(i){ const s=window[id+'_data'][i]; const b=document.getElementById(id+'-b'); if(!b)return; document.querySelectorAll('.'+id+'-c').forEach(function(x){x.style.outline='none';}); document.getElementById(id+'-c'+i).style.outline='2.5px solid '+s.color; document.getElementById(id+'-n').textContent=s.icon+' '+s.name; document.getElementById(id+'-n').style.color=s.color; document.getElementById(id+'-d').textContent=s.desc; b.style.display='block'; };
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#0C4A6E;margin-bottom:2px;">
+        ${pt?'5 Estratégias de Branding Interno':'5 Internal Branding Strategies'}
+      </div>
+      <div style="font-size:7.5px;color:#64748B;margin-bottom:8px;">${pt?'Como construir a marca por dentro (Marketing91). Clique.':'How to build the brand from within (Marketing91). Click.'}</div>
+      <div style="display:flex;flex-direction:column;gap:4px;">
+        ${st.map((s,i)=>`<div id="${id}-c${i}" class="${id}-c" onclick="window['${id}_sel'](${i})" style="display:flex;align-items:center;gap:8px;background:${s.color}0D;border:1px solid ${s.color}33;border-radius:6px;padding:6px 9px;cursor:pointer;transition:outline .12s;"><span style="font-size:15px;">${s.icon}</span><span style="font-size:8.5px;font-weight:800;color:${s.color};">${s.name}</span></div>`).join('')}
+      </div>
+      <div id="${id}-b" style="display:none;margin-top:8px;background:#F8FAFC;border:1px solid #E5E7EB;border-radius:7px;padding:9px 11px;">
+        <div id="${id}-n" style="font-size:10px;font-weight:800;margin-bottom:3px;"></div>
+        <div id="${id}-d" style="font-size:8.5px;color:#374151;line-height:1.6;"></div>
+      </div>
+    </div>`;
+};
+
+/* ─── MKT W5: JABES empirical evidence ──────────────────────────── */
+window.vis_jabesEvidence = function(container, lang) {
+  const pt = lang === 'pt';
+  const id = 'jab-' + Math.random().toString(36).substr(2,5);
+  const rows = [
+    { ok:true, label:pt?'Internal branding → Lealdade':'Internal branding → Loyalty', desc:pt?'H2 CONFIRMADA. O internal branding alinha o comportamento do funcionário à promessa e fortalece a devoção dele à marca — a lealdade é um ativo intangível e fonte de vantagem competitiva.':'H2 CONFIRMED. Internal branding aligns employee behaviour to the promise and strengthens their devotion to the brand — loyalty is an intangible asset and a source of competitive advantage.' },
+    { ok:true, label:pt?'Internal branding → Empoderamento':'Internal branding → Empowerment', desc:pt?'H3 CONFIRMADA. Comunicação e treinamento consistentes elevam o valor da tarefa na mente do funcionário e melhoram a clareza de papel — gerando empoderamento psicológico.':'H3 CONFIRMED. Consistent communication and training raise the value of the task in the employee\'s mind and improve role clarity — generating psychological empowerment.' },
+    { ok:true, label:pt?'Empoderamento MEDEIA a lealdade':'Empowerment MEDIATES loyalty', desc:pt?'H7 CONFIRMADA. O caminho é INDIRETO: internal branding → empoderamento psicológico → lealdade. O funcionário internaliza os valores e passa a "viver a marca". Não é um efeito direto.':'H7 CONFIRMED. The path is INDIRECT: internal branding → psychological empowerment → loyalty. The employee internalises the values and comes to "live the brand". It is not a direct effect.' },
+    { ok:false, label:pt?'Internal branding → Lucro':'Internal branding → Profit', desc:pt?'H1, H4, H6 NÃO confirmadas. Nem o internal branding nem o empoderamento tiveram efeito significativo sobre o desempenho financeiro (ROI/ROE/ROA/vendas). LIÇÃO: defenda o internal branding por lealdade e consistência, não por ROI direto — por isso é o 1º corte de orçamento.':'H1, H4, H6 NOT confirmed. Neither internal branding nor empowerment had a significant effect on financial performance (ROI/ROE/ROA/sales). LESSON: defend internal branding by loyalty and consistency, not by direct ROI — which is why it is the first budget cut.' }
+  ];
+  window[id+'_data'] = rows;
+  window[id+'_sel'] = function(i){ const r=window[id+'_data'][i]; const b=document.getElementById(id+'-b'); if(!b)return; const c=r.ok?'#16A34A':'#DC2626'; document.querySelectorAll('.'+id+'-c').forEach(function(x){x.style.outline='none';}); document.getElementById(id+'-c'+i).style.outline='2.5px solid '+c; document.getElementById(id+'-n').textContent=(r.ok?'✅ ':'❌ ')+r.label; document.getElementById(id+'-n').style.color=c; document.getElementById(id+'-d').textContent=r.desc; b.style.display='block'; };
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#0C4A6E;margin-bottom:2px;">
+        ${pt?'A Evidência (paper JABES, 2022)':'The Evidence (JABES paper, 2022)'}
+      </div>
+      <div style="font-size:7.5px;color:#64748B;margin-bottom:8px;">${pt?'O que o internal branding DE FATO move. 200 funcionários. Clique.':'What internal branding ACTUALLY moves. 200 employees. Click.'}</div>
+      <div style="display:flex;flex-direction:column;gap:4px;">
+        ${rows.map((r,i)=>{const c=r.ok?'#16A34A':'#DC2626';return `<div id="${id}-c${i}" class="${id}-c" onclick="window['${id}_sel'](${i})" style="display:flex;align-items:center;gap:7px;background:${c}0D;border:1px solid ${c}33;border-radius:6px;padding:6px 9px;cursor:pointer;transition:outline .12s;"><span style="font-size:12px;">${r.ok?'✅':'❌'}</span><span style="font-size:8px;font-weight:800;color:${c};">${r.label}</span></div>`;}).join('')}
+      </div>
+      <div id="${id}-b" style="display:none;margin-top:8px;background:#F8FAFC;border:1px solid #E5E7EB;border-radius:7px;padding:9px 11px;">
+        <div id="${id}-n" style="font-size:9.5px;font-weight:800;margin-bottom:3px;"></div>
+        <div id="${id}-d" style="font-size:8.5px;color:#374151;line-height:1.6;"></div>
+      </div>
+      <div style="margin-top:8px;background:#FEF2F2;border-radius:6px;padding:6px 9px;font-size:7.5px;color:#991B1B;line-height:1.55;">💣 ${pt?'A bomba: internal branding gera <b>lealdade</b>, mas <b>não lucro direto</b>. Por isso é sempre o 1º corte. (1 seguradora, Irã, N=200 — não generaliza.)':'The bomb: internal branding builds <b>loyalty</b>, but <b>not direct profit</b>. That is why it is always the first cut. (1 insurer, Iran, N=200 — not generalisable.)'}</div>
+    </div>`;
+};
+
+/* ─── MKT W5: external branding — brand≠branding + refresh ───────── */
+window.vis_externalRefresh = function(container, lang) {
+  const pt = lang === 'pt';
+  const id = 'ext-' + Math.random().toString(36).substr(2,5);
+  const data = [
+    { grp:'bb', color:'#94A3B8', name:pt?'Branding (a roupa)':'Branding (the clothes)', desc:pt?'Os elementos VISUAIS: logo, cores, tipografia. É o que se vê — mas sozinho não sustenta nada. Cor bonita não salva marca sem substância (Tiffany/Hermès).':'The VISUAL elements: logo, colours, typography. It is what you see — but on its own it sustains nothing. A pretty colour does not save a brand without substance (Tiffany/Hermès).' },
+    { grp:'bb', color:'#DC2626', name:pt?'Brand (a alma)':'Brand (the soul)', desc:pt?'O CORAÇÃO e a alma da organização: o que ela defende, como trata os funcionários, como se relaciona com o cliente. É o que realmente sustenta a marca.':'The HEART and soul of the organisation: what it stands for, how it treats employees, how it relates to customers. It is what truly sustains the brand.' },
+    { grp:'rf', color:'#0EA5E9', name:pt?'1. Pesquisa ampla':'1. Broad research', desc:pt?'Ouvir vários níveis, não só a chefia. Ex: a Kramer Levin fez 60 entrevistas (sócios, associados, gestão) antes de tocar em qualquer visual.':'Listen to many levels, not just leadership. E.g. Kramer Levin ran 60 interviews (partners, associates, management) before touching any visual.' },
+    { grp:'rf', color:'#0284C7', name:pt?'2. Vozes de stakeholders':'2. Stakeholder voices', desc:pt?'Engajar funcionários de todos os níveis, em especial as lideranças emergentes — elas representam a direção futura da empresa.':'Engage employees at all levels, especially emerging leaders — they represent the firm\'s future direction.' },
+    { grp:'rf', color:'#0891B2', name:pt?'3. Descobrir o ethos':'3. Discover the ethos', desc:pt?'Cavar fundo para achar os valores culturais AUTÊNTICOS antes de tocar em qualquer elemento visual. É a substância que o visual vai expressar.':'Dig deep to find the AUTHENTIC cultural values before touching any visual element. It is the substance the visual will express.' },
+    { grp:'rf', color:'#0369A1', name:pt?'4. Design (por último)':'4. Design (last)', desc:pt?'Só DEPOIS de entender a identidade real, os designers criam o visual externo — alinhado à cultura atual. Design não é o começo, é a expressão.':'Only AFTER understanding the real identity do designers create the external visual — aligned to the current culture. Design is not the start, it is the expression.' }
+  ];
+  window[id+'_data'] = data;
+  window[id+'_sel'] = function(i){ const d=window[id+'_data'][i]; const b=document.getElementById(id+'-b'); if(!b)return; document.querySelectorAll('.'+id+'-c').forEach(function(x){x.style.outline='none';}); document.getElementById(id+'-c'+i).style.outline='2.5px solid '+d.color; document.getElementById(id+'-n').textContent=d.name; document.getElementById(id+'-n').style.color=d.color; document.getElementById(id+'-d').textContent=d.desc; b.style.display='block'; };
+  container.innerHTML = `
+    <div style="padding:4px;font-family:sans-serif;">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:#0C4A6E;margin-bottom:2px;">
+        ${pt?'Branding Externo (Forbes)':'External Branding (Forbes)'}
+      </div>
+      <div style="font-size:7px;color:#64748B;font-weight:700;margin:4px 0 3px;">${pt?'BRAND ≠ BRANDING':'BRAND ≠ BRANDING'}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+        ${[0,1].map(i=>{const d=data[i];return `<div id="${id}-c${i}" class="${id}-c" onclick="window['${id}_sel'](${i})" style="background:${d.color}0D;border:1px solid ${d.color}44;border-radius:6px;padding:7px;cursor:pointer;text-align:center;transition:outline .12s;"><div style="font-size:8.5px;font-weight:800;color:${d.color};">${d.name}</div></div>`;}).join('')}
+      </div>
+      <div style="font-size:7px;color:#64748B;font-weight:700;margin:8px 0 3px;">${pt?'REFRESH EXTERNO · cultura primeiro, design por último':'EXTERNAL REFRESH · culture first, design last'}</div>
+      <div style="display:flex;align-items:stretch;gap:2px;">
+        ${[2,3,4,5].map((idx,k)=>{const d=data[idx];return `${k>0?'<div style="align-self:center;font-size:9px;color:#94A3B8;">→</div>':''}<div id="${id}-c${idx}" class="${id}-c" onclick="window['${id}_sel'](${idx})" style="flex:1;background:${d.color}1A;border:1px solid ${d.color};border-radius:5px;padding:5px 2px;cursor:pointer;text-align:center;transition:outline .12s;"><div style="font-size:6px;font-weight:800;color:${d.color};line-height:1.1;">${d.name}</div></div>`;}).join('')}
+      </div>
+      <div id="${id}-b" style="display:none;margin-top:8px;background:#F8FAFC;border:1px solid #E5E7EB;border-radius:7px;padding:9px 11px;">
+        <div id="${id}-n" style="font-size:10px;font-weight:800;margin-bottom:3px;"></div>
+        <div id="${id}-d" style="font-size:8.5px;color:#374151;line-height:1.6;"></div>
+      </div>
+      <div style="margin-top:7px;font-size:7px;color:#94A3B8;line-height:1.5;">💡 ${pt?'External branding só se sustenta se DERIVA do interno. Senão é maquiagem sem lastro.':'External branding only holds if it DERIVES from the internal. Otherwise it is makeup with no backing.'}</div>
+    </div>`;
+};
