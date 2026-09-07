@@ -4480,7 +4480,7 @@ window.vis_carrollPyramid = function(container, lang) {
         </div>
         <div id="${id}-d" style="font-size:8.5px;color:#374151;line-height:1.6;"></div>
       </div>
-      <div style="margin-top:7px;font-size:7px;color:#94A3B8;line-height:1.5;">💡 ${pt?'⚠️ Visser: a pirâmide é situada nos EUA — em países em desenvolvimento a filantropia às vezes vem em 2º. Dialoga com o relativismo.':'⚠️ Visser: the pyramid is US-situated — in developing countries philanthropy sometimes ranks 2nd. It dialogues with relativism.'}</div>
+      <div style="margin-top:7px;font-size:7px;color:#94A3B8;line-height:1.5;">💡 ${pt?'⚠️ Não é universal: Friedman (só lucro+lei é papel da empresa) · Visser (em país em desenvolvimento a filantropia sobe pro 2º) · Crane & Matten (na Europa o "ético" já é LEI) · Spence (PME faz por relação, não programa). Dialoga com o relativismo.':'⚠️ Not universal: Friedman (only profit+law is the firm\'s job) · Visser (in developing countries philanthropy rises to 2nd) · Crane & Matten (in Europe the "ethical" is already LAW) · Spence (SMEs do it by relationship, not a programme). It dialogues with relativism.'}</div>
     </div>`;
 };
 
@@ -4490,7 +4490,7 @@ window.vis_sustainableMarketing = function(container, lang) {
   const id = 'sm-' + Math.random().toString(36).substr(2,5);
   const e = [
     { icon:'🌱', color:'#0EA5E9', name:'Ecological', desc:pt?'As atividades de marketing NÃO devem ter efeitos negativos sobre o meio ambiente. É o E mais óbvio — mas sozinho não basta.':'Marketing activities must NOT have negative effects on the environment. It is the most obvious E — but alone it is not enough.' },
-    { icon:'⚖️', color:'#0284C7', name:'Equitable', desc:pt?'As atividades de marketing NÃO devem encorajar práticas sociais iníquas. É a dimensão SOCIAL da sustentabilidade — a que mais se esquece.':'Marketing activities must NOT encourage inequitable social practices. It is the SOCIAL dimension of sustainability — the one most forgotten.' },
+    { icon:'⚖️', color:'#0284C7', name:'Equitable', desc:pt?'As atividades de marketing NÃO devem encorajar práticas sociais INÍQUAS (injustas): exploração de trabalho, discriminação, marketing predatório com vulneráveis (crédito caro, junk food pra criança), preço abusivo. É a dimensão SOCIAL da sustentabilidade — a que mais se esquece.':'Marketing activities must NOT encourage INEQUITABLE (unfair) social practices: labour exploitation, discrimination, predatory marketing to the vulnerable (costly credit, junk food to children), price-gouging. It is the SOCIAL dimension of sustainability — the one most forgotten.' },
     { icon:'📈', color:'#0C4A6E', name:'Economic', desc:pt?'As atividades devem visar desenvolvimento econômico de LONGO PRAZO, não ganho de curto prazo. Sustentabilidade inclui saúde financeira duradoura, não só o meio ambiente.':'Activities must aim at LONG-TERM economic development, not short-term gain. Sustainability includes lasting financial health, not just the environment.' }
   ];
   window[id+'_data'] = e;
