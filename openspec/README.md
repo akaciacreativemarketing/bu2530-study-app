@@ -13,8 +13,9 @@ Criado em 07/set/2026, no início do glow-up (redesign completo para compartilha
 | [03-renderers.md](03-renderers.md) | Contrato das visualizações interativas, padrão de índice, auditoria, restrição de escala | Vigente |
 | [04-decisions.md](04-decisions.md) | Log de decisões (ADR): público, gamificação, stack, mobile, direção | Em aberto: ver itens "pendente" |
 | [05-glowup-scope.md](05-glowup-scope.md) | Escopo do redesign: tirar / manter / adicionar, prioridades, fases, critérios de pronto | Proposta |
-| [06-design-direction.md](06-design-direction.md) | Metáfora, direções A/B/C, tipografia, acento, motion, modo escuro | **Pendente de escolha do dono** (prancha visual em produção) |
+| [06-design-direction.md](06-design-direction.md) | Direção escolhida (B · Dossiê), paleta, tipografia, assinaturas; A e C como referência | Vigente (escolha em 07/set/2026) |
 | [07-gamification-archive.md](07-gamification-archive.md) | Arquivo do sistema de XP/níveis/conquistas removido, para reimplementação futura | Arquivo (referência) |
+| [08-modes.md](08-modes.md) | Modos de aprendizado: Semanas, Hub de conhecimento (conceitos interligados) e Trilhas (gaveta) | Proposta (D11) |
 
 ## Como usar
 

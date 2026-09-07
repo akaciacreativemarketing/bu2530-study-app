@@ -1,4 +1,17 @@
-# 06 · Direção de design · PENDENTE
+# 06 · Direção de design · VIGENTE: B · Dossiê (escolhida 07/set/2026)
+
+## Decisão
+
+O dono escolheu a **direção B · Dossiê** na prancha visual (D6). A e C ficam abaixo como referência do que foi considerado. O que segue vale para a construção:
+
+- **Paleta B:** fundo preto quente `#151210` (e `#1D1915` para superfícies), manila `#D8C79F` e `#C2AF80` (abas e pastas), folha `#F0EADB` (onde o conteúdo longo é lido, com tinta `#1C1813`), texto sobre escuro `#E9E2D4`, apoio `#9C9484`, carimbo `#D42A2A` (o único acento; usar pouco).
+- **Tipografia B:** Archivo condensada (eixo `wdth` 62 a 75, pesos 800 e 900) para numerais e títulos em caixa alta · Source Serif 4 para leitura longa · IBM Plex Mono para rótulos, abas e carimbos.
+- **Assinaturas:** capa de dossiê por matéria (numeral gigante da parte, título, carimbo); pastas das semanas como abas manila; folha creme com abas de seção para a leitura; carimbos inclinados como status temático ("Contraponto", "Evidência", "Cai na prova"); a **linha de pauta sutil** no fundo escuro (motivo da família).
+- **O mapa vira quadro de ligações** dentro do modo Hub (08): fundo escuro de cortiça/pauta, nós como fichas, linhas como barbante. É a assinatura do modo, não da home.
+- **Renderers:** entram como "Evidência NN" numa folha clara dentro do palco escalado, exatamente como na prancha.
+- **Sem modo noite:** a direção já é escura. Fase 4 pode avaliar uma "folha clara" para sessões longas.
+
+---
 
 Regime: produto próprio de estudo, compartilhado com alunos. **Não é peça da Akacia** (não herda mono #0A0A0A, Space Grotesk nem raio zero por obrigação) e não é site de cliente. Tem identidade própria. O que vale de qualquer jeito: o craft universal do playbook anti-slop.
 

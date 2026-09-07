@@ -31,9 +31,17 @@ Formato: contexto → decisão → consequências. Status: **aceita**, **propost
 
 Ver 03. Resolve a legibilidade sem reescrever os renderers; normalização por token fica para depois.
 
-## D6 · Direção de design · pendente
+## D6 · Direção de design · aceita: B · Dossiê (07/set/2026)
 
-Opções A (Atlas, recomendada), B (Dossiê) e C (Caderno) em 06. Decisão do dono, de preferência depois de ver uma prancha visual das três.
+**Contexto.** Prancha visual com A (Atlas, recomendada pelo assistente), B (Dossiê) e C (Caderno), com conteúdo real e renderers rodando: https://claude.ai/code/artifact/c4df899b-3978-4c64-89a6-6e8c4611a7a7
+**Decisão do dono.** B · Dossiê, "com mais identidade". O risco de proximidade com o universo Akacia foi aceito conscientemente.
+**O que atravessa da A.** O mapa de conexões continua, mas como parte do conteúdo e não como hero da home: no Dossiê ele vira o **quadro de ligações** (corkboard de investigação, linhas ligando evidências) dentro do modo Hub (ver D11 e 08).
+**Consequências.** 06 vira vigente com a paleta e tipografia da B; a home é capa de dossiê por matéria; página da semana é folha com abas; sem modo noite (a direção já é escura por natureza; avaliar "folha clara" para leitura longa na Fase 4).
+
+## D11 · Dois modos de aprendizado agora, um terceiro na gaveta · aceita (07/set/2026)
+
+**Contexto.** O dono percebeu que a matéria inteira é um hub de conhecimento que pode ser estudado sem a amarra das semanas: conceitos espalhados que se interligam, "uma renovação do conceito de estudar".
+**Decisão.** Três modos: (1) **Semanas**, o que existe hoje, redesenhado; (2) **Hub de conhecimento**, novo, os conceitos e teorias como nós interligados, independente de semana; (3) **Trilhas**, sequências curadas entre semanas, fica na gaveta. Com as provas chegando, o foco é entregar 1 e 2. Spec em [08-modes.md](08-modes.md).
 
 ## D7 · Idioma padrão por detecção · proposta
 

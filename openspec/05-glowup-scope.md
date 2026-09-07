@@ -29,7 +29,9 @@
 | P0 | Home nova: apresentação do curso e das matérias, sem progresso | D1 |
 | P0 | Idioma auto-detectado | D7 |
 | P1 | Busca global (conceitos, glossário, flashcards, teorias) com atalho `/` | índice derivado, ver 02 |
-| P1 | Mapa de conexões em canvas 2D na home (nós = semanas, arestas = `connections`) | o "wow" da direção A |
+| P0 | **Modo Hub de conhecimento**: conceitos e teorias como nós interligados, independente de semana, com quadro de ligações em canvas e página por conceito | D11, spec 08 |
+| P1 | Quadro de ligações em canvas 2D (nós = conceitos/teorias, arestas = co-ocorrência, `connections` e citações cruzadas) | assinatura do modo Hub na direção B |
+| P2 | Modo Trilhas (sequências curadas entre semanas) | gaveta, D11 |
 | P1 | Modo Revisão por matéria: todos os flashcards, embaralhar, pilha de revisão na sessão | rota `#<subject>/review` |
 | P1 | Modo Prova: questões de múltipla escolha geradas de flashcards e glossário | rota `#<subject>/quiz` |
 | P1 | Callout de macete (mnemônicos em destaque) | componente |
