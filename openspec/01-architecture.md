@@ -52,6 +52,10 @@ Três chaves: `uol-lang` (`pt` | `en`, gravada quando o visitante troca), `uol-t
 
 Só CSS em `transform`/`opacity`: transições (gaveta, pastas, flashcard) e a animação `rise` com stagger por `--i` (pastas da capa, seções da folha), mais o desenho progressivo do quadro em canvas. `prefers-reduced-motion` zera tudo (inclusive `scroll-behavior`). GSAP e Lottie (D10) foram avaliados e não adicionados; continuam aprovados se um momento futuro os justificar.
 
+## Contagem de acessos
+
+Vercel Web Analytics (sem cookie, sem identificação do visitante; plano Hobby: 50 mil eventos/mês, janela de 1 mês, sem eventos personalizados). `initAnalytics()` em `app.js` injeta `/_vercel/insights/script.js` só quando o host termina em `.vercel.app`, então `file://`, localhost e o QA não geram nada. Como as rotas são em hash, `beforeSend` reescreve a URL do evento trocando o hash por caminho (`#marketing-strategy/week-9/theories` → `/marketing-strategy/week-9`; fichas do Hub mantêm o slug) e `route()` envia `va('pageview')` a cada navegação depois da primeira. Ver os números: painel do Vercel → projeto `uol-bu2530` → Analytics. Pré-requisito: Web Analytics habilitado no projeto (clique no painel) seguido de um deploy; até lá o script responde 404 e nada é contado.
+
 ## Impressão
 
 `@media print` no fim do `style.css` (fora das camadas): esconde a casca, abre as fichas (`beforeprint`/`afterprint` em `app.js`), imprime os palcos com borda e a lista pergunta/resposta dos flashcards (`.print-only`). Acionada pelo link "Imprimir · salvar PDF" do cabeçalho da semana (`data-act="print"`).
@@ -61,7 +65,7 @@ Só CSS em `transform`/`opacity`: transições (gaveta, pastas, flashcard) e a a
 1. 100% estático e sem build.
 2. Os arquivos de dados não mudam de formato por causa da UI.
 3. Nenhuma dependência instalada sem aviso.
-4. Sem backend, sem conta, sem cookie de rastreio.
+4. Sem backend, sem conta, sem cookie de rastreio (a contagem de acessos do Vercel é agregada e sem cookie; ver "Contagem de acessos").
 
 ## QA obrigatório antes de publicar
 

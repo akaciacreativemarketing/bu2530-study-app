@@ -150,8 +150,11 @@
   main { min-width: 0; }
   .foot {
     font-family: var(--f-mono); font-size: 12px; letter-spacing: .06em; color: var(--mut);
-    padding: 22px 24px 28px; border-top: 1px solid var(--line); text-align: center;
+    padding: 22px 24px 28px; border-top: 1px solid var(--line); text-align: center; line-height: 1.8;
   }
+  .foot a { color: var(--manila); text-decoration: none; text-transform: uppercase; letter-spacing: .12em; border-bottom: 1px solid var(--line); padding-bottom: 1px; }
+  .foot a:hover { color: var(--text); border-color: var(--manila); }
+  :root[data-theme="light"] .foot a { color: #7E6A3E; }
 
   @media (max-width: 899px) {
     .shell { grid-template-columns: minmax(0, 1fr); }

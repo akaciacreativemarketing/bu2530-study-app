@@ -126,7 +126,8 @@ const UI = {
   choosePart:   { pt: 'Escolher a parte',         en: 'Choose a part' },
   openHub:      { pt: 'Abrir o hub',              en: 'Open the hub' },
   dossiers:     { pt: 'dossiês',                  en: 'dossiers' },
-  credit:       { pt: 'Material de estudo de João Rodrigues · BSc Marketing · University of London · aberto a todos', en: 'Study material by João Rodrigues · BSc Marketing · University of London · open to all' },
+  creditBy:     { pt: 'Material de estudo de João Rodrigues', en: 'Study material by João Rodrigues' },
+  creditOpen:   { pt: 'aberto a todos',                 en: 'open to all' },
   partConnH:    { pt: 'Ligações desta parte',     en: 'Links inside this part' },
   partConnP:    { pt: 'No Hub, os conceitos e teorias desta parte aparecem como fichas ligadas por barbante: mesma semana, conexões do curso e citações cruzadas.', en: 'In the Hub, this part’s concepts and theories appear as index cards tied by string: same week, course connections and cross-citations.' },
   navOpen:      { pt: 'Abrir navegação',          en: 'Open navigation' },
@@ -282,7 +283,31 @@ function renderDrawer(r) {
     <span class="dr-mode soon" aria-disabled="true">${GLYPH.trail}<span>${T('trails')}</span><small>${T('soon')}</small></span>`;
 }
 
-function renderFoot() { document.getElementById('foot').textContent = T('credit'); }
+function renderFoot() {
+  document.getElementById('foot').innerHTML = `${T('creditBy')} · <a href="https://akaciacreative.com" target="_blank" rel="noopener">Akacia Creative Marketing</a> · BSc Marketing · University of London · ${T('creditOpen')}`;
+}
+
+/* ─── Contagem de acessos (Vercel Web Analytics, sem cookie) ─
+   Só no domínio publicado; em file:// e localhost nada carrega.
+   O hash vira caminho para contar por página (#marketing-strategy/week-9 → /marketing-strategy/week-9). */
+let analyticsFirst = true;
+function analyticsPath() {
+  const seg = (location.hash || '#home').replace(/^#\/?/, '').replace(/\?.*$/, '').split('/');
+  return '/' + seg.slice(0, seg[0] === 'hub' ? 3 : 2).join('/');
+}
+function initAnalytics() {
+  if (!/\.vercel\.app$/.test(location.hostname)) return;
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+  window.va('beforeSend', ev => {
+    try { const u = new URL(ev.url); u.pathname = analyticsPath(); u.hash = ''; u.search = ''; return { ...ev, url: u.toString() }; } catch (e) { return ev; }
+  });
+  const s = document.createElement('script'); s.defer = true; s.src = '/_vercel/insights/script.js';
+  document.head.appendChild(s);
+}
+function trackPageview() {
+  if (analyticsFirst) { analyticsFirst = false; return; }   // a primeira vista o script conta sozinho
+  if (window.va) window.va('pageview', { route: analyticsPath(), path: analyticsPath() });
+}
 
 function openDrawer(open) {
   const b = document.body, btn = document.getElementById('menuBtn'), scrim = document.getElementById('scrim');
@@ -824,6 +849,7 @@ function route(force) {
   if (r.view !== 'week') window.scrollTo(0, 0);
   if (['week', 'subject', 'review', 'review-all', 'quiz'].includes(r.view) || (r.view === 'hub' && r.slug)) storeSet(STORE.last, location.hash);
   const main = document.getElementById('main'); if (main && !(r.view === 'week' && r.section)) main.focus({ preventScroll: true });
+  trackPageview();
 }
 
 /* ─── Eventos delegados ─────────────────────────────────── */
@@ -873,6 +899,7 @@ function init() {
   cleanLegacyStorage();
   document.documentElement.lang = lang;
   applyTheme();
+  initAnalytics();
   bindEvents();
   if (window.STUDY) STUDY.bind();
   window.addEventListener('hashchange', () => route());
