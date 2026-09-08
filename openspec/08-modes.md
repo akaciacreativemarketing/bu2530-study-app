@@ -1,40 +1,40 @@
-# 08 · Modos de aprendizado · proposta (D11)
+# 08 · Modos de aprendizado · vigente (D11, implementado em 07/set/2026)
 
 Três jeitos de entrar no mesmo conteúdo. Os dados não mudam de formato; o que muda é a porta de entrada.
 
-## Modo 1 · Semanas (vigente, a redesenhar)
+## Modo 1 · Semanas · vigente
 
-O que existe: matéria → semana → seções (visão geral, conceitos, teorias, casos, glossário, conexões, flashcards, notas). Na direção B: capa por matéria, pastas das semanas, folha com abas. Continua sendo o caminho de quem acompanha o curso e o que a prova cobra por bloco.
+Matéria → semana → seções. Na direção B: capa por matéria (numeral da parte, pastas manila das semanas e das revisões), cabeçalho escuro da semana (numeral, título, contagem, anterior/próxima), barra de abas fixa e a folha creme contínua com as seções na ordem de 02: visão geral, conceitos (fichas `details`, com "abrir todas"), teorias (com "Evidência NN" no palco), casos, glossário (busca), flashcards (fichário), autores, notas (blocos `═══` viram subtítulos; "FONTES" em mono), material, conexões. Cada ficha e teoria tem "Ver no Hub".
 
-## Modo 2 · Hub de conhecimento (novo, foco junto com o glow-up)
+## Modo 2 · Hub de conhecimento · vigente
 
 **Ideia do dono:** a matéria inteira é um hub; os conceitos se espalham e se interligam, sem a amarra da semana. Estudar pela rede, não pela sequência.
 
-**Nós.** Conceitos (284) e teorias (111) de todas as semanas das duas matérias. Cada nó sabe de onde veio (matéria, semana, seção).
+**Nós.** 284 conceitos + 111 teorias (395) de todas as semanas das duas matérias. Cada nó sabe de onde veio (matéria, semana, índice) e tem um `slug` estável por matéria: `slugify(en || pt)`; em colisão, sufixo `-wN`; se ainda colidir, `-c<idx>`/`-t<idx>`.
 
-**Arestas, em ordem de custo zero para custo baixo:**
-1. **Mesma semana:** conceitos e teorias da mesma semana se conectam (co-ocorrência).
-2. **`connections` entre semanas:** herdadas; ligam os nós das duas semanas.
-3. **Citação cruzada automática:** o nome de um conceito ou termo de glossário aparece na definição de outro (busca por texto, normalizada, com lista de exclusão para palavras genéricas). É o que faz "Porter" da Semana 2 encontrar "Porter" da Semana 9 sem ninguém digitar nada.
-4. **`related[]` explícito** (futuro, opcional por conceito) para amarrar o que a automação não pega.
-5. **Temas** (futuro, opcional): `tags[]` por conceito para agrupar em clusters (ex.: Porter, Branding, Processos, Ética). Enquanto não existir, o cluster é a matéria.
+**Arestas (as três primeiras implementadas, sem dado novo):**
+1. **Mesma semana:** todos os nós da semana se conectam (co-ocorrência). Na ficha: "Ligado a · mesma semana".
+2. **`connections` entre semanas:** herdadas dos dados e agregadas por par de semanas (52 pares). No quadro são o barbante manila entre os anéis; na ficha, "Semanas ligadas pelo curso" com a razão original.
+3. **Citação cruzada automática:** o nome de um nó (PT ou EN, com 6+ caracteres, sem parênteses, fora da lista de termos genéricos) aparece na definição ou no nome de outro nó de outra semana. Chaves que batem em mais de 8 nós são descartadas como genéricas. Resultado nos dados de set/2026: 121 arestas, 132 nós com pelo menos uma. No quadro é o barbante vermelho; na ficha, "Citação cruzada · automática".
+4. **`related[]` explícito** (futuro, opcional por conceito).
+5. **`tags[]`** (futuro, opcional) para clusters temáticos. Enquanto não existir, o cluster é a semana.
 
 **Telas.**
-- **Quadro de ligações:** canvas 2D na estética Dossiê (fichas sobre fundo escuro, barbante entre elas). Hover acende a vizinhança; clique abre a ficha. Filtros por matéria e por tema; busca no próprio quadro. Mobile: lista de fichas com "ligado a" em vez do canvas denso.
-- **Ficha do conceito:** nome PT/EN, definição, onde aparece (semanas, teorias, casos, flashcards que o citam), conceitos ligados, e o carimbo "Cai na prova" quando houver flashcard associado. Rota `#hub/<subject>/<slug>`.
-- **Entrada:** `#hub` com busca em primeiro plano e o quadro logo abaixo.
+- **Entrada `#hub`:** título, lede, busca em primeiro plano (atalho `/` de qualquer tela; `Enter` abre o primeiro resultado; `Esc` limpa), figuras (conceitos, teorias, semanas, conexões, citações), filtros por matéria (abas manila), legenda, quadro, "fichas mais citadas" (maior grau de citação cruzada) e a lista por semana (`details` por semana com chips; teorias em manila).
+- **Quadro de ligações (canvas 2D, telas ≥ 720px):** uma região por matéria (lado a lado; empilhadas abaixo de 900px), dez anéis (semanas) por região, teorias como fichas manila no centro do anel e conceitos como pontos ao redor. Hover acende o nó, a semana e as citações; etiqueta manila com o nome; legenda embaixo com "abrir ficha". Clique no nó abre a ficha; clique em "W##" abre a semana. A busca destaca os nós encontrados. Desenho progressivo respeita `prefers-reduced-motion`. Abaixo de 720px o quadro não é desenhado: fica a lista por semana.
+- **Ficha `#hub/<subject>/<slug>`:** tipo e posição ("Conceito 04 de 16 · W09 · título"), nome PT/EN, autores/ano quando teoria, definição, atalho para a evidência interativa no dossiê, "Onde aparece" (dossiê, flashcards que citam o nome, casos, termos do glossário), "Ligado a · mesma semana", "Citação cruzada · automática", "Semanas ligadas pelo curso" (com a razão), anterior/próximo dentro da semana. Carimbo **"Cai na prova"** quando algum flashcard da matéria cita o nome.
 
-**Regras.** Nunca inventar ligação sem fonte nos dados. Ligações automáticas são marcadas como tal na ficha. O Hub lê os mesmos `WEEKS_DATA`; nenhum conteúdo é duplicado.
+**Busca.** Índice = nós + termos de glossário + flashcards. Pontuação: prefixo do nome > nome contém > texto contém, com leve prioridade teoria > conceito > termo > flashcard. Termos e flashcards levam à seção da semana; nós levam à ficha.
 
-**Índice derivado (02).** Construído uma vez no carregamento: `{id, kind, subject, week, pt, en, text, links[]}` por nó. Custo aceitável para 400 nós em JS puro.
+**Regras.** Nunca inventar ligação sem fonte nos dados. Ligações automáticas são marcadas como tal. O Hub lê os mesmos `WEEKS_DATA`; nenhum conteúdo é duplicado. Índice construído uma vez no carregamento (`HUB.build()` em `init()`), custo de dezenas de milissegundos.
 
-## Modo 3 · Trilhas (gaveta)
+## Modo 3 · Trilhas · gaveta
 
-Sequências curadas que atravessam semanas com um objetivo ("Trilha Porter: 5 Forças → Cadeia de Valor → estratégias genéricas", "Trilha de prova MCQ 4: semanas 17 a 20"). Formato provável: `data/trails/*.js` com lista ordenada de nós do Hub e um texto de ligação por passo. Não começa antes de 1 e 2 estarem publicados.
+Sequências curadas que atravessam semanas com um objetivo ("Trilha Porter: 5 Forças → Cadeia de Valor → estratégias genéricas", "Trilha de prova MCQ 4: semanas 17 a 20"). Formato provável: `data/trails/*.js` com lista ordenada de slugs do Hub e um texto de ligação por passo. Aparece na gaveta como "em breve".
 
-## Sequência de entrega (ajusta as fases de 05)
+## Sequência de entrega
 
-- Fase 1: fundação na direção B + Modo 1 responsivo + remoção da gamificação.
-- Fase 2: Modo 2 com arestas 1 a 3 (sem novo dado) + fichas + quadro.
-- Fase 3: busca global, revisão e prova (aproveitam o índice do Hub).
+- Fase 1: fundação na direção B + Modo 1 responsivo + remoção da gamificação. ✅
+- Fase 2: Modo 2 com arestas 1 a 3 + fichas + quadro + busca. ✅
+- Fase 3: modo Revisão e modo Prova (aproveitam o índice do Hub).
 - Fase 4: polimento; avaliar `related[]`/`tags[]` e o Modo 3.

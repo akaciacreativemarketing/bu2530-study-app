@@ -27,9 +27,9 @@ Formato: contexto → decisão → consequências. Status: **aceita**, **propost
 **Contexto.** Screenshot em 390px (07/set/2026): sidebar fixa de 272px, conteúdo quebrado em uma palavra por linha. Alunos abrem no celular.
 **Decisão.** Todo layout nasce em 390px e cresce. Sidebar vira gaveta abaixo de ~900px. Nenhuma tela publica sem screenshot mobile aprovado.
 
-## D5 · Escala dos renderers por palco + `zoom` · proposta
+## D5 · Escala dos renderers por palco + `zoom` · aceita e implementada (07/set/2026)
 
-Ver 03. Resolve a legibilidade sem reescrever os renderers; normalização por token fica para depois.
+Ver 03. Resolve a legibilidade sem reescrever os renderers; normalização por token fica para depois. No celular a figura mantém a largura de projeto e rola dentro do palco.
 
 ## D6 · Direção de design · aceita: B · Dossiê (07/set/2026)
 
@@ -43,17 +43,27 @@ Ver 03. Resolve a legibilidade sem reescrever os renderers; normalização por t
 **Contexto.** O dono percebeu que a matéria inteira é um hub de conhecimento que pode ser estudado sem a amarra das semanas: conceitos espalhados que se interligam, "uma renovação do conceito de estudar".
 **Decisão.** Três modos: (1) **Semanas**, o que existe hoje, redesenhado; (2) **Hub de conhecimento**, novo, os conceitos e teorias como nós interligados, independente de semana; (3) **Trilhas**, sequências curadas entre semanas, fica na gaveta. Com as provas chegando, o foco é entregar 1 e 2. Spec em [08-modes.md](08-modes.md).
 
-## D7 · Idioma padrão por detecção · proposta
+## D7 · Idioma padrão por detecção · aceita e implementada (07/set/2026)
 
-`navigator.language` começando com `pt` abre em PT-BR; senão, EN. O toggle continua e a escolha persiste em `uol-lang`. Conteúdo segue bilíngue por campo.
+`navigator.language` começando com `pt` abre em PT-BR; senão, EN. O toggle continua e a escolha persiste em `uol-lang`. Conteúdo segue bilíngue por campo; `<html lang>` acompanha.
 
-## D8 · Rotas: manter hash e adicionar âncoras de seção · proposta
+## D8 · Rotas: manter hash e adicionar âncoras de seção · aceita, parcialmente implementada (07/set/2026)
 
-Manter `#<subjectId>/week-N` (links existentes continuam válidos) e adicionar `#<subjectId>/week-N/<secao>` para o sumário e para compartilhar um trecho. Novas rotas: `#search`, `#<subjectId>/review` (flashcards da matéria) e `#<subjectId>/quiz`.
+Implementado: `#<subjectId>/week-N/<secao>` (abas fixas da folha; mudar só a seção rola sem re-render) e as rotas do Hub (`#hub`, `#hub/<subjectId>`, `#hub/<subjectId>/<slug>`). A busca global vive dentro do Hub (`#hub`, atalho `/`), então `#search` não foi criada. Pendentes para a Fase 3: `#<subjectId>/review` (flashcards da matéria inteira) e `#<subjectId>/quiz`.
 
 ## D9 · Nada de imagem gerada nem 3D · aceita (07/set/2026)
 
-As visualizações são a imagem do produto. Fotos ou 3D no hero seriam enfeite com custo de performance. O único elemento "vivo" fica no canvas 2D do mapa de conexões da home.
+As visualizações são a imagem do produto. Fotos ou 3D no hero seriam enfeite com custo de performance. O único elemento "vivo" é o canvas 2D do quadro de ligações, que com a D6 saiu da home e mora no modo Hub.
+
+## D12 · Negrito automático nas palavras em caixa alta · aceita (07/set/2026)
+
+**Contexto.** Os textos do curso já marcam o essencial em CAIXA ALTA ("SISTEMA DE ATIVIDADES", "MARGEM", "NÃO é"). O playbook pede palavras-chave em negrito para escaneabilidade.
+**Decisão.** `boldKeys()` em `app.js` envolve em `<b>` toda sequência de palavras em caixa alta com 3 letras ou mais (conectivos "DE", "E", "OF" no meio são aceitos; uma lista de exclusão evita "NOT", "THE", "NÃO" sozinhos). O texto é escapado antes; os dados não mudam.
+**Consequências.** Nenhum campo novo nos dados. Se um texto tiver caixa alta por outro motivo (siglas longas), ela aparece em negrito, o que é aceitável.
+
+## D13 · Ligações do Hub: nunca inventadas, automáticas marcadas · aceita (07/set/2026)
+
+Ver 08. As arestas nascem só dos dados (mesma semana, `connections`, citação cruzada por texto). A citação cruzada usa chaves com 6 caracteres ou mais, ignora uma lista de termos genéricos e descarta qualquer chave que apareça em mais de 8 nós de outras semanas (frequência alta = termo genérico, não ligação). Na ficha, essas ligações aparecem sob o título "Citação cruzada · automática".
 
 ## D10 · Arsenal aprovado · aceita (07/set/2026)
 

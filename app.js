@@ -1,1366 +1,793 @@
-/* ─── State ─────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════
+   Study Hub · app.js
+   Núcleo (estado, i18n, rotas, casca) + Modo 1 · Semanas.
+   O Modo 2 · Hub de conhecimento vive em hub.js (window.HUB).
+   Spec: openspec/01, 02, 03, 05, 08.
+   ═══════════════════════════════════════════════════════════ */
 window.WEEKS_DATA = window.WEEKS_DATA || {};
 window.SUBJECTS = window.SUBJECTS || [];
-let lang = localStorage.getItem('uol-lang') || 'en';
-let currentSubject = null; // matéria ativa, definida pelo router
 
-function getSubject(id) {
-  return window.SUBJECTS.find(s => s.id === id) || null;
+/* ─── Estado leve (01: só idioma e última rota) ─────────── */
+const STORE = { lang: 'uol-lang', last: 'uol-last' };
+const LEGACY_KEYS = ['uol-xp', 'uol-fc-count', 'uol-lang-toggle', 'uol-migrated'];
+
+function storeGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+function storeSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+
+function detectLang() {
+  const saved = storeGet(STORE.lang);
+  if (saved === 'pt' || saved === 'en') return saved;
+  const nav = (navigator.language || navigator.userLanguage || 'en').toLowerCase();
+  return nav.startsWith('pt') ? 'pt' : 'en';
+}
+let lang = detectLang();
+let currentSubject = null;
+let lastRoute = null;
+
+/* Gamificação removida (04·D2, arquivo em 07): limpa as chaves antigas. */
+function cleanLegacyStorage() {
+  try {
+    const del = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (!k) continue;
+      if (LEGACY_KEYS.includes(k) || /^bu2530-/.test(k) || /^uol-.+-(status|sections-\d+)$/.test(k)) del.push(k);
+    }
+    del.forEach(k => localStorage.removeItem(k));
+  } catch (e) {}
 }
 
-function getWeek(subjectId, num) {
-  return (window.WEEKS_DATA[subjectId] || {})[num];
+/* ─── i18n ──────────────────────────────────────────────── */
+const UI = {
+  subjects:     { pt: 'Matérias',                 en: 'Subjects' },
+  modes:        { pt: 'Modos de estudo',          en: 'Study modes' },
+  byWeek:       { pt: 'Por semana',               en: 'By week' },
+  hub:          { pt: 'Hub de conhecimento',      en: 'Knowledge hub' },
+  hubShort:     { pt: 'Hub',                      en: 'Hub' },
+  trails:       { pt: 'Trilhas',                  en: 'Trails' },
+  soon:         { pt: 'em breve',                 en: 'soon' },
+  part:         { pt: 'Parte',                    en: 'Part' },
+  dossier:      { pt: 'Dossiê',                   en: 'Dossier' },
+  week:         { pt: 'Semana',                   en: 'Week' },
+  weeks:        { pt: 'semanas',                  en: 'weeks' },
+  courseWeek:   { pt: 'Semana {n} do curso',      en: 'Course week {n}' },
+  openPart:     { pt: 'Abrir a parte',            en: 'Open this part' },
+  openBoard:    { pt: 'Quadro de ligações',       en: 'Connections board' },
+  review:       { pt: 'Revisão',                  en: 'Review' },
+  book:         { pt: 'Livro-base',               en: 'Core textbook' },
+  concepts:     { pt: 'Conceitos-chave',          en: 'Key concepts' },
+  theories:     { pt: 'Teorias e frameworks',     en: 'Theories and frameworks' },
+  cases:        { pt: 'Casos',                    en: 'Case studies' },
+  glossary:     { pt: 'Glossário',                en: 'Glossary' },
+  flashcards:   { pt: 'Flashcards',               en: 'Flashcards' },
+  authors:      { pt: 'Autores',                  en: 'Key authors' },
+  notes:        { pt: 'Notas completas',          en: 'Full notes' },
+  links:        { pt: 'Material complementar',    en: 'Supplementary material' },
+  connections:  { pt: 'Conexões',                 en: 'Connections' },
+  overview:     { pt: 'Visão geral',              en: 'Overview' },
+  items:        { pt: 'itens',                    en: 'items' },
+  concept:      { pt: 'Conceito',                 en: 'Concept' },
+  theory:       { pt: 'Teoria',                   en: 'Theory' },
+  of:           { pt: 'de',                       en: 'of' },
+  evidence:     { pt: 'Evidência',                en: 'Exhibit' },
+  interactive:  { pt: 'interativa · clique nos elementos', en: 'interactive · click the elements' },
+  autoScale:    { pt: 'escala automática',        en: 'auto scale' },
+  case:         { pt: 'Caso',                     en: 'Case' },
+  searchTerm:   { pt: 'Buscar termo…',            en: 'Search term…' },
+  noTerm:       { pt: 'Nenhum termo com esse texto.', en: 'No term matches that text.' },
+  expandAll:    { pt: 'Abrir todas',              en: 'Open all' },
+  collapseAll:  { pt: 'Fechar todas',             en: 'Close all' },
+  inHub:        { pt: 'Ver no Hub',               en: 'See in the Hub' },
+  reveal:       { pt: 'clique ou Enter para virar', en: 'click or Enter to flip' },
+  back:         { pt: 'virar de volta',           en: 'flip back' },
+  prev:         { pt: 'Anterior',                 en: 'Previous' },
+  next:         { pt: 'Próximo',                  en: 'Next' },
+  knew:         { pt: 'Sabia',                    en: 'Knew it' },
+  needReview:   { pt: 'Revisar',                  en: 'Review' },
+  sessionOnly:  { pt: 'contagem só nesta sessão', en: 'count kept for this session only' },
+  video:        { pt: 'Vídeo',                    en: 'Video' },
+  article:      { pt: 'Artigo',                   en: 'Article' },
+  news:         { pt: 'Notícia',                  en: 'News' },
+  other:        { pt: 'Link',                     en: 'Link' },
+  emptyWeek:    { pt: 'Esta semana ainda não tem conteúdo.', en: 'This week has no content yet.' },
+  reviewOf:     { pt: 'Compilado das semanas {a} a {b}', en: 'Compiled from weeks {a} to {b}' },
+  allCards:     { pt: 'Todos os flashcards do bloco', en: 'All flashcards in this block' },
+  openAll:      { pt: 'Aberto a todos · sem login', en: 'Open to all · no login' },
+  heroEyebrow:  { pt: 'University of London · BSc Marketing · Coursera', en: 'University of London · BSc Marketing · Coursera' },
+  heroLede:     { pt: 'Material de estudo de um aluno, aberto a qualquer aluno. Cada semana é um dossiê: conceitos, teorias com visualizações, casos, glossário, flashcards e o que a prova cobra.', en: 'One student’s study material, open to every student. Each week is a dossier: concepts, theories with visualisations, cases, glossary, flashcards and what the exam asks.' },
+  figWeeks:     { pt: 'Semanas',                  en: 'Weeks' },
+  figNodes:     { pt: 'Conceitos e teorias',      en: 'Concepts and theories' },
+  figCards:     { pt: 'Flashcards',               en: 'Flashcards' },
+  figVis:       { pt: 'Visualizações',            en: 'Visualisations' },
+  modeWeekDesc: { pt: 'O caminho do curso. Abra a pasta da semana e leia o dossiê inteiro, seção por seção.', en: 'The course path. Open the week’s folder and read the whole dossier, section by section.' },
+  modeHubDesc:  { pt: 'A matéria inteira como uma rede. Conceitos e teorias ligados por semana, pelas conexões do curso e por citação cruzada.', en: 'The whole subject as a network. Concepts and theories linked by week, by course connections and by cross-citation.' },
+  choosePart:   { pt: 'Escolher a parte',         en: 'Choose a part' },
+  openHub:      { pt: 'Abrir o hub',              en: 'Open the hub' },
+  dossiers:     { pt: 'dossiês',                  en: 'dossiers' },
+  credit:       { pt: 'Material de estudo de João Rodrigues · BSc Marketing · University of London · aberto a todos', en: 'Study material by João Rodrigues · BSc Marketing · University of London · open to all' },
+  partConnH:    { pt: 'Ligações desta parte',     en: 'Links inside this part' },
+  partConnP:    { pt: 'No Hub, os conceitos e teorias desta parte aparecem como fichas ligadas por barbante: mesma semana, conexões do curso e citações cruzadas.', en: 'In the Hub, this part’s concepts and theories appear as index cards tied by string: same week, course connections and cross-citations.' },
+  navOpen:      { pt: 'Abrir navegação',          en: 'Open navigation' },
+  navClose:     { pt: 'Fechar navegação',         en: 'Close navigation' },
+  clickCase:    { pt: 'clique nos casos',         en: 'click the cases' },
+};
+function T(key, vars) {
+  const e = UI[key]; let s = e ? (e[lang] || e.pt) : key;
+  if (vars) for (const k in vars) s = s.replace(`{${k}}`, vars[k]);
+  return s;
 }
-
-function subjectWeekNums(subject) {
-  return Array.from({ length: subject.totalWeeks }, (_, i) => i + 1);
-}
-
-const SECTION_DEFS = [
-  { key: 'overview',    icon: '📋', pt: 'Visão Geral',           en: 'Overview'               },
-  { key: 'theories',   icon: '🧩', pt: 'Teorias & Frameworks',  en: 'Theories & Frameworks'  },
-  { key: 'cases',      icon: '🏢', pt: 'Casos de Estudo',       en: 'Case Studies'           },
-  { key: 'concepts',   icon: '🔑', pt: 'Conceitos-chave',       en: 'Key Concepts'           },
-  { key: 'flashcards', icon: '🃏', pt: 'Flashcards',            en: 'Flashcards'             },
-  { key: 'glossary',   icon: '📖', pt: 'Glossário',             en: 'Glossary'               },
-  { key: 'authors',    icon: '👤', pt: 'Autores-chave',         en: 'Key Authors'            },
-  { key: 'notes',      icon: '📝', pt: 'Notas Completas',       en: 'Full Notes'             },
-  { key: 'links',      icon: '🎬', pt: 'Material Complementar', en: 'Supplementary Material' },
-  { key: 'connections',icon: '🔗', pt: 'Conexões',              en: 'Connections'            },
-];
-
-/* ─── XP System ─────────────────────────────────────────── */
-const XP_LEVELS = [
-  { min:0,    name:{ pt:'Estagiário(a) de Marketing', en:'Marketing Intern'   } },
-  { min:80,   name:{ pt:'Analista Jr.',               en:'Junior Analyst'     } },
-  { min:200,  name:{ pt:'Coordenador(a)',              en:'Coordinator'        } },
-  { min:400,  name:{ pt:'Gerente de Marketing',        en:'Marketing Manager'  } },
-  { min:700,  name:{ pt:'Especialista Sênior',         en:'Senior Specialist'  } },
-  { min:1100, name:{ pt:'Diretor(a) de Marketing',     en:'Marketing Director' } },
-  { min:1600, name:{ pt:'VP de Marketing',             en:'VP of Marketing'    } },
-  { min:2200, name:{ pt:'CMO',                         en:'CMO'                } },
-];
-
-function getXP() { return parseInt(localStorage.getItem('uol-xp') || '0'); }
-function setXP(v) { localStorage.setItem('uol-xp', String(Math.max(0, v))); }
-function addXP(n) { setXP(getXP() + n); updateXPBar(); }
-
-function getLevelInfo(xp) {
-  let lvl = XP_LEVELS[0];
-  for (const l of XP_LEVELS) { if (xp >= l.min) lvl = l; else break; }
-  const idx = XP_LEVELS.indexOf(lvl);
-  const next = XP_LEVELS[idx + 1];
-  const pct = next ? Math.round(((xp - lvl.min) / (next.min - lvl.min)) * 100) : 100;
-  return { name: t(lvl.name), nextXP: next ? next.min : null, pct, idx };
-}
-
-function updateXPBar() {
-  const xp = getXP();
-  const info = getLevelInfo(xp);
-  const el = document.getElementById('xpBar');
-  if (!el) return;
-
-  const r = 18, c = r + 2, sz = (c + 2) * 2;
-  const circumference = 2 * Math.PI * r;
-  const offset = circumference - (info.pct / 100) * circumference;
-  const nextTxt = info.nextXP ? `${info.nextXP - xp} XP` : 'MAX';
-
-  el.innerHTML = `
-    <div class="xp-bar-wrap">
-      <div style="display:flex;align-items:center;gap:12px;">
-        <svg width="${sz}" height="${sz}" viewBox="0 0 ${sz} ${sz}" style="flex-shrink:0;">
-          <circle cx="${c+2}" cy="${c+2}" r="${r}" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="3.5"/>
-          <circle cx="${c+2}" cy="${c+2}" r="${r}" fill="none" stroke="url(#xpGrad)" stroke-width="3.5"
-            stroke-dasharray="${circumference}" stroke-dashoffset="${offset}"
-            stroke-linecap="round" transform="rotate(-90 ${c+2} ${c+2})"
-            style="transition:stroke-dashoffset .7s cubic-bezier(.4,0,.2,1)"/>
-          <defs>
-            <linearGradient id="xpGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stop-color="#F59E0B"/>
-              <stop offset="100%" stop-color="#FDE68A"/>
-            </linearGradient>
-          </defs>
-          <text x="${c+2}" y="${c+2}" text-anchor="middle" dominant-baseline="central"
-            fill="#F59E0B" font-size="9" font-weight="800" font-family="-apple-system,sans-serif"
-          >${info.pct}%</text>
-        </svg>
-        <div style="flex:1;min-width:0;">
-          <div class="xp-level-name">${info.name}</div>
-          <div class="xp-count">${xp} XP · ${nextTxt} ${lang === 'pt' ? 'p/ próx.' : 'to next'}</div>
-        </div>
-      </div>
-    </div>`;
-}
-
-/* ─── Achievements ──────────────────────────────────────── */
-function countDoneWeeks() {
-  let n = 0;
-  for (const s of window.SUBJECTS) {
-    for (const w of subjectWeekNums(s)) if (weekStatus(s.id, w) === 'done') n++;
-  }
-  return n;
-}
-
-const ACHIEVEMENTS = [
-  { id: 'first_step',     icon: '🚀', pt: 'Primeiro Passo',    en: 'First Step',      check: () => countDoneWeeks() >= 1 },
-  { id: 'strategist',     icon: '♟️', pt: 'Estrategista',       en: 'Strategist',      check: () => countDoneWeeks() >= 5 },
-  { id: 'subject_master', icon: '🎓', pt: 'Matéria Completa',   en: 'Subject Master',  check: () => window.SUBJECTS.some(s => subjectWeekNums(s).every(n => weekStatus(s.id, n) === 'done')) },
-  { id: 'flashcard',      icon: '🃏', pt: 'Flashcard Pro',      en: 'Flashcard Pro',   check: () => parseInt(localStorage.getItem('uol-fc-count') || '0') >= 50 },
-  { id: 'bilingual',      icon: '🌍', pt: 'Bilíngue',           en: 'Bilingual',       check: () => parseInt(localStorage.getItem('uol-lang-toggle') || '0') >= 5 },
-  { id: 'cmo',            icon: '👑', pt: 'CMO',                en: 'CMO',             check: () => getXP() >= 2200 },
-];
-
-function trackFcScore() {
-  const n = parseInt(localStorage.getItem('uol-fc-count') || '0') + 1;
-  localStorage.setItem('uol-fc-count', String(n));
-}
-
-function trackLangToggle() {
-  const n = parseInt(localStorage.getItem('uol-lang-toggle') || '0') + 1;
-  localStorage.setItem('uol-lang-toggle', String(n));
-}
-
-/* ─── Toast + Confetti ──────────────────────────────────── */
-function showToast(msg) {
-  document.querySelectorAll('.toast').forEach(el => el.remove());
-  const el = document.createElement('div');
-  el.className = 'toast';
-  el.textContent = msg;
-  document.body.appendChild(el);
-  setTimeout(() => { el.classList.add('hidden'); setTimeout(() => el.remove(), 350); }, 2800);
-}
-
-function launchConfetti() {
-  const wrap = document.createElement('div');
-  wrap.className = 'confetti-wrap';
-  const colors = ['#C8102E','#003865','#10B981','#F59E0B','#7C3AED','#0EA5E9','#EC4899'];
-  for (let i = 0; i < 60; i++) {
-    const p = document.createElement('div');
-    p.className = 'confetti-piece';
-    p.style.cssText = `left:${Math.random()*100}%;background:${colors[i%colors.length]};animation-duration:${1.4+Math.random()*1.8}s;animation-delay:${Math.random()*1}s;transform:rotate(${Math.random()*360}deg);width:${5+Math.random()*7}px;height:${8+Math.random()*10}px;`;
-    wrap.appendChild(p);
-  }
-  document.body.appendChild(wrap);
-  setTimeout(() => wrap.remove(), 4000);
-}
-
-/* ─── Helpers ───────────────────────────────────────────── */
 function t(obj) {
   if (!obj) return '';
   if (typeof obj === 'string') return obj;
   return lang === 'en' ? (obj.en || obj.pt || '') : (obj.pt || obj.en || '');
 }
+function esc(s) {
+  return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+/* Negrito nas palavras-chave: os textos do curso já marcam o essencial em CAIXA ALTA. */
+const KW_STOP = new Set(['AND', 'THE', 'FOR', 'NOT', 'BUT', 'YOU', 'ALL', 'ONE', 'TWO', 'NEW', 'ARE', 'WAS', 'HAS', 'ITS', 'OUT', 'QUE', 'COM', 'POR', 'DOS', 'DAS', 'UMA', 'NÃO', 'NAO', 'SIM', 'SEM', 'MAS', 'SER', 'SUA', 'SEU', 'UOL', 'THIS', 'THAT', 'WITH', 'FROM', 'WHAT', 'ISSO', 'ESSE', 'ESSA', 'ESTE', 'ESTA', 'ONDE', 'COMO', 'PARA', 'PELO', 'PELA', 'MUITO']);
+function boldKeys(html) {
+  return html.replace(/(^|[^\wÀ-ÿ])([A-ZÀ-Ý][A-ZÀ-Ý&\-\/]{2,}(?:\s+(?:[A-ZÀ-Ý][A-ZÀ-Ý&\-\/]{1,}|DE|DA|DO|DOS|DAS|E|&|OF|THE|AND|IN|TO|X|×|VS|VS\.))*)(?![\wÀ-ÿ])/g, (m, pre, w) => {
+    const words = w.split(/\s+/).filter(x => /^[A-ZÀ-Ý][A-ZÀ-Ý&\-\/]{2,}$/.test(x) && !KW_STOP.has(x));
+    return words.length ? `${pre}<b>${w}</b>` : m;
+  });
+}
+function rich(s) { return boldKeys(esc(t(s))); }
 
-function weekTitle(subjectId, num) {
+/* ─── Dados ─────────────────────────────────────────────── */
+function getSubject(id) { return window.SUBJECTS.find(s => s.id === id) || null; }
+function getWeek(subjectId, num) { return (window.WEEKS_DATA[subjectId] || {})[num]; }
+function subjectWeekNums(s) { return Array.from({ length: s.totalWeeks }, (_, i) => i + 1); }
+function subjectIndex(s) { return window.SUBJECTS.indexOf(s); }
+function partNum(s) { return String(subjectIndex(s) + 1).padStart(2, '0'); }
+function courseWeekNum(s, n) {
+  let off = 0;
+  for (const x of window.SUBJECTS) { if (x === s) break; off += x.totalWeeks; }
+  return off + n;
+}
+function weekTitle(subjectId, num, which) {
   const w = getWeek(subjectId, num);
-  if (w && w.title) return t(w.title);
   const s = getSubject(subjectId);
-  const meta = s && s.weekTitles && s.weekTitles[num];
-  return meta ? t(meta) : `Week ${num}`;
+  const src = (w && w.title) || (s && s.weekTitles && s.weekTitles[num]);
+  if (!src) return `Week ${num}`;
+  if (which === 'pt') return src.pt || src.en; if (which === 'en') return src.en || src.pt;
+  return t(src);
 }
-
-function weekStatus(subjectId, num) {
-  const ls = localStorage.getItem(`uol-${subjectId}-week-${num}-status`);
-  if (ls) return ls;
-  const w = getWeek(subjectId, num);
-  return (w && w.status) || 'not-started';
-}
-
-function statusLabel(s) {
-  const map = {
-    'not-started': { pt: '⬜ Não iniciado', en: '⬜ Not started' },
-    'in-progress': { pt: '🔄 Em andamento', en: '🔄 In progress' },
-    'done':        { pt: '✅ Concluído',    en: '✅ Done' },
-  };
-  return t(map[s] || map['not-started']);
-}
-
-function statusBadgeClass(s) {
-  return { 'not-started': 'badge-not-started', 'in-progress': 'badge-in-progress', 'done': 'badge-done' }[s] || 'badge-not-started';
-}
-
-function initials(name) {
-  return name.split(' ').filter(Boolean).map(p => p[0]).join('').slice(0, 2).toUpperCase();
-}
-
 function isWeekPopulated(subjectId, num) {
   const w = getWeek(subjectId, num);
-  if (!w) return false;
-  return !!(w.overview || w.concepts?.length || w.theories?.length || w.caseStudies?.length);
+  return !!(w && (w.overview || (w.concepts && w.concepts.length) || (w.theories && w.theories.length) || (w.caseStudies && w.caseStudies.length)));
 }
-
-function getAvailableSections(subjectId, num) {
-  const w = getWeek(subjectId, num);
-  if (!w) return [];
-  const keys = [];
-  if (w.overview)            keys.push('overview');
-  if (w.theories?.length)    keys.push('theories');
-  if (w.caseStudies?.length) keys.push('cases');
-  if (w.concepts?.length)    keys.push('concepts');
-  if (w.flashcards?.length)  keys.push('flashcards');
-  if (w.glossary?.length)    keys.push('glossary');
-  if (w.authors?.length)     keys.push('authors');
-  if (w.notes)               keys.push('notes');
-  if (w.links?.length)       keys.push('links');
-  if (w.connections?.length) keys.push('connections');
-  return keys;
+function nameOf(th) {
+  if (!th || !th.name) return { pt: '', en: '' };
+  if (typeof th.name === 'string') return { pt: th.name, en: th.name };
+  return { pt: th.name.pt || th.name.en || '', en: th.name.en || th.name.pt || '' };
 }
+function wnum(n) { return 'W' + String(n).padStart(2, '0'); }
+function pad2(n) { return String(n).padStart(2, '0'); }
+function initials(name) { return String(name || '').split(' ').filter(Boolean).map(p => p[0]).join('').slice(0, 2).toUpperCase(); }
 
-/* ─── Section Progress ───────────────────────────────────── */
-function getSectionState(subjectId, weekNum) {
-  try { return JSON.parse(localStorage.getItem(`uol-${subjectId}-sections-${weekNum}`)) || {}; }
-  catch { return {}; }
-}
-
-function checkWeekCompletion(subjectId, weekNum, state) {
-  const available = getAvailableSections(subjectId, weekNum);
-  if (!available.length) return;
-  const allDone = available.every(k => state[k]);
-  const anyDone = available.some(k => state[k]);
-  if (allDone) {
-    localStorage.setItem(`uol-${subjectId}-week-${weekNum}-status`, 'done');
-  } else if (anyDone) {
-    localStorage.setItem(`uol-${subjectId}-week-${weekNum}-status`, 'in-progress');
-  } else {
-    localStorage.removeItem(`uol-${subjectId}-week-${weekNum}-status`);
-  }
-}
-
-/* ─── Language Toggle ───────────────────────────────────── */
-function toggleLang() {
-  lang = lang === 'pt' ? 'en' : 'pt';
-  localStorage.setItem('uol-lang', lang);
-  trackLangToggle();
-  document.getElementById('langFlag').textContent = lang === 'pt' ? '🇧🇷' : '🇬🇧';
-  document.getElementById('langText').textContent = lang === 'pt' ? 'PT+EN' : 'EN';
-  renderSidebar();
-  route();
-}
-
-/* ─── Sidebar ───────────────────────────────────────────── */
-function renderSidebar() {
-  updateXPBar();
-  const hash = window.location.hash || '#home';
-  const nav = document.getElementById('sidebarNav');
-  const footer = document.getElementById('sidebarFooter');
-  const pt1 = lang === 'pt';
-
-  if (currentSubject) {
-    const s = currentSubject;
-
-    function reviewAfter(n) {
-      const r = (s.reviews || []).find(r => r.after === n);
-      if (!r) return '';
-      const h = `#${s.id}/${r.id}`;
-      return `<a href="${h}" class="nav-review ${hash === h ? 'active' : ''}">${pt1 ? r.labelPt : r.labelEn}</a>`;
-    }
-
-    function weekItem(n) {
-      const h = `#${s.id}/week-${n}`;
-      const status = weekStatus(s.id, n);
-      return `
-        <a href="${h}" class="nav-week-item status-${status} ${hash === h ? 'active' : ''}">
-          <span class="nav-status-dot"></span>
-          <span class="nav-week-num">W${n}</span>
-          <span class="nav-week-title">${weekTitle(s.id, n)}</span>
-        </a>
-        ${reviewAfter(n)}
-      `;
-    }
-
-    nav.innerHTML = `
-      <div class="nav-home">
-        <a href="#home">← ${pt1 ? 'Todas as matérias' : 'All subjects'}</a>
-      </div>
-      <div class="nav-section-header">${s.icon} ${t(s.name)}</div>
-      ${subjectWeekNums(s).map(weekItem).join('')}
-    `;
-  } else {
-    const items = window.SUBJECTS.map(s => {
-      const done = subjectWeekNums(s).filter(n => weekStatus(s.id, n) === 'done').length;
-      const h = `#${s.id}`;
-      return `
-        <a href="${h}" class="nav-week-item ${hash === h ? 'active' : ''}">
-          <span class="nav-week-num">${s.icon}</span>
-          <span class="nav-week-title">${t(s.name)}</span>
-          <span style="margin-left:auto;font-size:10px;opacity:.7;flex-shrink:0;">${done}/${s.totalWeeks}</span>
-        </a>
-      `;
-    }).join('');
-
-    nav.innerHTML = `
-      <div class="nav-home">
-        <a href="#home" class="${(hash === '#home' || hash === '' || hash === '#dashboard') ? 'active' : ''}">
-          🏠 Dashboard
-        </a>
-      </div>
-      <div class="nav-section-header">${pt1 ? 'Matérias' : 'Subjects'}</div>
-      ${items}
-    `;
-  }
-
-  footer.innerHTML = pt1
-    ? `Desenvolvido por João Rodrigues<br>Marketing BSc · University of London`
-    : `Developed by João Rodrigues<br>Marketing BSc · University of London`;
-}
-
-/* ─── Section Wrapper ───────────────────────────────────── */
-function sectionWrapper(key, weekNum, bodyHtml, state) {
-  const def = SECTION_DEFS.find(d => d.key === key);
-  const isOk = !!(state && state[key]);
-  const label = lang === 'pt' ? def.pt : def.en;
-  const pt1 = lang === 'pt';
-
-  return `
-    <div class="section ${isOk ? 'is-ok' : ''}" id="sec-${weekNum}-${key}">
-      <div class="section-header" onclick="toggleSection(event,'${key}',${weekNum})">
-        <div class="section-header-left">
-          <span class="section-chevron">›</span>
-          <span class="section-icon">${def.icon}</span>
-          <span class="section-title">${label}</span>
-        </div>
-        <div class="section-header-right">
-          <button class="ok-btn ${isOk ? 'ok-done' : ''}"
-                  onclick="toggleOk(event,'${key}',${weekNum})"
-                  title="${pt1 ? 'Marcar como concluído' : 'Mark as done'}">
-            ${isOk ? '✓' : '○'}
-          </button>
-        </div>
-      </div>
-      <div class="section-body"><div class="section-inner">${bodyHtml}</div></div>
-    </div>
-  `;
-}
-
-/* ─── Toggle Handlers ───────────────────────────────────── */
-function toggleSection(e, key, weekNum) {
-  if (e.target.closest('.ok-btn')) return;
-  const sec = document.getElementById(`sec-${weekNum}-${key}`);
-  if (!sec) return;
-  const wasOpen = sec.classList.contains('open');
-  sec.classList.toggle('open');
-  if (!wasOpen) {
-    sec.querySelectorAll('.vis-container[data-renderer]').forEach(el => {
-      if (!el.hasAttribute('data-vis-init')) initSingleVis(el);
-    });
-  }
-}
-
-function toggleOk(e, key, weekNum) {
-  e.stopPropagation();
-  const state = getSectionState(currentSubject.id, weekNum);
-  const wasDone = !!state[key];
-  const prevStatus = weekStatus(currentSubject.id, weekNum);
-
-  state[key] = !state[key];
-  localStorage.setItem(`uol-${currentSubject.id}-sections-${weekNum}`, JSON.stringify(state));
-
-  const sec = document.getElementById(`sec-${weekNum}-${key}`);
-  const btn = sec && sec.querySelector('.ok-btn');
-  if (sec && btn) {
-    if (state[key]) {
-      sec.classList.add('is-ok');
-      btn.classList.add('ok-done');
-      btn.textContent = '✓';
-    } else {
-      sec.classList.remove('is-ok');
-      btn.classList.remove('ok-done');
-      btn.textContent = '○';
-    }
-  }
-
-  if (state[key] && !wasDone) {
-    addXP(10);
-    showToast(lang === 'pt' ? '+10 XP — Seção concluída! 🎯' : '+10 XP — Section done! 🎯');
-  } else if (!state[key] && wasDone) {
-    addXP(-10);
-  }
-
-  checkWeekCompletion(currentSubject.id, weekNum, state);
-  updateProgressRow(weekNum, state);
-  renderSidebar();
-
-  const newStatus = weekStatus(currentSubject.id, weekNum);
-  if (newStatus === 'done' && prevStatus !== 'done') {
-    addXP(50);
-    launchConfetti();
-    showToast(lang === 'pt' ? `🏆 +50 XP — Semana ${weekNum} concluída!` : `🏆 +50 XP — Week ${weekNum} done!`);
-  }
-}
-
-function updateProgressRow(weekNum, state) {
-  const available = getAvailableSections(currentSubject.id, weekNum);
-  const done = available.filter(k => state[k]).length;
-  const el = document.getElementById(`prog-fill-${weekNum}`);
-  const txt = document.getElementById(`prog-text-${weekNum}`);
-  if (el) el.style.width = `${available.length ? (done / available.length) * 100 : 0}%`;
-  if (txt) txt.textContent = lang === 'pt' ? `${done}/${available.length} seções` : `${done}/${available.length} sections`;
-}
-
-/* ─── Home (todas as matérias) ──────────────────────────── */
-function renderHome() {
-  const pt1 = lang === 'pt';
-  const subjects = window.SUBJECTS;
-  const totalWeeks = subjects.reduce((a, s) => a + s.totalWeeks, 0);
-  const done = countDoneWeeks();
-  let inProg = 0;
-  for (const s of subjects) for (const n of subjectWeekNums(s)) if (weekStatus(s.id, n) === 'in-progress') inProg++;
-  const notStarted = totalWeeks - done - inProg;
-
-  const pct = totalWeeks ? Math.round((done / totalWeeks) * 100) : 0;
-  const r = 28, sz = (r + 5) * 2;
-  const circumference = 2 * Math.PI * r;
-  const offset = circumference - (pct / 100) * circumference;
-
-  const subjectCards = subjects.map(s => {
-    const sDone = subjectWeekNums(s).filter(n => weekStatus(s.id, n) === 'done').length;
-    const sPct = Math.round((sDone / s.totalWeeks) * 100);
-    return `
-      <div class="week-card" onclick="navigate('#${s.id}')" style="border-top:3px solid ${s.color};">
-        <div class="week-card-num">${s.icon} ${s.code}</div>
-        <div class="week-card-title">${t(s.name)}</div>
-        <div style="font-size:11px;color:var(--text-mid);margin:6px 0 10px;line-height:1.5;">${t(s.description)}</div>
-        <div class="week-prog-bar" style="background:rgba(0,0,0,.08);">
-          <div class="week-prog-fill" style="width:${sPct}%;background:${s.color};"></div>
-        </div>
-        <div style="font-size:11px;font-weight:700;color:var(--text-mid);margin-top:6px;">${sDone}/${s.totalWeeks} ${pt1 ? 'semanas' : 'weeks'} · ${sPct}%</div>
-      </div>`;
-  }).join('');
-
-  const achievementsHtml = ACHIEVEMENTS.map(a => {
-    const unlocked = a.check();
-    return `
-      <div class="achievement-badge ${unlocked ? 'unlocked' : ''}">
-        <div class="achievement-icon ${unlocked ? 'unlocked' : 'locked'}">${a.icon}</div>
-        <div class="achievement-name">${pt1 ? a.pt : a.en}</div>
-      </div>`;
-  }).join('');
-
-  document.getElementById('mainContent').innerHTML = `
-    <div class="dash-hero">
-      <div class="dash-eyebrow">University of London · Coursera</div>
-      <div class="dash-title">${pt1 ? 'Central de Estudos' : 'Study Hub'}</div>
-      <div class="dash-desc">${pt1
-        ? 'Todas as suas matérias num só lugar. Escolha uma matéria e explore cada semana no seu ritmo — conceitos, teorias, casos e flashcards.'
-        : 'All your subjects in one place. Pick a subject and explore each week at your own pace — concepts, theories, cases and flashcards.'
-      }</div>
-    </div>
-
-    <div class="dash-stats">
-      <div class="stat-card">
-        <div class="stat-num">${subjects.length}</div>
-        <div class="stat-label">${pt1 ? 'Matérias' : 'Subjects'}</div>
-      </div>
-      <div class="stat-card green">
-        <div class="stat-num">${done}</div>
-        <div class="stat-label">${pt1 ? 'Semanas concluídas' : 'Weeks completed'}</div>
-      </div>
-      <div class="stat-card amber">
-        <div class="stat-num">${inProg}</div>
-        <div class="stat-label">${pt1 ? 'Em andamento' : 'In progress'}</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-num">${notStarted}</div>
-        <div class="stat-label">${pt1 ? 'Não iniciadas' : 'Not started'}</div>
-      </div>
-    </div>
-
-    <div style="display:flex;align-items:center;gap:24px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:20px 24px;margin-bottom:32px;box-shadow:var(--shadow);">
-      <svg width="${sz}" height="${sz}" viewBox="0 0 ${sz} ${sz}">
-        <circle cx="${r+5}" cy="${r+5}" r="${r}" fill="none" stroke="var(--border)" stroke-width="5"/>
-        <circle cx="${r+5}" cy="${r+5}" r="${r}" fill="none" stroke="var(--blue)" stroke-width="5"
-          stroke-dasharray="${circumference}" stroke-dashoffset="${offset}"
-          stroke-linecap="round" transform="rotate(-90 ${r+5} ${r+5})"
-          style="transition:stroke-dashoffset 1s cubic-bezier(.4,0,.2,1)"/>
-        <text x="${r+5}" y="${r+5}" text-anchor="middle" dominant-baseline="central"
-          fill="var(--blue)" font-size="12" font-weight="900" font-family="-apple-system,sans-serif">${pct}%</text>
-      </svg>
-      <div>
-        <div style="font-size:13px;font-weight:800;color:var(--blue);margin-bottom:4px;">${pt1 ? 'Progresso Geral' : 'Overall Progress'}</div>
-        <div style="font-size:12px;color:var(--text-mid);">${done}/${totalWeeks} ${pt1 ? 'semanas concluídas' : 'weeks completed'}</div>
-      </div>
-      <div style="margin-left:auto;">
-        <div style="font-size:11px;font-weight:700;color:var(--text-lt);text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px;">${pt1 ? 'Conquistas' : 'Achievements'}</div>
-        <div class="achievement-grid" style="margin-top:0;">${achievementsHtml}</div>
-      </div>
-    </div>
-
-    <div class="part-header">
-      <div class="part-title">${pt1 ? 'Matérias' : 'Subjects'}</div>
-      <div class="part-line"></div>
-      <div class="part-badge">${subjects.length}</div>
-    </div>
-    <div class="week-grid">${subjectCards}</div>
-  `;
-  document.getElementById('mainContent').scrollTop = 0;
-}
-
-/* ─── Dashboard da matéria ──────────────────────────────── */
-function renderSubjectDashboard(s) {
-  const pt1 = lang === 'pt';
-  const nums = subjectWeekNums(s);
-  const total = nums.length;
-  const done = nums.filter(n => weekStatus(s.id, n) === 'done').length;
-  const inProg = nums.filter(n => weekStatus(s.id, n) === 'in-progress').length;
-  const notStarted = total - done - inProg;
-
-  const pct = Math.round((done / total) * 100);
-  const r = 28, sz = (r + 5) * 2;
-  const circumference = 2 * Math.PI * r;
-  const offset = circumference - (pct / 100) * circumference;
-
-  function weekCard(n) {
-    const status = weekStatus(s.id, n);
-    return `
-      <div class="week-card status-${status}" onclick="navigate('#${s.id}/week-${n}')">
-        <div class="week-card-num">Week ${n}</div>
-        <div class="week-card-title">${weekTitle(s.id, n)}</div>
-        <div class="week-badge ${statusBadgeClass(status)}">${statusLabel(status)}</div>
-      </div>`;
-  }
-
-  function reviewCard(rv) {
-    return `
-      <div class="week-card review-card" onclick="navigate('#${s.id}/${rv.id}')">
-        <div class="week-card-num">📋 ${pt1 ? 'Revisão' : 'Review'}</div>
-        <div class="week-card-title">${(pt1 ? rv.labelPt : rv.labelEn).replace('📋 ', '')}</div>
-        <div class="week-badge" style="background:rgba(255,255,255,.15);color:#fff;font-size:10px;">
-          ${pt1 ? 'Semanas' : 'Weeks'} ${rv.range[0]}–${rv.range[1]}
-        </div>
-      </div>`;
-  }
-
-  document.getElementById('mainContent').innerHTML = `
-    <div class="dash-hero">
-      <div class="dash-eyebrow">${s.code} · University of London</div>
-      <div class="dash-title">${t(s.name)}</div>
-      <div class="dash-desc">${t(s.description)}</div>
-    </div>
-
-    <div class="dash-stats">
-      <div class="stat-card">
-        <div class="stat-num">${total}</div>
-        <div class="stat-label">${pt1 ? 'Semanas totais' : 'Total weeks'}</div>
-      </div>
-      <div class="stat-card green">
-        <div class="stat-num">${done}</div>
-        <div class="stat-label">${pt1 ? 'Concluídas' : 'Completed'}</div>
-      </div>
-      <div class="stat-card amber">
-        <div class="stat-num">${inProg}</div>
-        <div class="stat-label">${pt1 ? 'Em andamento' : 'In progress'}</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-num">${notStarted}</div>
-        <div class="stat-label">${pt1 ? 'Não iniciadas' : 'Not started'}</div>
-      </div>
-    </div>
-
-    <div style="display:flex;align-items:center;gap:24px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:20px 24px;margin-bottom:32px;box-shadow:var(--shadow);">
-      <svg width="${sz}" height="${sz}" viewBox="0 0 ${sz} ${sz}">
-        <circle cx="${r+5}" cy="${r+5}" r="${r}" fill="none" stroke="var(--border)" stroke-width="5"/>
-        <circle cx="${r+5}" cy="${r+5}" r="${r}" fill="none" stroke="${s.color || 'var(--blue)'}" stroke-width="5"
-          stroke-dasharray="${circumference}" stroke-dashoffset="${offset}"
-          stroke-linecap="round" transform="rotate(-90 ${r+5} ${r+5})"
-          style="transition:stroke-dashoffset 1s cubic-bezier(.4,0,.2,1)"/>
-        <text x="${r+5}" y="${r+5}" text-anchor="middle" dominant-baseline="central"
-          fill="${s.color || 'var(--blue)'}" font-size="12" font-weight="900" font-family="-apple-system,sans-serif">${pct}%</text>
-      </svg>
-      <div>
-        <div style="font-size:13px;font-weight:800;color:${s.color || 'var(--blue)'};margin-bottom:4px;">${pt1 ? 'Progresso da Matéria' : 'Subject Progress'}</div>
-        <div style="font-size:12px;color:var(--text-mid);">${done}/${total} ${pt1 ? 'semanas concluídas' : 'weeks completed'}</div>
-      </div>
-    </div>
-
-    <div class="part-header">
-      <div class="part-title">${pt1 ? 'Semanas' : 'Weeks'}</div>
-      <div class="part-line"></div>
-      <div class="part-badge">${pt1 ? `Semanas 1–${total}` : `Weeks 1–${total}`}</div>
-    </div>
-    <div class="week-grid">${nums.map(weekCard).join('')}${(s.reviews || []).map(reviewCard).join('')}</div>
-  `;
-  document.getElementById('mainContent').scrollTop = 0;
-}
-
-/* ─── Week Page ─────────────────────────────────────────── */
-function renderWeek(num) {
-  const sid = currentSubject.id;
-  const w = getWeek(sid, num);
-  const title = weekTitle(sid, num);
-  const status = weekStatus(sid, num);
-  const pt1 = lang === 'pt';
-  const state = getSectionState(sid, num);
-  const available = getAvailableSections(sid, num);
-  const doneCount = available.filter(k => state[k]).length;
-  const pct = available.length ? Math.round((doneCount / available.length) * 100) : 0;
-
-  const partLabel = t(currentSubject.name);
-
-  let html = `
-    <div class="week-hero">
-      <div class="week-num-bg">${num}</div>
-      <div class="week-hero-tag">Week ${num} · ${partLabel}</div>
-      <div class="week-hero-title">${title}</div>
-      <div class="week-hero-bottom">
-        <span class="week-status-chip">${statusLabel(status)}</span>
-        ${available.length ? `
-        <div class="week-prog-wrap">
-          <span class="week-prog-label" id="prog-text-${num}">${pt1 ? `${doneCount}/${available.length} seções` : `${doneCount}/${available.length} sections`}</span>
-          <div class="week-prog-bar">
-            <div class="week-prog-fill" id="prog-fill-${num}" style="width:${pct}%"></div>
-          </div>
-        </div>` : ''}
-      </div>
-    </div>
-  `;
-
-  if (!w || !isWeekPopulated(sid, num)) {
-    html += `
-      <div class="empty-week">
-        <div class="empty-icon">📭</div>
-        <div class="empty-title">${pt1 ? 'Conteúdo ainda não adicionado' : 'Content not yet added'}</div>
-        <div class="empty-text">${pt1 ? 'Mande o conteúdo desta semana no chat e a plataforma será atualizada.' : "Send this week's content in the chat and the platform will be updated."}</div>
-      </div>`;
-  } else {
-    if (w.overview)            html += sectionWrapper('overview',    num, renderOverviewBody(w.overview),           state);
-    if (w.theories?.length)    html += sectionWrapper('theories',    num, renderTheoriesBody(w.theories),           state);
-    if (w.caseStudies?.length) html += sectionWrapper('cases',       num, renderCasesBody(w.caseStudies),           state);
-    if (w.concepts?.length)    html += sectionWrapper('concepts',    num, renderConceptsBody(w.concepts, num),      state);
-    if (w.flashcards?.length)  html += sectionWrapper('flashcards',  num, renderFlashcardsBody(w.flashcards, num),  state);
-    if (w.glossary?.length)    html += sectionWrapper('glossary',    num, renderGlossaryBody(w.glossary, num),      state);
-    if (w.authors?.length)     html += sectionWrapper('authors',     num, renderAuthorsBody(w.authors),             state);
-    if (w.notes)               html += sectionWrapper('notes',       num, renderNotesBody(w.notes),                state);
-    if (w.links?.length)       html += sectionWrapper('links',       num, renderLinksBody(w.links),                state);
-    if (w.connections?.length) html += sectionWrapper('connections', num, renderConnectionsBody(w.connections),     state);
-  }
-
-  document.getElementById('mainContent').innerHTML = html;
-  document.getElementById('mainContent').scrollTop = 0;
-}
-
-/* ─── Overview ───────────────────────────────────────────── */
-function renderOverviewBody(overview) {
-  return `<div class="overview-text">${t(overview)}</div>`;
-}
-
-/* ─── Concept Cards ──────────────────────────────────────── */
-const PILL_COLORS = [
-  { bg:'#EFF6FF', text:'#1E40AF', border:'#BFDBFE' },
-  { bg:'#F0FDF4', text:'#065F46', border:'#A7F3D0' },
-  { bg:'#FEF3C7', text:'#92600A', border:'#FDE68A' },
-  { bg:'#FDF4FF', text:'#6B21A8', border:'#E9D5FF' },
-  { bg:'#FFF1F2', text:'#9F1239', border:'#FECDD3' },
-  { bg:'#F0FDFA', text:'#0F766E', border:'#99F6E4' },
-  { bg:'#FFF7ED', text:'#9A3412', border:'#FED7AA' },
-  { bg:'#F5F3FF', text:'#5B21B6', border:'#DDD6FE' },
+const SECTION_DEFS = [
+  { key: 'overview',    ui: 'overview',    has: w => !!w.overview },
+  { key: 'concepts',    ui: 'concepts',    has: w => !!(w.concepts && w.concepts.length) },
+  { key: 'theories',    ui: 'theories',    has: w => !!(w.theories && w.theories.length) },
+  { key: 'cases',       ui: 'cases',       has: w => !!(w.caseStudies && w.caseStudies.length) },
+  { key: 'glossary',    ui: 'glossary',    has: w => !!(w.glossary && w.glossary.length) },
+  { key: 'flashcards',  ui: 'flashcards',  has: w => !!(w.flashcards && w.flashcards.length) },
+  { key: 'authors',     ui: 'authors',     has: w => !!(w.authors && w.authors.length) },
+  { key: 'notes',       ui: 'notes',       has: w => !!w.notes },
+  { key: 'links',       ui: 'links',       has: w => !!(w.links && w.links.length) },
+  { key: 'connections', ui: 'connections', has: w => !!(w.connections && w.connections.length) },
 ];
+function availableSections(w) { return w ? SECTION_DEFS.filter(d => d.has(w)) : []; }
 
-const currentConcept = {};
-
-function renderConceptsBody(concepts, weekNum) {
-  const cards = concepts.map((c, i) => {
-    const col = PILL_COLORS[i % PILL_COLORS.length];
-    const num = String(i + 1).padStart(2, '0');
-    const label = lang === 'pt' ? c.pt : c.en;
-    const enLabel = lang === 'pt' && c.en && c.en !== c.pt ? c.en : '';
-    return `
-      <div class="concept-card" data-idx="${i}"
-        style="background:${col.bg};border-color:${col.border};"
-        onclick="selectConcept(${weekNum},${i})">
-        <div class="concept-num" style="color:${col.text}">${num}</div>
-        <div class="concept-term" style="color:${col.text}">${label}</div>
-        ${enLabel ? `<div class="concept-en" style="color:${col.text}">${enLabel}</div>` : ''}
-      </div>`;
-  }).join('');
-  return `
-    <div class="concept-grid">${cards}</div>
-    <div class="concept-detail-v2" id="cdetail-${weekNum}" style="display:none"></div>`;
-}
-
-function selectConcept(weekNum, idx) {
-  const w = getWeek(currentSubject.id, weekNum);
-  if (!w?.concepts) return;
-  const isSame = currentConcept[weekNum] === idx;
-  currentConcept[weekNum] = isSame ? -1 : idx;
-
-  const detail = document.getElementById(`cdetail-${weekNum}`);
-  const cards = document.querySelectorAll(`#sec-${weekNum}-concepts .concept-card`);
-
-  cards.forEach((card, i) => {
-    const col = PILL_COLORS[i % PILL_COLORS.length];
-    card.classList.toggle('active', i === currentConcept[weekNum]);
-    if (i === currentConcept[weekNum]) {
-      card.style.boxShadow = `0 0 0 2.5px ${col.text}, 0 8px 24px ${col.border}`;
-      card.style.transform = 'translateY(-2px)';
-    } else {
-      card.style.boxShadow = '';
-      card.style.transform = '';
-    }
-  });
-
-  if (isSame || currentConcept[weekNum] === -1) {
-    if (detail) detail.style.display = 'none';
-    return;
+/* Totais para a capa */
+function courseFigures() {
+  let weeks = 0, nodes = 0, cards = 0, vis = 0;
+  for (const s of window.SUBJECTS) for (const n of subjectWeekNums(s)) {
+    const w = getWeek(s.id, n); if (!w || !isWeekPopulated(s.id, n)) continue;
+    weeks++;
+    nodes += (w.concepts || []).length + (w.theories || []).length;
+    cards += (w.flashcards || []).length;
+    vis += (w.theories || []).filter(th => th.renderer && VIS_DISPATCH[th.renderer]).length;
   }
-  const c = w.concepts[idx];
-  if (detail) {
-    detail.style.display = 'block';
-    detail.innerHTML = `
-      <div class="concept-detail-term">${lang === 'pt' ? c.pt : c.en}</div>
-      ${lang === 'pt' && c.en ? `<div class="concept-detail-en">${c.en}</div>` : ''}
-      <div class="concept-detail-def">${t(c.definition)}</div>`;
-  }
+  return { weeks, nodes, cards, vis };
 }
 
-/* ─── Theories ───────────────────────────────────────────── */
-function renderTheoriesBody(theories) {
-  return `<div class="theory-list">${theories.map(th => renderTheoryCard(th)).join('')}</div>`;
-}
-
-const VIS_DISPATCH = {
-  '4vs-scatter':       true,
-  'radar':             true,
-  'forces':            true,
-  'ladder':            true,
-  'wave':              true,
-  'spectrum':          true,
-  'timeline':          true,
-  'fourvsCards':       true,
-  'performMatrix':     true,
-  'lifecycle':         true,
-  'genericStrategies': true,
-  'valueDisciplines':  true,
-  'valueMatrix':       true,
-  // Week 3
-  'npdFlow':           true,
-  'rdFunnel':          true,
-  'modularVsIntegral': true,
-  'productPlatform':   true,
-  // Week 4
-  'processTypes':        true,
-  'orderTypes':          true,
-  'processMappingTools': true,
-  'vsmConcept':          true,
-  'facilityLayouts':     true,
-  // Week 5
-  'scmNetwork':          true,
-  'sourcingCompare':     true,
-  'enterpriseTypes':     true,
-  'derg':                true,
-  'tceAssumptions':      true,
-  // Week 6
-  'kraljicMatrix':       true,
-  'armsVsPartnership':   true,
-  'decouplingPoint':     true,
-  // Week 7
-  'eoqModel':            true,
-  'qpSystems':           true,
-  'mrpTree':             true,
-  'abcAnalysis':         true,
-  // Week 8
-  'leanElements':        true,
-  'sevenWastes':         true,
-  'fiveS':               true,
-  'kanbanPull':          true,
-  // Week 9
-  'qualityDimensions':   true,
-  'qualityEvolution':    true,
-  'sevenTools':          true,
-  'spcChart':            true,
-  // Week 10
-  'industry40':          true,
-  'digitizationVsDigital': true,
-  'printing3dSupply':    true,
-  'amazonVsWalmart':     true,
-  // Marketing Strategy — Week 1
-  'marketingEnvironment': true,
-  'microMacroCompare':   true,
-  'macroForces':         true,
-  // Marketing Strategy — Week 2
-  'swotMatrix':          true,
-  'portersForces':       true,
-  'pestle':              true,
-  // Marketing Strategy — Week 3 (STP)
-  'stpFunnel':           true,
-  'segmentationBases':   true,
-  'targetingStrategies': true,
-  'damasTest':           true,
-  'positioningMap':      true,
-  'stpInPractice':       true,
-  // Marketing Strategy — Week 4 (Branding)
-  'brandCloud':          true,
-  'brandBenefits':       true,
-  'equityVsValue':       true,
-  'brandEquityDrivers':  true,
-  'brandFinance500':     true,
-  'kellerPyramid':       true,
-  // Marketing Strategy — Week 5 (Internal & External Branding)
-  'insideOut':               true,
-  'internalVsExternal':      true,
-  'internalBrandingLadder':  true,
-  'internalStrategies':      true,
-  'jabesEvidence':           true,
-  'externalRefresh':         true,
-  // Marketing Strategy — Week 6 (The 4 Ps / marketing mix)
-  'fourPs':              true,
-  'productFeatures':     true,
-  'pricingStrategies':   true,
-  'placeDistribution':   true,
-  'promotionalMix':      true,
-  'imcLadder':           true,
-  // Marketing Strategy — Week 7 (The 7 Ps / extended mix)
-  'sevenPs':             true,
-  'serviceIHIP':         true,
-  'peopleLayers':        true,
-  'serviceProcess':      true,
-  'physicalEvidence':    true,
-  'richardMille':        true,
-  // Marketing Strategy — Week 8 (Marketing in the digital age)
-  'digitalValue':        true,
-  'poemModel':           true,
-  'multiVsOmni':         true,
-  'omniTransition':      true,
-  'socialMedia':         true,
-  'dataPrivacySecurity': true,
-  // Marketing Strategy — Week 9 (Porter's Value Chain)
-  'valueChainMap':       true,
-  'competitiveAdvantage':true,
-  'valueLinkages':       true,
-  'valueChainSteps':     true,
-  'valueChainBenefits':  true,
-  'cocaColaVC':          true,
-  // Marketing Strategy — Week 10 (Ethical marketing, CSR & Sustainability)
-  'ethicsLevels':        true,
-  'universalismRelativism': true,
-  'tripleBottomLine':    true,
-  'carrollPyramid':      true,
-  'sustainableMarketing':true,
-  'greenwashing':        true,
+/* ─── Glifos próprios (SVG à mão) ───────────────────────── */
+const GLYPH = {
+  folder: `<svg viewBox="0 0 56 56" aria-hidden="true"><path d="M6 16h18l4-5h22v34H6z" fill="#D8C79F"/><path d="M6 24h44" stroke="#151210" stroke-width="2"/><path d="M12 32h24M12 38h16" stroke="#151210" stroke-width="2"/></svg>`,
+  string: `<svg viewBox="0 0 56 56" aria-hidden="true" fill="none"><path d="M12 14 Q30 8 44 20 T40 44 Q26 50 14 40 T12 14" stroke="#E24B48" stroke-width="1.6"/><path d="M12 14 L44 20 M44 20 L40 44 M14 40 L44 20" stroke="#D8C79F" stroke-width="1.2" opacity=".8"/><rect x="8" y="10" width="9" height="7" fill="#D8C79F"/><rect x="40" y="16" width="9" height="7" fill="#D8C79F"/><rect x="36" y="40" width="9" height="7" fill="#D8C79F"/><rect x="10" y="36" width="9" height="7" fill="#D8C79F"/><circle cx="28" cy="27" r="2.4" fill="#E9E2D4"/></svg>`,
+  hubSmall: `<svg viewBox="0 0 26 26" aria-hidden="true" fill="none"><path d="M5 6 L21 9 L18 21 L6 18 Z" stroke="#E24B48" stroke-width="1.2"/><path d="M5 6 L18 21 M21 9 L6 18" stroke="currentColor" stroke-width="1" opacity=".7"/><rect x="3" y="4" width="5" height="4" fill="currentColor"/><rect x="18" y="7" width="5" height="4" fill="currentColor"/><rect x="15" y="19" width="5" height="4" fill="currentColor"/><rect x="4" y="16" width="5" height="4" fill="currentColor"/></svg>`,
+  trail: `<svg viewBox="0 0 26 26" aria-hidden="true" fill="none"><path d="M4 20 C8 8 14 8 18 14 S22 6 23 5" stroke="currentColor" stroke-width="1.4" stroke-dasharray="3 2"/><circle cx="4" cy="20" r="2" fill="currentColor"/><circle cx="23" cy="5" r="2" fill="currentColor"/></svg>`,
 };
 
-function renderTheoryCard(th) {
-  const nameEn = th.name?.en || (typeof th.name === 'string' ? th.name : '');
-  const namePt = th.name?.pt || nameEn;
-
-  // Explicit renderer field takes priority over hardcoded name detection
-  if (th.renderer && VIS_DISPATCH[th.renderer]) {
-    return renderTwoPanelCard(th);
-  }
-
-  if (nameEn.includes('4Vs') || namePt.includes('4Vs')) return render4VsCard();
-  if (nameEn.includes('Conversion') || namePt.includes('Conversão')) return renderConversionCard(th);
-
-  return renderGenericTheoryCard(th);
+/* ─── Casca: topo, gaveta, rodapé ───────────────────────── */
+function renderTopNav(r) {
+  const el = document.getElementById('topNav');
+  const view = r ? r.view : 'home';
+  el.innerHTML = `
+    <a href="#home" class="hide-m ${view === 'home' || view === 'subject' || view === 'week' || view === 'review' ? 'on' : ''}">${T('subjects')}</a>
+    <a href="#hub" class="${view === 'hub' ? 'on' : ''}">${T('hubShort')}</a>
+    <button type="button" class="lang" id="langBtn" aria-label="${lang === 'pt' ? 'Switch to English' : 'Mudar para português'}">${lang === 'pt' ? '<b>PT</b> · EN' : 'PT · <b>EN</b>'}</button>`;
+  document.getElementById('langBtn').addEventListener('click', toggleLang);
 }
 
-function renderGenericTheoryCard(th) {
-  const nameEn = th.name?.en || (typeof th.name === 'string' ? th.name : '');
-  const namePt = th.name?.pt || nameEn;
-  return `
-    <div class="theory-card">
-      ${theoryHead(th, namePt, nameEn)}
-      <div class="theory-body">${t(th.description)}</div>
-    </div>`;
-}
-
-function renderTwoPanelCard(th) {
-  const nameEn = th.name?.en || '';
-  const namePt = th.name?.pt || nameEn;
-  const uid = `vis-${th.renderer}-${Math.random().toString(36).substr(2,5)}`;
-  return `
-    <div class="theory-card">
-      ${theoryHead(th, namePt, nameEn)}
-      <div class="theory-two-panel">
-        <div class="theory-text-panel">${t(th.description)}</div>
-        <div class="theory-vis-panel">
-          <div class="vis-container" id="${uid}" data-renderer="${th.renderer}"></div>
-        </div>
-      </div>
-    </div>`;
-}
-
-function theoryHead(th, namePt, nameEn) {
-  const pt1 = lang === 'pt';
-  return `
-    <div class="theory-card-head">
-      <div class="theory-card-head-left">
-        <div class="theory-name">${pt1 ? (namePt || nameEn) : (nameEn || namePt)}</div>
-        ${pt1 && nameEn ? `<div class="theory-en">${nameEn}</div>` : ''}
-        <div class="theory-meta">
-          ${(th.authors||[]).map(a=>`<span class="theory-tag author">${a}</span>`).join('')}
-          ${th.year ? `<span class="theory-tag year">${th.year}</span>` : ''}
-          ${th.company ? `<span class="theory-tag company">${th.company}</span>` : ''}
-        </div>
-      </div>
-    </div>`;
-}
-
-/* ─── Visualization Init ─────────────────────────────────── */
-function initSingleVis(el) {
-  el.setAttribute('data-vis-init', '1');
-  const renderer = el.getAttribute('data-renderer');
-  const fnName = `vis_${renderer.replace(/-/g, '_')}`;
-  if (typeof window[fnName] === 'function') {
-    window[fnName](el, lang, {});
-  }
-}
-
-function initVisualizations() {
-  document.querySelectorAll('.vis-container[data-renderer]').forEach(el => {
-    if (!el.hasAttribute('data-vis-init')) initSingleVis(el);
-  });
-}
-
-/* ─── 4Vs Card ───────────────────────────────────────────── */
-function render4VsCard() {
-  const pt1 = lang === 'pt';
-  const dims = [
-    {
-      num:'V1', color:'#1E40AF', bg:'#EFF6FF',
-      pt:'Volume', en:'Volume',
-      highPt:'Alto volume → economias de escala, especialização, custo baixo por unidade (ex: Toyota, McDonald\'s)',
-      highEn:'High volume → economies of scale, specialisation, low cost per unit (e.g. Toyota, McDonald\'s)',
-      lowPt:'Baixo volume → flexibilidade, custo unitário maior, menos automação (ex: Pashley Cycles)',
-      lowEn:'Low volume → flexibility, higher unit cost, less automation (e.g. Pashley Cycles)',
-    },
-    {
-      num:'V2', color:'#065F46', bg:'#F0FDF4',
-      pt:'Variedade', en:'Variety',
-      highPt:'Alta variedade → equipamento geral, staff multifuncional, mais flexibilidade (ex: Intercontinental Hotels)',
-      highEn:'High variety → general equipment, multi-skilled staff, more flexibility (e.g. Intercontinental Hotels)',
-      lowPt:'Baixa variedade → especialização, maior eficiência, processos padronizados (ex: Holiday Inn Express)',
-      lowEn:'Low variety → specialisation, greater efficiency, standardised processes (e.g. Holiday Inn Express)',
-    },
-    {
-      num:'V3', color:'#92600A', bg:'#FEF3C7',
-      pt:'Variação na Demanda', en:'Variation in Demand',
-      highPt:'Alta variação → sistema precisa absorver picos e vales; capacidade extra necessária (ex: hotéis de luxo)',
-      highEn:'High variation → system must absorb peaks and troughs; extra capacity needed (e.g. luxury hotels)',
-      lowPt:'Baixa variação → demanda previsível, estável, utilização máxima de recursos',
-      lowEn:'Low variation → predictable, stable demand, maximum resource utilisation',
-    },
-    {
-      num:'V4', color:'#6B21A8', bg:'#FDF4FF',
-      pt:'Visibilidade', en:'Visibility',
-      highPt:'Alta visibilidade → cliente presente e interage com o processo (ex: Intercontinental — atendimento personalizado)',
-      highEn:'High visibility → customer present and interacts with the process (e.g. Intercontinental — personalised service)',
-      lowPt:'Baixa visibilidade → operações "fechadas", cliente não interage (ex: Holiday Inn Express — check-in automático)',
-      lowEn:'Low visibility → "closed" operations, customer does not interact (e.g. Holiday Inn Express — automated check-in)',
-    },
-  ];
-
-  const cards = dims.map(d => `
-    <div class="fourv-card" style="background:${d.bg};border-color:${d.color}30;">
-      <div class="fourv-card-header">
-        <div class="fourv-num" style="background:${d.color}">${d.num}</div>
-        <div class="fourv-title-group">
-          <div class="fourv-title" style="color:${d.color}">${pt1 ? d.pt : d.en}</div>
-          ${pt1 ? `<div class="fourv-title-en">${d.en}</div>` : ''}
-        </div>
-      </div>
-      <div class="fourv-spectrum">
-        <div class="fourv-spectrum-bar" style="background:linear-gradient(90deg,${d.color},${d.color}35);"></div>
-        <div class="fourv-spectrum-labels">
-          <span style="color:${d.color};font-weight:800">${pt1?'Alto ▲':'High ▲'}</span>
-          <span>${pt1?'Baixo ▼':'Low ▼'}</span>
-        </div>
-      </div>
-      <div class="fourv-implications">
-        <div class="fourv-impl high"><div class="fourv-impl-label">${pt1?'Alto →':'High →'}</div>${pt1?d.highPt:d.highEn}</div>
-        <div class="fourv-impl low"><div class="fourv-impl-label">${pt1?'Baixo →':'Low →'}</div>${pt1?d.lowPt:d.lowEn}</div>
-      </div>
-    </div>`).join('');
-
-  const introText = pt1
-    ? 'As quatro características fundamentais que determinam como sistemas de operações diferem entre si e como devem ser projetados. O modelo ajuda a comparar desde manufatura em massa até serviços altamente personalizados.'
-    : 'The four fundamental characteristics determining how operations systems differ and how they should be designed. The model helps compare everything from mass manufacturing to highly personalised services.';
-
-  const corrText = pt1
-    ? '↔ Volume e Variedade têm relação inversamente proporcional — alto volume tende à baixa variedade; baixo volume tende à alta variedade.'
-    : '↔ Volume and Variety have an inversely proportional relationship — high volume tends towards low variety; low volume towards high variety.';
-
-  return `
-    <div class="theory-card">
-      <div class="theory-card-head">
-        <div class="theory-card-head-left">
-          <div class="theory-name">${pt1 ? 'Modelo 4Vs' : '4Vs Model'}</div>
-          ${pt1 ? '<div class="theory-en">4Vs Model</div>' : ''}
-          <div class="theory-meta">
-            <span class="theory-tag author">Operations Management textbook</span>
-            <span class="theory-tag year">${pt1 ? 'Clássico' : 'Classic'}</span>
-          </div>
-        </div>
-      </div>
-      <div class="theory-body">
-        <div class="fourv-intro">${introText}</div>
-        <div class="fourv-grid">${cards}</div>
-        <div class="fourv-correlation">${corrText}</div>
-      </div>
-    </div>`;
-}
-
-function renderConversionCard(th) {
-  const pt1 = lang === 'pt';
-  const inputs = pt1
-    ? ['Materiais','Informação','Staff','Capital','Instalações']
-    : ['Materials','Information','Staff','Capital','Facilities'];
-  const outputs = pt1 ? ['Produtos','Serviços'] : ['Products','Services'];
-  const feedbackText = pt1
-    ? 'Sistema de Feedback (Feedback System) — monitora o processo para garantir repetibilidade, consistência e confiabilidade'
-    : 'Feedback System — monitors the process to ensure repeatability, consistency and reliability';
-
-  return `
-    <div class="theory-card">
-      <div class="theory-card-head">
-        <div class="theory-card-head-left">
-          <div class="theory-name">${pt1 ? 'Processo de Conversão' : 'Conversion Process'}</div>
-          ${pt1 ? '<div class="theory-en">Conversion Process</div>' : ''}
-          <div class="theory-meta">
-            <span class="theory-tag author">Operations Management textbook</span>
-            <span class="theory-tag year">${pt1 ? 'Clássico' : 'Classic'}</span>
-          </div>
-        </div>
-      </div>
-      <div class="theory-body">
-        <div class="conv-flow">
-          <div class="conv-box conv-box-in">
-            <div class="conv-box-label-top">${pt1?'Entradas':'Inputs'}</div>
-            <div class="conv-box-title">${pt1?'Recursos':'Resources'}</div>
-            <div class="conv-box-items">${inputs.map(i=>`<span class="conv-item">${i}</span>`).join('')}</div>
-          </div>
-          <div class="conv-arrow-col">→</div>
-          <div class="conv-box conv-box-proc">
-            <div class="conv-box-label-top">${pt1?'Transformação':'Transformation'}</div>
-            <div class="conv-box-title">${pt1?'Processo':'Process'}</div>
-            <div class="conv-box-items">
-              <span class="conv-item">Design</span>
-              <span class="conv-item">${pt1?'Produção':'Production'}</span>
-              <span class="conv-item">${pt1?'Entrega':'Delivery'}</span>
-            </div>
-          </div>
-          <div class="conv-arrow-col">→</div>
-          <div class="conv-box conv-box-out">
-            <div class="conv-box-label-top">${pt1?'Saídas':'Outputs'}</div>
-            <div class="conv-box-title">${pt1?'Resultados':'Results'}</div>
-            <div class="conv-box-items">${outputs.map(o=>`<span class="conv-item">${o}</span>`).join('')}</div>
-          </div>
-        </div>
-        <div class="conv-feedback">
-          <span class="conv-feedback-arrow">↺</span>
-          ${feedbackText}
-        </div>
-        <div style="font-size:13px;color:var(--text-mid);line-height:1.75;margin-top:10px;">${t(th.description)}</div>
-      </div>
-    </div>`;
-}
-
-/* ─── Authors ────────────────────────────────────────────── */
-const AUTHOR_COLORS = ['#C8102E','#003865','#10B981','#F59E0B','#7C3AED','#0EA5E9'];
-
-function renderAuthorsBody(authors) {
-  return `
-    <div class="author-list">
-      ${authors.map((a, i) => `
-        <div class="author-card">
-          <div class="author-avatar" style="background:${AUTHOR_COLORS[i % AUTHOR_COLORS.length]}">${initials(a.name)}</div>
-          <div class="author-info">
-            <div class="author-name">${a.name}</div>
-            <div class="author-role">${t(a.role)}</div>
-            <div class="author-contribution">${t(a.contribution)}</div>
-          </div>
-        </div>`).join('')}
-    </div>`;
-}
-
-/* ─── Case Studies ───────────────────────────────────────── */
-const CASE_COLORS = ['#C8102E','#003865','#10B981','#F59E0B','#7C3AED','#0EA5E9','#EC4899','#0F766E'];
-
-function renderCasesBody(cases) {
-  return `
-    <div class="case-grid">
-      ${cases.map((c, i) => `
-        <div class="case-card">
-          <div class="case-card-header">
-            <div class="case-avatar" style="background:${CASE_COLORS[i % CASE_COLORS.length]}">${c.company.slice(0,2).toUpperCase()}</div>
-            <div>
-              <div class="case-company">${c.company}</div>
-              <div class="case-sector">${t(c.sector)}</div>
-            </div>
-          </div>
-          <div class="case-card-body">${t(c.lesson)}</div>
-        </div>`).join('')}
-    </div>`;
-}
-
-/* ─── Glossary ───────────────────────────────────────────── */
-function renderGlossaryBody(glossary, weekNum) {
-  const pt1 = lang === 'pt';
-  const id = `glos-${weekNum}`;
-  return `
-    <input class="glossary-search" id="${id}" placeholder="${pt1 ? 'Buscar termo...' : 'Search term...'}" oninput="filterGlossary('${id}', this.value)" />
-    <div class="glossary-list" id="${id}-list">
-      ${glossary.map((g, i) => `
-        <div class="glossary-item" id="${id}-${i}">
-          <span class="glossary-term">${g.term}</span>
-          <span class="glossary-def">${t(g.definition)}</span>
-        </div>`).join('')}
-    </div>`;
-}
-
-/* ─── Connections ────────────────────────────────────────── */
-function renderConnectionsBody(connections) {
-  return `
-    <div class="connection-list">
-      ${connections.map(c => `
-        <div class="connection-item" onclick="navigate('#${c.subject || currentSubject.id}/week-${c.week}')">
-          <span class="connection-week-badge">Week ${c.week}</span>
-          <span class="connection-reason">${t(c.reason)}</span>
-          <span class="connection-arrow">→</span>
-        </div>`).join('')}
-    </div>`;
-}
-
-/* ─── Flashcards ─────────────────────────────────────────── */
-const fcState = {};
-
-function renderFlashcardsBody(flashcards, weekNum) {
-  if (!fcState[weekNum]) fcState[weekNum] = { idx: 0, known: [], unknown: [] };
-  fcState[weekNum].cards = flashcards;
-  const st = fcState[weekNum];
-  const total = flashcards.length;
-  const fc = flashcards[st.idx] || flashcards[0];
-  const pt1 = lang === 'pt';
-
-  const dots = flashcards.map((_, i) => {
-    const cls = st.known.includes(i) ? 'known' : st.unknown.includes(i) ? 'unknown' : i === st.idx ? 'current' : '';
-    return `<div class="fc-dot ${cls}"></div>`;
+function renderDrawer(r) {
+  const nav = document.getElementById('drawerNav');
+  const active = r && r.subject && r.subject.id ? r.subject : (r && r.view === 'hub' && r.subject ? getSubject(r.subject) : null);
+  const hash = location.hash || '#home';
+  const subjects = window.SUBJECTS.map(s => {
+    const on = active && active.id === s.id && r.view !== 'hub';
+    let weeks = '';
+    if (on) {
+      weeks = '<div class="dr-weeks">' + subjectWeekNums(s).map(n => {
+        const h = `#${s.id}/week-${n}`;
+        const isOn = hash.split('/').slice(0, 2).join('/') === h;
+        const rv = (s.reviews || []).find(x => x.after === n);
+        return `<a class="dr-week ${isOn ? 'on' : ''}" href="${h}" ${isOn ? 'aria-current="page"' : ''}><b>${wnum(n)}</b><span>${esc(weekTitle(s.id, n))}</span></a>` +
+          (rv ? `<a class="dr-rev ${hash === `#${s.id}/${rv.id}` ? 'on' : ''}" href="#${s.id}/${rv.id}">${T('review')} ${rv.range[0]}–${rv.range[1]}</a>` : '');
+      }).join('') + '</div>';
+    }
+    return `<a class="dr-subj ${on ? 'on' : ''}" href="#${s.id}"><span class="n">${partNum(s)}</span><span class="t">${esc(t(s.name))}</span></a>${weeks}`;
   }).join('');
+  nav.innerHTML = `
+    <div class="dr-h">${T('subjects')}</div>
+    ${subjects}
+    <div class="dr-h">${T('modes')}</div>
+    <a class="dr-mode ${r && r.view === 'hub' ? 'on' : ''}" href="#hub">${GLYPH.hubSmall}<span>${T('hub')}</span></a>
+    <span class="dr-mode soon" aria-disabled="true">${GLYPH.trail}<span>${T('trails')}</span><small>${T('soon')}</small></span>`;
+}
 
+function renderFoot() { document.getElementById('foot').textContent = T('credit'); }
+
+function openDrawer(open) {
+  const b = document.body, btn = document.getElementById('menuBtn'), scrim = document.getElementById('scrim');
+  b.classList.toggle('drawer-open', open);
+  btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  btn.setAttribute('aria-label', open ? T('navClose') : T('navOpen'));
+  scrim.hidden = !open;
+}
+function toggleDrawer() { openDrawer(!document.body.classList.contains('drawer-open')); }
+
+function toggleLang() {
+  lang = lang === 'pt' ? 'en' : 'pt';
+  storeSet(STORE.lang, lang);
+  document.documentElement.lang = lang;
+  const y = window.scrollY;
+  route(true);
+  window.scrollTo(0, y);
+}
+
+/* ─── Home: capas de dossiê ─────────────────────────────── */
+function coverHTML(s, opts) {
+  const wide = !!(opts && opts.wide);
+  const nums = subjectWeekNums(s);
+  const folders = nums.map(n => {
+    const rv = (s.reviews || []).find(x => x.after === n);
+    const title = wide ? esc(weekTitle(s.id, n)) : esc(shortTitle(weekTitle(s.id, n)));
+    return `<a class="folder" href="#${s.id}/week-${n}"><b>${wnum(n)}</b>${title}</a>` +
+      (rv && wide ? `<a class="folder rev" href="#${s.id}/${rv.id}"><b>R${rv.range[0]}–${rv.range[1]}</b>${T('review')} · ${T('weeks')} ${rv.range[0]}–${rv.range[1]}</a>` : '');
+  }).join('');
+  const H = wide ? 'h1' : 'h2';
   return `
-    <div class="fc-study">
-      <div class="fc-counter-row">
-        <div class="fc-progress-dots">${dots}</div>
-        <div class="fc-count-txt">${st.idx + 1}/${total} · ✅${st.known.length} ✗${st.unknown.length}</div>
-      </div>
-      <div class="fc-card-wrap" id="fcwrap-${weekNum}" onclick="fcFlip(${weekNum})">
-        <div class="fc-card-inner">
-          <div class="fc-face fc-front">
-            <div class="fc-face-q">${t(fc.q)}</div>
-            <span class="fc-hint-txt">${pt1 ? 'clique para revelar' : 'click to reveal'}</span>
-          </div>
-          <div class="fc-face fc-back">
-            <div class="fc-face-a">${t(fc.a)}</div>
-            <span class="fc-hint-txt">${pt1 ? 'clique para voltar' : 'click back'}</span>
-          </div>
+    <section class="cover" id="cover-${s.id}">
+      <div>
+        <div class="eyebrow">${esc(s.code)}</div>
+        <div class="big">${partNum(s)}</div>
+        <${H} class="disp">${esc(t(s.name))}</${H}>
+        <p class="lede">${esc(t(s.description))}</p>
+        ${s.book ? `<p class="book">${T('book')}: ${esc(s.book.replace(/\.pdf$/i, '').replace(/^EBOOK_ /, ''))}</p>` : ''}
+        <div class="acts">
+          ${wide ? '' : `<a class="btn" href="#${s.id}">${T('openPart')} · ${s.totalWeeks} ${T('dossiers')}</a>`}
+          <a class="btn ghost" href="#hub/${s.id}">${T('openBoard')}</a>
         </div>
       </div>
-      <div class="fc-nav-row">
-        <button class="fc-nav-btn" onclick="fcNav(${weekNum},-1)" ${st.idx === 0 ? 'disabled' : ''}>‹ ${pt1 ? 'Anterior' : 'Prev'}</button>
-        <span class="fc-pos">${st.idx + 1} / ${total}</span>
-        <button class="fc-nav-btn" onclick="fcNav(${weekNum},1)" ${st.idx === total - 1 ? 'disabled' : ''}>${pt1 ? 'Próximo' : 'Next'} ›</button>
+      <div class="folders ${wide ? 'wide' : ''}" aria-label="${T('weeks')}">${folders}</div>
+    </section>`;
+}
+function shortTitle(s) {
+  s = String(s).replace(/\s*[—–:(].*$/, '');
+  return s.length > 26 ? s.slice(0, 24).trim() + '…' : s;
+}
+
+function renderHome() {
+  const f = courseFigures();
+  const covers = window.SUBJECTS.map(s => coverHTML(s)).join('');
+  setMain(`
+    <section class="home-hero">
+      <div>
+        <div class="eyebrow">${T('heroEyebrow')}</div>
+        <h1 class="disp">Study Hub</h1>
+        <p class="lede">${T('heroLede')}</p>
+        <span class="stamp">${T('openAll')}</span>
       </div>
-      <div class="fc-score-row">
-        <button class="fc-score-btn fc-knew" onclick="fcScore(${weekNum},true)">✓ ${pt1 ? 'Sabia!' : 'Knew it!'}</button>
-        <button class="fc-score-btn fc-review" onclick="fcScore(${weekNum},false)">✗ ${pt1 ? 'Preciso revisar' : 'Need review'}</button>
+      <div class="home-figs" aria-label="${T('figNodes')}">
+        <div><b>${f.weeks}</b><span>${T('figWeeks')}</span></div>
+        <div><b>${f.nodes}</b><span>${T('figNodes')}</span></div>
+        <div><b>${f.cards}</b><span>${T('figCards')}</span></div>
+        <div><b>${f.vis}</b><span>${T('figVis')}</span></div>
       </div>
-    </div>`;
+    </section>
+    <section class="modes" aria-label="${T('modes')}">
+      <a class="mode" href="#${window.SUBJECTS[0] ? window.SUBJECTS[0].id : 'home'}">${GLYPH.folder}<div><div class="eyebrow">${T('byWeek')}</div><h3 class="disp">${T('byWeek')}</h3><p>${T('modeWeekDesc')}</p><span class="m">${T('choosePart')} ↓</span></div></a>
+      <a class="mode" href="#hub">${GLYPH.string}<div><div class="eyebrow">${T('hubShort')}</div><h3 class="disp">${T('hub')}</h3><p>${T('modeHubDesc')}</p><span class="m">${T('openHub')} →</span></div></a>
+    </section>
+    ${covers}`, 'Study Hub · University of London');
 }
 
-function fcFlip(weekNum) {
-  document.getElementById(`fcwrap-${weekNum}`)?.classList.toggle('flipped');
+/* ─── Página da matéria ─────────────────────────────────── */
+function renderSubject(s) {
+  setMain(`<div class="subject-page">${coverHTML(s, { wide: true })}
+    <section class="part-conn"><h3 class="disp">${T('partConnH')}</h3><p>${T('partConnP')}</p><a class="btn ghost" href="#hub/${s.id}">${T('openBoard')} →</a></section></div>`,
+    `${t(s.name)} · Study Hub`);
 }
 
-function fcNav(weekNum, dir) {
-  const st = fcState[weekNum];
-  if (!st?.cards) return;
-  st.idx = Math.max(0, Math.min(st.cards.length - 1, st.idx + dir));
-  document.getElementById(`fcwrap-${weekNum}`)?.classList.remove('flipped');
-  const inner = document.getElementById(`sec-${weekNum}-flashcards`)?.querySelector('.section-inner');
-  if (inner) inner.innerHTML = renderFlashcardsBody(st.cards, weekNum);
+/* ─── Página da semana: documento contínuo ──────────────── */
+function renderWeek(s, num, section) {
+  const w = getWeek(s.id, num);
+  const populated = isWeekPopulated(s.id, num);
+  const secs = populated ? availableSections(w) : [];
+  const titlePt = weekTitle(s.id, num, 'pt'), titleEn = weekTitle(s.id, num, 'en');
+  const title = weekTitle(s.id, num);
+  const prevN = num > 1 ? num - 1 : null, nextN = num < s.totalWeeks ? num + 1 : null;
+  const meta = populated ? [
+    w.concepts && w.concepts.length ? `${w.concepts.length} ${T('concepts').toLowerCase()}` : '',
+    w.theories && w.theories.length ? `${w.theories.length} ${T('theories').toLowerCase()}` : '',
+    w.caseStudies && w.caseStudies.length ? `${w.caseStudies.length} ${T('cases').toLowerCase()}` : '',
+    w.flashcards && w.flashcards.length ? `${w.flashcards.length} flashcards` : '',
+  ].filter(Boolean).join(' · ') : '';
+
+  const tabs = secs.map(d => `<a class="tab" href="#${s.id}/week-${num}/${d.key}" data-key="${d.key}">${T(d.ui)}</a>`).join('');
+  let body = '';
+  if (!populated) body = `<div class="empty">${T('emptyWeek')}</div>`;
+  else body = secs.map((d, i) => sectionHTML(d, i, s, num, w)).join('');
+
+  setMain(`
+    <header class="wk-head">
+      <div class="crumb"><a href="#${s.id}">${T('part')} ${partNum(s)} · ${esc(t(s.name))}</a> · ${T('dossier')} ${pad2(num)} · ${T('courseWeek', { n: courseWeekNum(s, num) })}</div>
+      <div class="wk-grid">
+        <div class="big">${pad2(num)}</div>
+        <div>
+          <h1 class="disp">${esc(title)}</h1>
+          ${lang === 'pt' && titleEn !== titlePt ? `<div class="wk-en">${esc(titleEn)}</div>` : ''}
+          ${meta ? `<div class="wk-meta">${meta}</div>` : ''}
+        </div>
+      </div>
+      <nav class="wk-pn" aria-label="${T('weeks')}">
+        <span>${prevN ? `<a href="#${s.id}/week-${prevN}">‹ <span>${wnum(prevN)}</span> ${esc(weekTitle(s.id, prevN))}</a>` : ''}</span>
+        <span>${nextN ? `<a href="#${s.id}/week-${nextN}"><span>${wnum(nextN)}</span> ${esc(weekTitle(s.id, nextN))} ›</a>` : `<a href="#${s.id}">${T('part')} ${partNum(s)} ›</a>`}</span>
+      </nav>
+    </header>
+    ${tabs ? `<nav class="tabs" aria-label="${T('overview')}">${tabs}</nav>` : ''}
+    <article class="paper"><div class="inner">${body}</div></article>`,
+    `${wnum(num)} · ${title} · ${t(s.name)}`);
+
+  requestAnimationFrame(() => { initVisualizations(); setupScrollSpy(); scrollToSection(section); });
 }
 
-function fcScore(weekNum, knew) {
-  trackFcScore();
-  const st = fcState[weekNum];
-  if (!st?.cards) return;
-  const arr = knew ? st.known : st.unknown;
-  const other = knew ? st.unknown : st.known;
-  if (!arr.includes(st.idx)) arr.push(st.idx);
-  const otherIdx = other.indexOf(st.idx);
-  if (otherIdx > -1) other.splice(otherIdx, 1);
-  if (st.idx < st.cards.length - 1) {
-    st.idx++;
-    document.getElementById(`fcwrap-${weekNum}`)?.classList.remove('flipped');
+function sectionHTML(d, i, s, num, w) {
+  let inner = '', count = '';
+  switch (d.key) {
+    case 'overview':    inner = `<div class="prose">${rich(w.overview)}</div>`; break;
+    case 'concepts':    inner = conceptsHTML(w.concepts, s, num); count = w.concepts.length; break;
+    case 'theories':    inner = theoriesHTML(w.theories, s, num); count = w.theories.length; break;
+    case 'cases':       inner = casesHTML(w.caseStudies); count = w.caseStudies.length; break;
+    case 'glossary':    inner = glossaryHTML(w.glossary, `gl-${s.id}-${num}`); count = w.glossary.length; break;
+    case 'flashcards':  inner = fcDeck(`fc-${s.id}-${num}`, w.flashcards); count = w.flashcards.length; break;
+    case 'authors':     inner = authorsHTML(w.authors); count = w.authors.length; break;
+    case 'notes':       inner = notesHTML(w.notes); break;
+    case 'links':       inner = linksHTML(w.links); count = w.links.length; break;
+    case 'connections': inner = connectionsHTML(w.connections, s); count = w.connections.length; break;
   }
-  const inner = document.getElementById(`sec-${weekNum}-flashcards`)?.querySelector('.section-inner');
-  if (inner) inner.innerHTML = renderFlashcardsBody(st.cards, weekNum);
+  return `<section class="sec" id="sec-${d.key}" data-key="${d.key}">
+    <div class="sec-head"><div><div class="n">§ ${pad2(i + 1)}</div><h2 class="disp">${T(d.ui)}</h2></div>${count ? `<div class="cnt">${count} ${T('items')}</div>` : ''}</div>
+    ${inner}
+  </section>`;
 }
 
-/* ─── Links ──────────────────────────────────────────────── */
-function renderLinksBody(links) {
-  const icons = { video: '🎬', article: '📄', news: '📰', other: '🔗' };
-  const typePt = { video: 'Vídeo', article: 'Artigo', news: 'Notícia', other: 'Link' };
-  const typeEn = { video: 'Video', article: 'Article', news: 'News', other: 'Link' };
-  return `<div class="links-grid">${links.map(l => {
-    const type = l.type || 'other';
-    return `
-      <div class="link-card link-type-${type}">
-        <div class="link-card-icon">${icons[type] || '🔗'}</div>
-        <div class="link-card-content">
-          <div class="link-card-type">${lang === 'pt' ? typePt[type] : typeEn[type]}</div>
-          <div class="link-card-title"><a href="${l.url}" target="_blank" rel="noopener">${l.title}</a></div>
-          ${l.description ? `<div class="link-card-desc">${t(l.description)}</div>` : ''}
-        </div>
-      </div>`;
+/* conceitos como fichas */
+function conceptsHTML(concepts, s, num) {
+  const cards = concepts.map((c, i) => {
+    const primary = lang === 'pt' ? (c.pt || c.en) : (c.en || c.pt);
+    const secondary = lang === 'pt' ? (c.en && c.en !== c.pt ? c.en : '') : (c.pt && c.pt !== c.en ? c.pt : '');
+    const slug = window.HUB ? HUB.slugFor(s.id, 'concept', num, i) : null;
+    return `<details class="ficha" id="c-${num}-${i}">
+      <summary><span class="n">${pad2(i + 1)}</span><span class="t">${esc(primary)}</span>${secondary ? `<span class="en">${esc(secondary)}</span>` : ''}</summary>
+      <div class="ficha-body"><div class="prose">${rich(c.definition)}</div>${slug ? `<a class="ficha-hub" href="#hub/${s.id}/${slug}">${T('inHub')} →</a>` : ''}</div>
+    </details>`;
+  }).join('');
+  return `<div class="sec-act"><button type="button" data-open="1">${T('expandAll')}</button><button type="button" data-open="0">${T('collapseAll')}</button></div><div class="fichas">${cards}</div>`;
+}
+
+/* teorias com palco */
+function theoriesHTML(theories, s, num) {
+  let ev = 0;
+  return theories.map((th, i) => {
+    const nm = nameOf(th);
+    const primary = lang === 'pt' ? nm.pt : nm.en;
+    const secondary = lang === 'pt' && nm.en !== nm.pt ? nm.en : (lang === 'en' && nm.pt !== nm.en ? nm.pt : '');
+    const meta = [
+      ...(th.authors || []).map(a => `<span>${esc(a)}</span>`),
+      th.year ? `<span class="yr">${esc(th.year)}</span>` : '',
+      th.company ? `<span>${esc(th.company)}</span>` : '',
+    ].filter(Boolean).join('');
+    let extra = '';
+    if (th.renderer && VIS_DISPATCH[th.renderer]) {
+      ev++;
+      extra = `<div class="ev"><span>${T('evidence')} ${pad2(ev)} · ${T('interactive')}</span><span>${T('autoScale')}</span></div>
+        <figure class="palco"><div class="stage vis-container" data-renderer="${esc(th.renderer)}" aria-label="${esc(primary)}"></div></figure>`;
+    } else if (nm.en.includes('4Vs') || nm.pt.includes('4Vs')) {
+      extra = fourVsHTML();
+    } else if (nm.en.includes('Conversion') || nm.pt.includes('Conversão')) {
+      extra = conversionHTML();
+    }
+    const slug = window.HUB ? HUB.slugFor(s.id, 'theory', num, i) : null;
+    return `<section class="theory" id="th-${num}-${i}">
+      <div class="th-n">${T('theory')} ${pad2(i + 1)} ${T('of')} ${pad2(theories.length)}</div>
+      <h3 class="disp">${esc(primary)}</h3>
+      ${secondary ? `<div class="th-en">${esc(secondary)}</div>` : ''}
+      ${meta ? `<div class="th-meta">${meta}</div>` : ''}
+      <div class="prose">${rich(th.description)}</div>
+      ${extra}
+      ${slug ? `<a class="ficha-hub" href="#hub/${s.id}/${slug}">${T('inHub')} →</a>` : ''}
+    </section>`;
+  }).join('');
+}
+
+function casesHTML(cases) {
+  return `<div class="cases">${cases.map((c, i) => `
+    <article class="case">
+      <div class="n">${T('case')} ${pad2(i + 1)}</div>
+      <h3 class="disp">${esc(c.company)}</h3>
+      <div class="sector">${esc(t(c.sector))}</div>
+      <p>${rich(c.lesson)}</p>
+    </article>`).join('')}</div>`;
+}
+
+function glossaryHTML(glossary, id) {
+  return `<input class="gl-search" id="${id}" type="search" placeholder="${T('searchTerm')}" aria-label="${T('glossary')}" autocomplete="off">
+    <dl class="gl" id="${id}-list">${glossary.map(g => `<div class="gl-item"><dt>${esc(g.term)}</dt><dd>${rich(g.definition)}</dd></div>`).join('')}</dl>
+    <div class="gl-empty" id="${id}-empty" hidden>${T('noTerm')}</div>`;
+}
+
+function authorsHTML(authors) {
+  return `<div class="authors">${authors.map(a => `
+    <div class="author"><div class="ini" aria-hidden="true">${esc(initials(a.name))}</div>
+      <div><h3 class="disp">${esc(a.name)}</h3><div class="role">${esc(t(a.role))}</div><p>${rich(a.contribution)}</p></div></div>`).join('')}</div>`;
+}
+
+function parseNotes(text) {
+  const out = []; const re = /═══\s*([^═]+?)\s*═══/g;
+  let m, prevTitle = null, prevEnd = 0, first = true;
+  while ((m = re.exec(text))) {
+    const body = text.slice(prevEnd, m.index).trim();
+    if (!first || body) out.push({ title: prevTitle, body });
+    first = false; prevTitle = m[1].trim(); prevEnd = re.lastIndex;
+  }
+  out.push({ title: prevTitle, body: text.slice(prevEnd).trim() });
+  return out.filter(b => b.body || b.title);
+}
+function notesHTML(notes) {
+  const blocks = parseNotes(t(notes));
+  return blocks.map(b => {
+    const isSrc = /^(FONTES|SOURCES)/i.test(b.title || '');
+    return `<div class="note-block ${isSrc ? 'src' : ''}">${b.title ? `<h3>${esc(b.title)}</h3>` : ''}<div class="prose">${isSrc ? esc(b.body) : boldKeys(esc(b.body))}</div></div>`;
+  }).join('');
+}
+
+function linksHTML(links) {
+  return `<div class="links">${links.map(l => {
+    const type = ['video', 'article', 'news'].includes(l.type) ? l.type : 'other';
+    return `<div class="link"><div class="type">${T(type)}</div><div><a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.title)}</a>${l.description ? `<p>${esc(t(l.description))}</p>` : ''}</div></div>`;
   }).join('')}</div>`;
 }
 
-/* ─── Notes ──────────────────────────────────────────────── */
-function renderNotesBody(notes) {
-  return `<div class="notes-body">${t(notes)}</div>`;
+function connectionsHTML(connections, s) {
+  return `<div class="conns">${connections.map(c => {
+    const to = c.subject ? getSubject(c.subject) : s;
+    if (!to) return '';
+    return `<a class="conn" href="#${to.id}/week-${c.week}">
+      <div class="to">${T('part')} ${partNum(to)} · ${wnum(c.week)}${to !== s ? ` · ${esc(t(to.name))}` : ''}<b>${esc(weekTitle(to.id, c.week))}</b></div>
+      <p>${rich(c.reason)}</p></a>`;
+  }).join('')}</div>`;
 }
 
-/* ─── Review Pages ──────────────────────────────────────── */
-function renderReview(reviewId) {
-  const s = currentSubject;
+/* ─── Flashcards (estado só na sessão) ──────────────────── */
+const fcState = {};
+function fcDeck(id, cards) {
+  if (!fcState[id]) fcState[id] = { idx: 0, known: [], unknown: [] };
+  const st = fcState[id]; st.cards = cards;
+  const total = cards.length, fc = cards[st.idx] || cards[0];
+  const dots = cards.map((_, i) => `<i class="${st.known.includes(i) ? 'ok' : st.unknown.includes(i) ? 'no' : i === st.idx ? 'cur' : ''}"></i>`).join('');
+  return `<div class="fc" id="${id}" data-deck="${id}">
+    <div class="fc-top"><div class="fc-dots" aria-hidden="true">${dots}</div><div>${st.known.length} ${T('knew').toLowerCase()} · ${st.unknown.length} ${T('needReview').toLowerCase()}</div></div>
+    <div class="fc-card" role="button" tabindex="0" aria-label="Flashcard ${st.idx + 1} ${T('of')} ${total}" data-act="flip">
+      <div class="fc-inner">
+        <div class="fc-face"><div class="q">${esc(t(fc.q))}</div><span class="hint">${T('reveal')}</span></div>
+        <div class="fc-face back"><div class="a">${boldKeys(esc(t(fc.a)))}</div><span class="hint">${T('back')}</span></div>
+      </div>
+    </div>
+    <div class="fc-nav">
+      <button type="button" data-act="prev" ${st.idx === 0 ? 'disabled' : ''}>‹ ${T('prev')}</button>
+      <span class="fc-pos">${st.idx + 1} / ${total}</span>
+      <button type="button" data-act="next" ${st.idx === total - 1 ? 'disabled' : ''}>${T('next')} ›</button>
+    </div>
+    <div class="fc-score"><button type="button" data-act="knew">✓ ${T('knew')}</button><button type="button" class="no" data-act="review">✗ ${T('needReview')}</button><span class="m" style="margin-left:auto;color:var(--ink3);font-size:11.5px;align-self:center">${T('sessionOnly')}</span></div>
+  </div>`;
+}
+function fcUpdate(id) {
+  const el = document.getElementById(id); if (!el) return;
+  const st = fcState[id];
+  const tmp = document.createElement('div'); tmp.innerHTML = fcDeck(id, st.cards);
+  el.replaceWith(tmp.firstElementChild);
+}
+function fcAction(id, act) {
+  const st = fcState[id]; if (!st || !st.cards) return;
+  const card = document.querySelector(`#${CSS.escape(id)} .fc-card`);
+  if (act === 'flip') { card && card.classList.toggle('flipped'); return; }
+  if (act === 'prev') st.idx = Math.max(0, st.idx - 1);
+  if (act === 'next') st.idx = Math.min(st.cards.length - 1, st.idx + 1);
+  if (act === 'knew' || act === 'review') {
+    const arr = act === 'knew' ? st.known : st.unknown, other = act === 'knew' ? st.unknown : st.known;
+    if (!arr.includes(st.idx)) arr.push(st.idx);
+    const j = other.indexOf(st.idx); if (j > -1) other.splice(j, 1);
+    if (st.idx < st.cards.length - 1) st.idx++;
+  }
+  fcUpdate(id);
+  const btn = document.querySelector(`#${CSS.escape(id)} [data-act="${act}"]`);
+  if (btn && !btn.disabled) btn.focus();
+}
+
+/* ─── Cards especiais (4Vs e Processo de Conversão) ─────── */
+function fourVsHTML() {
+  const pt = lang === 'pt';
+  const dims = [
+    { num: 'V1', pt: 'Volume', en: 'Volume',
+      highPt: 'Alto volume: economias de escala, especialização, custo baixo por unidade (Toyota, McDonald’s).', highEn: 'High volume: economies of scale, specialisation, low cost per unit (Toyota, McDonald’s).',
+      lowPt: 'Baixo volume: flexibilidade, custo unitário maior, menos automação (Pashley Cycles).', lowEn: 'Low volume: flexibility, higher unit cost, less automation (Pashley Cycles).' },
+    { num: 'V2', pt: 'Variedade', en: 'Variety',
+      highPt: 'Alta variedade: equipamento geral, equipe multifuncional, mais flexibilidade (Intercontinental Hotels).', highEn: 'High variety: general equipment, multi-skilled staff, more flexibility (Intercontinental Hotels).',
+      lowPt: 'Baixa variedade: especialização, maior eficiência, processos padronizados (Holiday Inn Express).', lowEn: 'Low variety: specialisation, greater efficiency, standardised processes (Holiday Inn Express).' },
+    { num: 'V3', pt: 'Variação na demanda', en: 'Variation in demand',
+      highPt: 'Alta variação: o sistema precisa absorver picos e vales; capacidade extra necessária (hotéis de luxo).', highEn: 'High variation: the system must absorb peaks and troughs; extra capacity needed (luxury hotels).',
+      lowPt: 'Baixa variação: demanda previsível e estável, utilização máxima dos recursos.', lowEn: 'Low variation: predictable, stable demand, maximum resource utilisation.' },
+    { num: 'V4', pt: 'Visibilidade', en: 'Visibility',
+      highPt: 'Alta visibilidade: o cliente está presente e interage com o processo (Intercontinental, atendimento personalizado).', highEn: 'High visibility: the customer is present and interacts with the process (Intercontinental, personalised service).',
+      lowPt: 'Baixa visibilidade: operações “fechadas”, o cliente não interage (Holiday Inn Express, check-in automático).', lowEn: 'Low visibility: “closed” operations, the customer does not interact (Holiday Inn Express, automated check-in).' },
+  ];
+  return `<div class="fourv-grid">${dims.map(d => `
+    <div class="fourv-card">
+      <div class="fourv-card-header"><div class="fourv-num">${d.num}</div><div><div class="fourv-title">${pt ? d.pt : d.en}</div>${pt ? `<div class="fourv-title-en">${d.en}</div>` : ''}</div></div>
+      <div class="fourv-spectrum-bar"></div>
+      <div class="fourv-spectrum-labels"><span>${pt ? 'Alto ▲' : 'High ▲'}</span><span>${pt ? 'Baixo ▼' : 'Low ▼'}</span></div>
+      <div class="fourv-impl"><div class="fourv-impl-label">${pt ? 'Alto' : 'High'}</div>${pt ? d.highPt : d.highEn}</div>
+      <div class="fourv-impl"><div class="fourv-impl-label">${pt ? 'Baixo' : 'Low'}</div>${pt ? d.lowPt : d.lowEn}</div>
+    </div>`).join('')}</div>
+    <div class="fourv-correlation">${pt ? 'Volume e variedade têm relação inversa: alto volume tende à baixa variedade; baixo volume, à alta variedade.' : 'Volume and variety are inversely related: high volume tends towards low variety; low volume towards high variety.'}</div>`;
+}
+function conversionHTML() {
+  const pt = lang === 'pt';
+  const inputs = pt ? ['Materiais', 'Informação', 'Pessoas', 'Capital', 'Instalações'] : ['Materials', 'Information', 'Staff', 'Capital', 'Facilities'];
+  const outputs = pt ? ['Produtos', 'Serviços'] : ['Products', 'Services'];
+  return `<div class="conv-flow">
+      <div class="conv-box"><div class="conv-box-label-top">${pt ? 'Entradas' : 'Inputs'}</div><div class="conv-box-title">${pt ? 'Recursos' : 'Resources'}</div><div class="conv-box-items">${inputs.map(i => `<span>${i}</span>`).join('')}</div></div>
+      <div class="conv-arrow-col">→</div>
+      <div class="conv-box conv-box-proc"><div class="conv-box-label-top">${pt ? 'Transformação' : 'Transformation'}</div><div class="conv-box-title">${pt ? 'Processo' : 'Process'}</div><div class="conv-box-items"><span>Design</span><span>${pt ? 'Produção' : 'Production'}</span><span>${pt ? 'Entrega' : 'Delivery'}</span></div></div>
+      <div class="conv-arrow-col">→</div>
+      <div class="conv-box"><div class="conv-box-label-top">${pt ? 'Saídas' : 'Outputs'}</div><div class="conv-box-title">${pt ? 'Resultados' : 'Results'}</div><div class="conv-box-items">${outputs.map(o => `<span>${o}</span>`).join('')}</div></div>
+    </div>
+    <div class="conv-feedback">↺ ${pt ? 'Sistema de feedback: monitora o processo para garantir repetibilidade, consistência e confiabilidade.' : 'Feedback system: monitors the process to ensure repeatability, consistency and reliability.'}</div>`;
+}
+
+/* ─── Revisão por bloco ─────────────────────────────────── */
+function renderReview(s, reviewId) {
   const r = (s.reviews || []).find(x => x.id === reviewId);
-  if (!r) return;
-  const pt1 = lang === 'pt';
+  if (!r) { renderSubject(s); return; }
   const [from, to] = r.range;
   const weeks = Array.from({ length: to - from + 1 }, (_, i) => from + i);
-  const fakeWeekNum = 100 + window.SUBJECTS.indexOf(s) * 10 + s.reviews.indexOf(r);
-  let allFlashcards = [];
-
-  const weekBlocks = weeks.map(n => {
+  const all = [];
+  const blocks = weeks.map(n => {
     const w = getWeek(s.id, n);
     const title = weekTitle(s.id, n);
-    if (w?.flashcards) allFlashcards.push(...w.flashcards);
-    if (!isWeekPopulated(s.id, n)) {
-      return `<div class="review-week-block">
-        <div class="review-week-label">Week ${n} — ${title}</div>
-        <div class="review-empty">${pt1 ? 'Conteúdo não adicionado ainda' : 'Content not yet added'}</div>
-      </div>`;
-    }
-    const overview = w.overview
-      ? `<div class="review-week-overview">${t(w.overview).slice(0, 300)}${t(w.overview).length > 300 ? '…' : ''}</div>`
-      : '';
-    const tags = [
-      ...(w.concepts||[]).map(c => `<span class="review-tag">${lang === 'pt' ? c.pt : c.en}</span>`),
-      ...(w.theories||[]).map(th => `<span class="review-tag">${t(th.name)}</span>`),
+    if (w && w.flashcards) all.push(...w.flashcards);
+    if (!isWeekPopulated(s.id, n)) return `<div class="rev-block"><h3 class="disp"><a href="#${s.id}/week-${n}">${wnum(n)} · ${esc(title)}</a></h3><div class="empty">${T('emptyWeek')}</div></div>`;
+    const ov = t(w.overview || '');
+    const terms = [
+      ...(w.theories || []).map(th => `<span><b>${esc(t(nameOf(th)))}</b></span>`),
+      ...(w.concepts || []).map(c => `<span>${esc(lang === 'pt' ? c.pt : c.en)}</span>`),
     ].join('');
-    return `<div class="review-week-block">
-      <div class="review-week-label">Week ${n} — ${title}</div>
-      ${overview}
-      ${tags ? `<div class="review-week-tags">${tags}</div>` : ''}
+    return `<div class="rev-block">
+      <h3 class="disp"><a href="#${s.id}/week-${n}">${wnum(n)} · ${esc(title)}</a></h3>
+      ${ov ? `<div class="prose">${boldKeys(esc(ov.length > 420 ? ov.slice(0, 420).replace(/\s+\S*$/, '') + '…' : ov))}</div>` : ''}
+      ${terms ? `<div class="rev-terms">${terms}</div>` : ''}
     </div>`;
   }).join('');
-
-  const fcSection = allFlashcards.length
-    ? `<div style="margin-top:20px">${sectionWrapper('flashcards', fakeWeekNum, renderFlashcardsBody(allFlashcards, fakeWeekNum), {})}</div>`
-    : '';
-
-  document.getElementById('mainContent').innerHTML = `
-    <div class="review-hero">
-      <div class="review-eyebrow">${pt1 ? 'Revisão Geral' : 'Full Review'}</div>
-      <div class="review-title">${(pt1 ? r.labelPt : r.labelEn).replace('📋 ', '')}</div>
-      <div class="review-subtitle">${pt1 ? `Compilado das semanas ${from}–${to}` : `Compiled from weeks ${from}–${to}`}</div>
-    </div>
-    ${weekBlocks}
-    ${fcSection}
-  `;
-  document.getElementById('mainContent').scrollTop = 0;
+  const label = (lang === 'pt' ? r.labelPt : r.labelEn).replace(/^[^\wÀ-ÿ]+/, '');
+  setMain(`
+    <header class="wk-head">
+      <div class="crumb"><a href="#${s.id}">${T('part')} ${partNum(s)} · ${esc(t(s.name))}</a> · ${T('review')}</div>
+      <div class="wk-grid"><div class="big">R${from}–${to}</div><div><h1 class="disp">${esc(label)}</h1><div class="wk-meta">${T('reviewOf', { a: from, b: to })} · ${all.length} flashcards</div></div></div>
+    </header>
+    <article class="paper"><div class="inner">
+      ${blocks}
+      ${all.length ? `<section class="sec" id="sec-flashcards"><div class="sec-head"><div><div class="n">§</div><h2 class="disp">${T('allCards')}</h2></div><div class="cnt">${all.length} ${T('items')}</div></div>${fcDeck(`fc-${s.id}-${reviewId}`, all)}</section>` : ''}
+    </div></article>`, `${label} · ${t(s.name)}`);
 }
 
-/* ─── Interactions ──────────────────────────────────────── */
-function filterGlossary(id, query) {
-  const items = document.querySelectorAll(`#${id}-list .glossary-item`);
-  const q = query.toLowerCase();
-  items.forEach(item => { item.classList.toggle('hidden', q && !item.textContent.toLowerCase().includes(q)); });
-}
-
-function navigate(hash) { window.location.hash = hash; }
-
-/* ─── Router ────────────────────────────────────────────── */
-function route() {
-  let hash = (window.location.hash || '#home').replace(/^#/, '');
-
-  // Hashes do formato antigo mono-matéria (#week-N, #rN) → redireciona
-  const legacyWeek = hash.match(/^week-(\d+)$/);
-  const legacyReview = hash.match(/^r(\d)$/);
-  if (legacyWeek) {
-    const n = parseInt(legacyWeek[1]);
-    window.location.hash = n <= 10
-      ? `#operations-management/week-${n}`
-      : `#marketing-strategy/week-${n - 10}`;
-    return;
-  }
-  if (legacyReview) {
-    const n = parseInt(legacyReview[1]);
-    window.location.hash = n <= 2
-      ? `#operations-management/r${n}`
-      : `#marketing-strategy/r${n - 2}`;
-    return;
-  }
-
-  const [first, second] = hash.split('/');
-  const subject = getSubject(first);
-
-  if (!subject) {
-    currentSubject = null;
-    renderSidebar();
-    renderHome();
-    return;
-  }
-
-  currentSubject = subject;
-  renderSidebar();
-  if (!second) {
-    renderSubjectDashboard(subject);
-  } else if (second.startsWith('week-')) {
-    const num = parseInt(second.replace('week-', ''));
-    if (!isNaN(num)) renderWeek(num);
-    else renderSubjectDashboard(subject);
-  } else if (second.startsWith('r')) {
-    renderReview(second);
-  } else {
-    renderSubjectDashboard(subject);
+/* ─── Visualizações (03) ────────────────────────────────── */
+const VIS_DISPATCH = {
+  '4vs-scatter': true, 'radar': true, 'forces': true, 'ladder': true, 'wave': true, 'spectrum': true, 'timeline': true,
+  'fourvsCards': true, 'performMatrix': true, 'lifecycle': true, 'genericStrategies': true, 'valueDisciplines': true, 'valueMatrix': true,
+  // Operations · Week 3
+  'npdFlow': true, 'rdFunnel': true, 'modularVsIntegral': true, 'productPlatform': true,
+  // Week 4
+  'processTypes': true, 'orderTypes': true, 'processMappingTools': true, 'vsmConcept': true, 'facilityLayouts': true,
+  // Week 5
+  'scmNetwork': true, 'sourcingCompare': true, 'enterpriseTypes': true, 'derg': true, 'tceAssumptions': true,
+  // Week 6
+  'kraljicMatrix': true, 'armsVsPartnership': true, 'decouplingPoint': true,
+  // Week 7
+  'eoqModel': true, 'qpSystems': true, 'mrpTree': true, 'abcAnalysis': true,
+  // Week 8
+  'leanElements': true, 'sevenWastes': true, 'fiveS': true, 'kanbanPull': true,
+  // Week 9
+  'qualityDimensions': true, 'qualityEvolution': true, 'sevenTools': true, 'spcChart': true,
+  // Week 10
+  'industry40': true, 'digitizationVsDigital': true, 'printing3dSupply': true, 'amazonVsWalmart': true,
+  // Marketing · Week 1
+  'marketingEnvironment': true, 'microMacroCompare': true, 'macroForces': true,
+  // Week 2
+  'swotMatrix': true, 'portersForces': true, 'pestle': true,
+  // Week 3 (STP)
+  'stpFunnel': true, 'segmentationBases': true, 'targetingStrategies': true, 'damasTest': true, 'positioningMap': true, 'stpInPractice': true,
+  // Week 4 (Branding)
+  'brandCloud': true, 'brandBenefits': true, 'equityVsValue': true, 'brandEquityDrivers': true, 'brandFinance500': true, 'kellerPyramid': true,
+  // Week 5 (Internal & External Branding)
+  'insideOut': true, 'internalVsExternal': true, 'internalBrandingLadder': true, 'internalStrategies': true, 'jabesEvidence': true, 'externalRefresh': true,
+  // Week 6 (4 Ps)
+  'fourPs': true, 'productFeatures': true, 'pricingStrategies': true, 'placeDistribution': true, 'promotionalMix': true, 'imcLadder': true,
+  // Week 7 (7 Ps)
+  'sevenPs': true, 'serviceIHIP': true, 'peopleLayers': true, 'serviceProcess': true, 'physicalEvidence': true, 'richardMille': true,
+  // Week 8 (Digital)
+  'digitalValue': true, 'poemModel': true, 'multiVsOmni': true, 'omniTransition': true, 'socialMedia': true, 'dataPrivacySecurity': true,
+  // Week 9 (Value Chain)
+  'valueChainMap': true, 'competitiveAdvantage': true, 'valueLinkages': true, 'valueChainSteps': true, 'valueChainBenefits': true, 'cocaColaVC': true,
+  // Week 10 (Ethics, CSR & Sustainability)
+  'ethicsLevels': true, 'universalismRelativism': true, 'tripleBottomLine': true, 'carrollPyramid': true, 'sustainableMarketing': true, 'greenwashing': true,
+};
+function initSingleVis(el) {
+  el.setAttribute('data-vis-init', '1');
+  const renderer = el.getAttribute('data-renderer');
+  const fn = `vis_${renderer.replace(/-/g, '_')}`;
+  if (typeof window[fn] === 'function') {
+    try { window[fn](el, lang, {}); } catch (e) { console.error('renderer', renderer, e); }
   }
 }
+function initVisualizations() {
+  document.querySelectorAll('.stage[data-renderer]').forEach(el => { if (!el.hasAttribute('data-vis-init')) initSingleVis(el); });
+}
 
-/* ─── Migração de dados antigos (formato mono-matéria) ──── */
-function migrateLegacyStorage() {
-  if (localStorage.getItem('uol-migrated')) return;
-  const simple = {
-    'bu2530-lang':        'uol-lang',
-    'bu2530-xp':          'uol-xp',
-    'bu2530-fc-count':    'uol-fc-count',
-    'bu2530-lang-toggle': 'uol-lang-toggle',
+/* ─── Sumário fixo: scroll spy + âncoras ────────────────── */
+let spy = null;
+function setupScrollSpy() {
+  if (spy) { spy.disconnect(); spy = null; }
+  const secs = [...document.querySelectorAll('.sec[data-key]')];
+  const tabs = [...document.querySelectorAll('.tab[data-key]')];
+  if (!secs.length || !tabs.length || !('IntersectionObserver' in window)) return;
+  const visible = new Map();
+  const update = () => {
+    let best = null;
+    for (const sec of secs) { if (visible.get(sec.dataset.key)) { best = sec.dataset.key; break; } }
+    if (!best) return;
+    tabs.forEach(tb => tb.classList.toggle('on', tb.dataset.key === best));
+    const on = tabs.find(tb => tb.dataset.key === best);
+    if (on && on.scrollIntoView) on.scrollIntoView({ block: 'nearest', inline: 'nearest' });
   };
-  for (const [oldKey, newKey] of Object.entries(simple)) {
-    const v = localStorage.getItem(oldKey);
-    if (v !== null && localStorage.getItem(newKey) === null) localStorage.setItem(newKey, v);
+  spy = new IntersectionObserver(entries => {
+    entries.forEach(e => visible.set(e.target.dataset.key, e.isIntersecting));
+    update();
+  }, { rootMargin: `-${56 + 44 + 10}px 0px -55% 0px`, threshold: 0 });
+  secs.forEach(sec => spy.observe(sec));
+}
+function scrollToSection(key) {
+  if (!key) { window.scrollTo(0, 0); return; }
+  const el = document.getElementById(`sec-${key}`);
+  if (el) el.scrollIntoView({ block: 'start' }); else window.scrollTo(0, 0);
+}
+
+/* ─── Render helpers ────────────────────────────────────── */
+function setMain(html, title) {
+  const main = document.getElementById('main');
+  main.innerHTML = html;
+  if (title) document.title = title;
+}
+
+/* ─── Rotas ─────────────────────────────────────────────── */
+function parseHash() {
+  let h = (location.hash || '#home').replace(/^#/, '').replace(/\?.*$/, '');
+  const legacyWeek = h.match(/^week-(\d+)$/), legacyReview = h.match(/^r(\d)$/);
+  if (legacyWeek) { const n = +legacyWeek[1]; return { redirect: n <= 10 ? `#operations-management/week-${n}` : `#marketing-strategy/week-${n - 10}` }; }
+  if (legacyReview) { const n = +legacyReview[1]; return { redirect: n <= 2 ? `#operations-management/r${n}` : `#marketing-strategy/r${n - 2}` }; }
+  if (h === 'dashboard') return { redirect: '#home' };
+  const seg = h.split('/');
+  if (seg[0] === 'hub') return { view: 'hub', subject: seg[1] ? decodeURIComponent(seg[1]) : null, slug: seg[2] ? decodeURIComponent(seg[2]) : null };
+  const s = getSubject(seg[0]);
+  if (!s) return { view: 'home' };
+  if (!seg[1]) return { view: 'subject', subject: s };
+  const wm = seg[1].match(/^week-(\d+)$/);
+  if (wm) return { view: 'week', subject: s, week: +wm[1], section: seg[2] || null };
+  if (/^r\d+$/.test(seg[1])) return { view: 'review', subject: s, review: seg[1] };
+  return { view: 'subject', subject: s };
+}
+
+function route(force) {
+  const r = parseHash();
+  if (r.redirect) { location.replace(r.redirect); return; }
+  // mesma semana, só a seção mudou: rola sem re-renderizar
+  if (!force && lastRoute && r.view === 'week' && lastRoute.view === 'week' && lastRoute.subject === r.subject && lastRoute.week === r.week) {
+    lastRoute = r; scrollToSection(r.section); renderDrawer(r); return;
   }
-  // Semanas 1–10 = operations-management · 11–20 = marketing-strategy (renumeradas 1–10)
-  for (let n = 1; n <= 20; n++) {
-    const subj = n <= 10 ? 'operations-management' : 'marketing-strategy';
-    const wk = n <= 10 ? n : n - 10;
-    const st = localStorage.getItem(`bu2530-week-${n}-status`);
-    if (st !== null) localStorage.setItem(`uol-${subj}-week-${wk}-status`, st);
-    const sec = localStorage.getItem(`bu2530-sections-${n}`);
-    if (sec !== null) localStorage.setItem(`uol-${subj}-sections-${wk}`, sec);
+  lastRoute = r;
+  currentSubject = r.view === 'hub' ? (r.subject ? getSubject(r.subject) : null) : (r.subject || null);
+  openDrawer(false);
+  renderTopNav(r); renderDrawer(r); renderFoot();
+  if (spy) { spy.disconnect(); spy = null; }
+  switch (r.view) {
+    case 'home':    renderHome(); break;
+    case 'subject': renderSubject(r.subject); break;
+    case 'week':    renderWeek(r.subject, r.week, r.section); break;
+    case 'review':  renderReview(r.subject, r.review); break;
+    case 'hub':     if (window.HUB) HUB.render(r); else renderHome(); break;
   }
-  localStorage.setItem('uol-migrated', '1');
-  lang = localStorage.getItem('uol-lang') || lang;
+  if (r.view !== 'week') window.scrollTo(0, 0);
+  storeSet(STORE.last, location.hash || '#home');
+}
+
+/* ─── Eventos delegados ─────────────────────────────────── */
+function bindEvents() {
+  document.getElementById('menuBtn').addEventListener('click', toggleDrawer);
+  document.getElementById('scrim').addEventListener('click', () => openDrawer(false));
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && document.body.classList.contains('drawer-open')) { openDrawer(false); document.getElementById('menuBtn').focus(); }
+    if (e.key === '/' && !e.metaKey && !e.ctrlKey && !e.altKey) {
+      const tag = (document.activeElement && document.activeElement.tagName) || '';
+      if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+      e.preventDefault();
+      if (lastRoute && lastRoute.view === 'hub') { const inp = document.getElementById('hubSearch'); if (inp) inp.focus(); }
+      else location.hash = '#hub';
+    }
+  });
+  const main = document.getElementById('main');
+  main.addEventListener('click', e => {
+    const fcBtn = e.target.closest('.fc [data-act]');
+    if (fcBtn) { const deck = fcBtn.closest('.fc'); fcAction(deck.dataset.deck, fcBtn.dataset.act); return; }
+    const secBtn = e.target.closest('.sec-act button[data-open]');
+    if (secBtn) { secBtn.closest('.sec').querySelectorAll('details.ficha').forEach(d => { d.open = secBtn.dataset.open === '1'; }); return; }
+  });
+  main.addEventListener('keydown', e => {
+    const card = e.target.closest('.fc-card');
+    if (card && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); fcAction(card.closest('.fc').dataset.deck, 'flip'); }
+  });
+  main.addEventListener('input', e => {
+    const inp = e.target.closest('.gl-search');
+    if (inp) {
+      const q = inp.value.trim().toLowerCase();
+      const items = document.querySelectorAll(`#${CSS.escape(inp.id)}-list .gl-item`);
+      let shown = 0;
+      items.forEach(it => { const hit = !q || it.textContent.toLowerCase().includes(q); it.classList.toggle('hidden', !hit); if (hit) shown++; });
+      const empty = document.getElementById(`${inp.id}-empty`); if (empty) empty.hidden = shown > 0;
+    }
+  });
+  // após a fonte carregar, os renderers já nasceram com fallback; nada a fazer
 }
 
 /* ─── Init ──────────────────────────────────────────────── */
 function init() {
-  migrateLegacyStorage();
-  document.getElementById('langFlag').textContent = lang === 'pt' ? '🇧🇷' : '🇬🇧';
-  document.getElementById('langText').textContent = lang === 'pt' ? 'PT+EN' : 'EN';
-  updateXPBar();
-  window.addEventListener('hashchange', route);
+  cleanLegacyStorage();
+  document.documentElement.lang = lang;
+  bindEvents();
+  window.addEventListener('hashchange', () => route());
+  if (window.HUB) HUB.build();
   route();
 }
-
 document.addEventListener('DOMContentLoaded', init);

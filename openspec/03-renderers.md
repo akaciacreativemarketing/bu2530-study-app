@@ -30,11 +30,13 @@ Sandbox em Node com DOM falso: carrega os `week-XX.js` e o `visualizers.js` em `
 
 Os renderers foram desenhados para um painel lateral de ~520px e usam `font-size` em pixels fixos, dominando 6px a 11px (mais de 600 ocorrências entre 6.5 e 10px). Em 1366px de largura já são difíceis de ler; em celular, ilegíveis.
 
-**Estratégia do glow-up (proposta, sem reescrever os 100 renderers agora):**
-1. Cada visualização ganha um **palco** próprio em largura total, abaixo do texto da teoria (não mais lado a lado).
-2. O palco aplica `zoom` (suportado nos navegadores atuais, inclusive Firefox 126+) proporcional à largura via container query: ~1.0 em 480px, ~1.4 em 800px, ~1.7 em 1100px+. Os px internos escalam junto sem tocar no código dos renderers.
-3. Fallback: onde `zoom` não existir, `transform: scale()` com ajuste de altura.
-4. **Fase posterior:** normalizar tipografia dos renderers para `rem`/`clamp()` e paleta por token, semana a semana, com auditoria a cada lote.
+**Solução implementada no glow-up (07/set/2026), sem tocar nos renderers:**
+1. Cada visualização vive num **palco** (`figure.palco` > `div.stage.vis-container[data-renderer]`) em largura total, abaixo do texto da teoria, precedido do rótulo "Evidência NN · interativa".
+2. `.palco` é `container-type: inline-size`; `.stage` recebe `zoom` por container query: 1 até 519px, 1.25 a partir de 520px, 1.5 a partir de 700px, 1.7 a partir de 900px. `.stage` tem `max-width: 600px` para não esticar além do projeto.
+3. Palco estreito (celular, `< 520px`): o conteúdo do stage ganha `min-width: 440px` e o stage rola horizontalmente (`overflow-x: auto`). A figura mantém a largura de projeto e o aluno desliza; a página nunca rola de lado (`.paper` tem `overflow-x: clip`).
+4. Inicialização: `initVisualizations()` roda após o render da semana (todas as seções estão abertas; não há mais acordeão). Erros de um renderer são capturados no console sem derrubar a página.
+5. CSS dos renderers (`.vis-*`) fica na camada `@layer renderers`, restrito a `.stage`, com a fonte de sistema e a cor de texto que eles assumem. `.vis-tooltip` continua global (o tooltip é anexado ao `body`).
+6. **Fase posterior:** normalizar tipografia dos renderers para `rem`/`clamp()` e paleta por token, semana a semana, com auditoria a cada lote.
 
 ## Paletas em uso
 
@@ -44,4 +46,4 @@ Os renderers foram desenhados para um painel lateral de ~520px e usam `font-size
 
 ## Regra de não regressão
 
-Nenhuma mudança de shell, CSS global ou `app.js` pode alterar o comportamento de clique dos renderers. Se o CSS global precisar afetar o interior de um renderer, isso entra na camada `@layer renderers` com seletor restrito ao palco.
+Nenhuma mudança de shell, CSS global ou `app.js` pode alterar o comportamento de clique dos renderers. Se o CSS global precisar afetar o interior de um renderer, isso entra na camada `@layer renderers` com seletor restrito ao palco. Verificação do glow-up (07/set/2026): as 20 semanas abrem em desktop e mobile com todos os 100 palcos inicializados e zero erro de console (`studyhub-qa.mjs full`).

@@ -1,6 +1,6 @@
 # 07 · Arquivo da gamificação (removida no glow-up)
 
-Registro fiel do sistema de XP, níveis e conquistas que existia até set/2026, para reimplementação futura (provável Fase 4, com contas). Fonte: `app.js` no commit anterior à remoção. Para recuperar o código: `git show <hash-anterior>:app.js` (preencher o hash no commit de remoção).
+Registro fiel do sistema de XP, níveis e conquistas que existia até set/2026, para reimplementação futura (provável Fase 4, com contas). Fonte: `app.js` no commit anterior à remoção. Para recuperar o código: `git show fed4cf4:app.js` e `git show fed4cf4:style.css` (último commit com a gamificação; a remoção veio no commit seguinte, do glow-up, em 07/set/2026). Na primeira visita após o glow-up, `cleanLegacyStorage()` apaga as chaves antigas do aparelho do visitante.
 
 ## Regras de pontuação
 

@@ -2,31 +2,39 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Study Hub — University of London</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Study Hub · University of London</title>
+  <meta name="description" content="Material de estudo aberto do BSc Marketing da University of London: Gestão de Operações e Estratégia de Marketing, semana a semana ou como hub de conceitos ligados. Sem login.">
+  <meta property="og:title" content="Study Hub · University of London">
+  <meta property="og:description" content="Gestão de Operações e Estratégia de Marketing: 20 dossiês semanais, 400 conceitos ligados, 100 visualizações interativas. Aberto a todos, sem login.">
+  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#151210">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23151210'/%3E%3Cpath d='M5 12h9l2-3h11v17H5z' fill='%23D8C79F'/%3E%3Crect x='8' y='16' width='16' height='2' fill='%23151210'/%3E%3Crect x='8' y='20' width='11' height='2' fill='%23151210'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <aside class="sidebar" id="sidebar">
-    <div class="sidebar-header">
-      <a href="#home" class="brand">
-        <div class="brand-badge">UoL</div>
-        <div class="brand-info">
-          <div class="brand-course">Study Hub</div>
-          <div class="brand-name">Univ. of London</div>
-        </div>
-      </a>
-      <button class="lang-toggle" id="langToggle" onclick="toggleLang()">
-        <span id="langFlag">🇧🇷</span>
-        <span id="langText">PT+EN</span>
-      </button>
-    </div>
-    <div id="xpBar"></div>
-    <nav class="sidebar-nav" id="sidebarNav"></nav>
-    <div class="sidebar-footer" id="sidebarFooter"></div>
-  </aside>
+  <a class="skip" href="#main">Pular para o conteúdo</a>
 
-  <main class="main-content" id="mainContent"></main>
+  <header class="topbar">
+    <button class="menu-btn" id="menuBtn" type="button" aria-controls="drawer" aria-expanded="false" aria-label="Abrir navegação">
+      <span></span><span></span><span></span>
+    </button>
+    <a href="#home" class="wordmark">Study Hub</a>
+    <nav class="topnav" id="topNav" aria-label="Principal"></nav>
+  </header>
+
+  <div class="shell">
+    <aside class="drawer" id="drawer" aria-label="Navegação do curso">
+      <nav id="drawerNav"></nav>
+    </aside>
+    <div class="scrim" id="scrim" hidden></div>
+    <main id="main" tabindex="-1"></main>
+  </div>
+
+  <footer class="foot" id="foot"></footer>
 
   <script src="data/subjects.js"></script>
   <script src="data/operations-management/week-01.js"></script>
@@ -50,6 +58,7 @@
   <script src="data/marketing-strategy/week-09.js"></script>
   <script src="data/marketing-strategy/week-10.js"></script>
   <script src="visualizers.js"></script>
+  <script src="hub.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
