@@ -44,6 +44,9 @@ const UI = {
   byWeek:       { pt: 'Por semana',               en: 'By week' },
   hub:          { pt: 'Hub de conhecimento',      en: 'Knowledge hub' },
   hubShort:     { pt: 'Hub',                      en: 'Hub' },
+  reviewMode:   { pt: 'Revisar flashcards',       en: 'Review flashcards' },
+  quizMode:     { pt: 'Modo prova',               en: 'Exam mode' },
+  mnemonic:     { pt: 'Macete',                   en: 'Mnemonic' },
   trails:       { pt: 'Trilhas',                  en: 'Trails' },
   soon:         { pt: 'em breve',                 en: 'soon' },
   part:         { pt: 'Parte',                    en: 'Part' },
@@ -226,7 +229,10 @@ function renderDrawer(r) {
         const rv = (s.reviews || []).find(x => x.after === n);
         return `<a class="dr-week ${isOn ? 'on' : ''}" href="${h}" ${isOn ? 'aria-current="page"' : ''}><b>${wnum(n)}</b><span>${esc(weekTitle(s.id, n))}</span></a>` +
           (rv ? `<a class="dr-rev ${hash === `#${s.id}/${rv.id}` ? 'on' : ''}" href="#${s.id}/${rv.id}">${T('review')} ${rv.range[0]}–${rv.range[1]}</a>` : '');
-      }).join('') + '</div>';
+      }).join('') +
+      `<a class="dr-rev tool ${r.view === 'review-all' ? 'on' : ''}" href="#${s.id}/review">${T('reviewMode')}</a>` +
+      `<a class="dr-rev tool ${r.view === 'quiz' ? 'on' : ''}" href="#${s.id}/quiz">${T('quizMode')}</a>` +
+      '</div>';
     }
     return `<a class="dr-subj ${on ? 'on' : ''}" href="#${s.id}"><span class="n">${partNum(s)}</span><span class="t">${esc(t(s.name))}</span></a>${weeks}`;
   }).join('');
@@ -280,6 +286,8 @@ function coverHTML(s, opts) {
         <div class="acts">
           ${wide ? '' : `<a class="btn" href="#${s.id}">${T('openPart')} · ${s.totalWeeks} ${T('dossiers')}</a>`}
           <a class="btn ghost" href="#hub/${s.id}">${T('openBoard')}</a>
+          <a class="btn ghost" href="#${s.id}/review">${T('reviewMode')}</a>
+          <a class="btn ghost" href="#${s.id}/quiz">${T('quizMode')}</a>
         </div>
       </div>
       <div class="folders ${wide ? 'wide' : ''}" aria-label="${T('weeks')}">${folders}</div>
@@ -351,6 +359,7 @@ function renderWeek(s, num, section) {
           <h1 class="disp">${esc(title)}</h1>
           ${lang === 'pt' && titleEn !== titlePt ? `<div class="wk-en">${esc(titleEn)}</div>` : ''}
           ${meta ? `<div class="wk-meta">${meta}</div>` : ''}
+          ${populated && w.flashcards && w.flashcards.length ? `<div class="wk-tools"><a href="#${s.id}/review/${num}">${T('reviewMode')} · ${wnum(num)} →</a><a href="#${s.id}/quiz/${num}">${T('quizMode')} · ${wnum(num)} →</a></div>` : ''}
         </div>
       </div>
       <nav class="wk-pn" aria-label="${T('weeks')}">
@@ -467,11 +476,19 @@ function parseNotes(text) {
   out.push({ title: prevTitle, body: text.slice(prevEnd).trim() });
   return out.filter(b => b.body || b.title);
 }
+/* Linhas com "macete"/"mnemonic" nas notas viram callout de marca-texto (05: callout de macete) */
+const MNEMO_RE = /\b(macete|mnem[oô]nic[oa]?s?|mnemonics?)\b/i;
+function noteBody(body) {
+  return body.split('\n').map(line => {
+    const html = boldKeys(esc(line));
+    return MNEMO_RE.test(line) ? `<mark class="macete"><span class="macete-tag">${T('mnemonic')}</span>${html}</mark>` : html;
+  }).join('\n');
+}
 function notesHTML(notes) {
   const blocks = parseNotes(t(notes));
   return blocks.map(b => {
     const isSrc = /^(FONTES|SOURCES)/i.test(b.title || '');
-    return `<div class="note-block ${isSrc ? 'src' : ''}">${b.title ? `<h3>${esc(b.title)}</h3>` : ''}<div class="prose">${isSrc ? esc(b.body) : boldKeys(esc(b.body))}</div></div>`;
+    return `<div class="note-block ${isSrc ? 'src' : ''}">${b.title ? `<h3>${esc(b.title)}</h3>` : ''}<div class="prose">${isSrc ? esc(b.body) : noteBody(b.body)}</div></div>`;
   }).join('');
 }
 
@@ -494,16 +511,28 @@ function connectionsHTML(connections, s) {
 
 /* ─── Flashcards (estado só na sessão) ──────────────────── */
 const fcState = {};
-function fcDeck(id, cards) {
-  if (!fcState[id]) fcState[id] = { idx: 0, known: [], unknown: [] };
-  const st = fcState[id]; st.cards = cards;
+/* opts.key(card, i) identifica a carta (padrão: índice); opts.meta(card) põe um rótulo acima da pergunta */
+function fcKeyOf(st, i) { return st.opts && st.opts.key ? st.opts.key(st.cards[i], i) : i; }
+function fcReset(id, cards) {
+  if (!fcState[id]) fcState[id] = { idx: 0, known: [], unknown: [], opts: {} };
+  const st = fcState[id];
+  const sig = cards.map((c, i) => st.opts && st.opts.key ? st.opts.key(c, i) : i).join('|');
+  if (st.sig !== sig) { st.idx = 0; st.sig = sig; }
+  st.cards = cards;
+}
+function fcDeck(id, cards, opts) {
+  if (!fcState[id]) fcState[id] = { idx: 0, known: [], unknown: [], opts: opts || {} };
+  const st = fcState[id]; st.cards = cards; st.opts = opts || st.opts || {};
+  if (st.idx >= cards.length) st.idx = 0;
   const total = cards.length, fc = cards[st.idx] || cards[0];
-  const dots = cards.map((_, i) => `<i class="${st.known.includes(i) ? 'ok' : st.unknown.includes(i) ? 'no' : i === st.idx ? 'cur' : ''}"></i>`).join('');
+  const keys = cards.map((_, i) => fcKeyOf(st, i));
+  const kn = st.known.filter(k => keys.includes(k)).length, un = st.unknown.filter(k => keys.includes(k)).length;
+  const dots = cards.map((_, i) => `<i class="${st.known.includes(keys[i]) ? 'ok' : st.unknown.includes(keys[i]) ? 'no' : i === st.idx ? 'cur' : ''}"></i>`).join('');
   return `<div class="fc" id="${id}" data-deck="${id}">
-    <div class="fc-top"><div class="fc-dots" aria-hidden="true">${dots}</div><div>${st.known.length} ${T('knew').toLowerCase()} · ${st.unknown.length} ${T('needReview').toLowerCase()}</div></div>
+    <div class="fc-top"><div class="fc-dots" aria-hidden="true">${dots}</div><div>${kn} ${T('knew').toLowerCase()} · ${un} ${T('needReview').toLowerCase()}</div></div>
     <div class="fc-card" role="button" tabindex="0" aria-label="Flashcard ${st.idx + 1} ${T('of')} ${total}" data-act="flip">
       <div class="fc-inner">
-        <div class="fc-face"><div class="q">${esc(t(fc.q))}</div><span class="hint">${T('reveal')}</span></div>
+        <div class="fc-face">${st.opts.meta ? `<div class="fc-meta">${st.opts.meta(fc)}</div>` : ''}<div class="q">${esc(t(fc.q))}</div><span class="hint">${T('reveal')}</span></div>
         <div class="fc-face back"><div class="a">${boldKeys(esc(t(fc.a)))}</div><span class="hint">${T('back')}</span></div>
       </div>
     </div>
@@ -518,19 +547,20 @@ function fcDeck(id, cards) {
 function fcUpdate(id) {
   const el = document.getElementById(id); if (!el) return;
   const st = fcState[id];
-  const tmp = document.createElement('div'); tmp.innerHTML = fcDeck(id, st.cards);
+  const tmp = document.createElement('div'); tmp.innerHTML = fcDeck(id, st.cards, st.opts);
   el.replaceWith(tmp.firstElementChild);
 }
 function fcAction(id, act) {
-  const st = fcState[id]; if (!st || !st.cards) return;
+  const st = fcState[id]; if (!st || !st.cards || !st.cards.length) return;
   const card = document.querySelector(`#${CSS.escape(id)} .fc-card`);
   if (act === 'flip') { card && card.classList.toggle('flipped'); return; }
   if (act === 'prev') st.idx = Math.max(0, st.idx - 1);
   if (act === 'next') st.idx = Math.min(st.cards.length - 1, st.idx + 1);
   if (act === 'knew' || act === 'review') {
+    const key = fcKeyOf(st, st.idx);
     const arr = act === 'knew' ? st.known : st.unknown, other = act === 'knew' ? st.unknown : st.known;
-    if (!arr.includes(st.idx)) arr.push(st.idx);
-    const j = other.indexOf(st.idx); if (j > -1) other.splice(j, 1);
+    if (!arr.includes(key)) arr.push(key);
+    const j = other.indexOf(key); if (j > -1) other.splice(j, 1);
     if (st.idx < st.cards.length - 1) st.idx++;
   }
   fcUpdate(id);
@@ -717,7 +747,15 @@ function parseHash() {
   const wm = seg[1].match(/^week-(\d+)$/);
   if (wm) return { view: 'week', subject: s, week: +wm[1], section: seg[2] || null };
   if (/^r\d+$/.test(seg[1])) return { view: 'review', subject: s, review: seg[1] };
+  if (seg[1] === 'review') return { view: 'review-all', subject: s, range: parseRange(seg[2]) };
+  if (seg[1] === 'quiz') return { view: 'quiz', subject: s, range: parseRange(seg[2]) };
   return { view: 'subject', subject: s };
+}
+/* "7-10" → [7,10] · "9" → [9,9] · outro → null (todas) */
+function parseRange(seg) {
+  if (!seg) return null;
+  const m = seg.match(/^(\d+)(?:-(\d+))?$/); if (!m) return null;
+  const a = +m[1], b = m[2] ? +m[2] : a; return [Math.min(a, b), Math.max(a, b)];
 }
 
 function route(force) {
@@ -737,6 +775,8 @@ function route(force) {
     case 'subject': renderSubject(r.subject); break;
     case 'week':    renderWeek(r.subject, r.week, r.section); break;
     case 'review':  renderReview(r.subject, r.review); break;
+    case 'review-all': if (window.STUDY) STUDY.renderReview(r.subject, r.range); else renderSubject(r.subject); break;
+    case 'quiz':    if (window.STUDY) STUDY.renderQuiz(r.subject, r.range); else renderSubject(r.subject); break;
     case 'hub':     if (window.HUB) HUB.render(r); else renderHome(); break;
   }
   if (r.view !== 'week') window.scrollTo(0, 0);
@@ -786,6 +826,7 @@ function init() {
   cleanLegacyStorage();
   document.documentElement.lang = lang;
   bindEvents();
+  if (window.STUDY) STUDY.bind();
   window.addEventListener('hashchange', () => route());
   if (window.HUB) HUB.build();
   route();

@@ -47,9 +47,15 @@ Ver 03. Resolve a legibilidade sem reescrever os renderers; normalização por t
 
 `navigator.language` começando com `pt` abre em PT-BR; senão, EN. O toggle continua e a escolha persiste em `uol-lang`. Conteúdo segue bilíngue por campo; `<html lang>` acompanha.
 
-## D8 · Rotas: manter hash e adicionar âncoras de seção · aceita, parcialmente implementada (07/set/2026)
+## D8 · Rotas: manter hash e adicionar âncoras de seção · aceita e implementada (07 e 08/set/2026)
 
-Implementado: `#<subjectId>/week-N/<secao>` (abas fixas da folha; mudar só a seção rola sem re-render) e as rotas do Hub (`#hub`, `#hub/<subjectId>`, `#hub/<subjectId>/<slug>`). A busca global vive dentro do Hub (`#hub`, atalho `/`), então `#search` não foi criada. Pendentes para a Fase 3: `#<subjectId>/review` (flashcards da matéria inteira) e `#<subjectId>/quiz`.
+Implementado: `#<subjectId>/week-N/<secao>` (abas fixas da folha; mudar só a seção rola sem re-render), as rotas do Hub (`#hub`, `#hub/<subjectId>`, `#hub/<subjectId>/<slug>`) e, na Fase 3, `#<subjectId>/review[/faixa]` e `#<subjectId>/quiz[/faixa]`, onde a faixa é `N` ou `A-B` (ex.: `#marketing-strategy/quiz/7-10` = prova das semanas 17 a 20 do curso). A busca global vive dentro do Hub (`#hub`, atalho `/`), então `#search` não foi criada.
+
+## D14 · Prova gerada dos dados, sem banco de questões à mão · aceita (08/set/2026)
+
+**Contexto.** O dono quer treinar para as MCQ do Coursera. Escrever questões à mão para 20 semanas não escala e envelhece.
+**Decisão.** `study.js` gera múltipla escolha na hora: de cada flashcard (pergunta → resposta certa) e de cada termo do glossário (definição → termo, ou termo → definição). As três alternativas erradas vêm de outras fichas da mesma matéria, com preferência pela mesma semana e por tamanho parecido (para o tamanho não entregar a resposta); textos iguais à resposta são descartados. Nada é gravado; ao terminar, o aluno pode refazer só as erradas.
+**Consequências.** Toda semana nova entra na prova sozinha. A qualidade das questões depende da qualidade dos flashcards e do glossário (02): perguntas diretas e respostas concisas continuam sendo a regra de escrita.
 
 ## D9 · Nada de imagem gerada nem 3D · aceita (07/set/2026)
 

@@ -36,5 +36,11 @@ Sequências curadas que atravessam semanas com um objetivo ("Trilha Porter: 5 Fo
 
 - Fase 1: fundação na direção B + Modo 1 responsivo + remoção da gamificação. ✅
 - Fase 2: Modo 2 com arestas 1 a 3 + fichas + quadro + busca. ✅
-- Fase 3: modo Revisão e modo Prova (aproveitam o índice do Hub).
+- Fase 3: modo Revisão e modo Prova (`study.js`, spec em 05 e D14). ✅
 - Fase 4: polimento; avaliar `related[]`/`tags[]` e o Modo 3.
+
+## Ferramentas de estudo por matéria (Fase 3, complementam os modos)
+
+- **Revisão** (`#<subject>/review[/faixa]`): todos os flashcards da matéria num fichário só, com a semana de origem em cada carta (link para a seção), chips por semana e presets dos blocos de revisão, embaralhar, "só os marcados para revisar" e teclado (← → navegar, Enter vira, 1 sabia, 2 revisar). A pilha vive na sessão.
+- **Prova** (`#<subject>/quiz[/faixa]`): configuração (semanas, 10/15/20/30 questões, fontes flashcards e/ou glossário) → uma questão por vez com quatro alternativas (1 a 4 no teclado) → correção imediata com carimbo "Certo"/"Errado", resposta e link para o dossiê → resultado com "refazer as erradas". Regras de geração em D14.
+- Atalhos: capa da matéria, gaveta (abaixo das semanas) e cabeçalho de cada semana (revisar/prova só daquela semana).

@@ -1,6 +1,6 @@
 # 05 · Escopo do glow-up
 
-Estado em 07/set/2026: **Fases 0, 1 e 2 entregues** (direção B · Dossiê, Modo Semanas responsivo, gamificação removida, Modo Hub). Fases 3 e 4 seguem como proposta.
+Estado em 08/set/2026: **Fases 0, 1, 2 e 3 entregues** (direção B · Dossiê, Modo Semanas responsivo, gamificação removida, Modo Hub, modo Revisão, modo Prova, callout de macete). Fase 4 segue como proposta.
 
 ## Tirar · feito
 
@@ -31,9 +31,9 @@ Estado em 07/set/2026: **Fases 0, 1 e 2 entregues** (direção B · Dossiê, Mod
 | P0 | **Modo Hub de conhecimento**: índice derivado, arestas, ficha por conceito, entrada com busca (D11, 08) | **feito** |
 | P1 | Quadro de ligações em canvas 2D no Hub (hover acende vizinhança, clique abre ficha, W## abre a semana, busca destaca) | **feito** |
 | P1 | Busca global (conceitos, teorias, glossário, flashcards) com atalho `/` | **feito, dentro do Hub** |
-| P1 | Callout de macete | pendente (depende de `mnemonics[]` ou parse; por ora o negrito automático D12 cobre a escaneabilidade) |
-| P1 | Modo Revisão por matéria: todos os flashcards, embaralhar (`#<subject>/review`) | Fase 3 |
-| P1 | Modo Prova: questões de múltipla escolha de flashcards e glossário (`#<subject>/quiz`) | Fase 3 |
+| P1 | Callout de macete: linhas das notas com "macete"/"mnemonic" viram marca-texto com etiqueta | **feito** (sem campo novo; `mnemonics[]` continua opcional para o futuro) |
+| P1 | Modo Revisão por matéria: todos os flashcards, chips por semana, embaralhar, "só revisar", teclado (`#<subject>/review[/faixa]`) | **feito** |
+| P1 | Modo Prova: múltipla escolha gerada de flashcards e glossário, correção na hora, refazer as erradas (`#<subject>/quiz[/faixa]`, D14) | **feito** |
 | P1 | "Folha clara" para leitura longa (a direção B já é escura; modo escuro deixou de fazer sentido) | avaliar na Fase 4 |
 | P2 | Checklist "o que a semana cobrou" (`tasks[]` ou parse das notes) | Fase 4 |
 | P2 | Motion com GSAP (reveals, linhas que se desenham) e Lottie discreto, com `prefers-reduced-motion` | Fase 4 |
@@ -48,7 +48,7 @@ Estado em 07/set/2026: **Fases 0, 1 e 2 entregues** (direção B · Dossiê, Mod
 0. **Prancha visual e decisões.** ✅ 07/set/2026 (Artifact com A, B e C; B escolhida).
 1. **Fundação + Modo Semanas.** ✅ 07/set/2026. Tokens, fontes, casca responsiva, gamificação fora, home nova, idioma, semana como documento com abas e palco, revisão redesenhada.
 2. **Modo Hub.** ✅ 07/set/2026. Índice, arestas 1 a 3, quadro em canvas, ficha, busca, lista mobile.
-3. **Estudo.** Modo Revisão por matéria, modo Prova, callout de macete.
+3. **Estudo.** ✅ 08/set/2026. Modo Revisão por matéria, modo Prova, callout de macete; atalhos na capa da matéria, na gaveta e no cabeçalho de cada semana ("Revisar · W09", "Modo prova · W09").
 4. **Polimento.** GSAP/Lottie, folha clara, meta tags por rota, impressão, renderers em `rem`, `related[]`/`tags[]`, Trilhas, atualização final do CLAUDE.md do hub.
 
 ## Critérios de pronto (por fase)
@@ -60,7 +60,7 @@ Estado em 07/set/2026: **Fases 0, 1 e 2 entregues** (direção B · Dossiê, Mod
 - Contraste mínimo AA em texto; foco visível.
 - Commit com a spec atualizada.
 
-Fases 1 e 2 cumpriram os critérios em 07/set/2026 (QA em 01).
+Fases 1 e 2 cumpriram os critérios em 07/set/2026 e a Fase 3 em 08/set/2026 (QA em 01).
 
 ## Fora de escopo agora
 

@@ -12,11 +12,12 @@ HTML + CSS + JavaScript puros. Sem framework, sem build, sem dependências de ru
 | `style.css` | Todo o estilo em camadas: `@layer tokens, base, layout, components, renderers, utilities`. Direção B · Dossiê (06) |
 | `app.js` | Núcleo (estado leve, i18n, rotas, casca) + **Modo 1 · Semanas** (home, matéria, semana como documento contínuo, revisão, flashcards) + `VIS_DISPATCH` e o palco das visualizações |
 | `hub.js` | **Modo 2 · Hub de conhecimento** (`window.HUB`): índice derivado, arestas, busca, quadro de ligações em canvas 2D, ficha do conceito |
+| `study.js` | **Fase 3** (`window.STUDY`): modo Revisão (todos os flashcards da matéria, filtro por semana, embaralhar, pilha "revisar") e modo Prova (múltipla escolha gerada de flashcards e glossário, correção na hora, refazer as erradas) |
 | `visualizers.js` | ~100 funções `window.vis_*` (intocadas pelo glow-up) |
 | `data/subjects.js` | Registro das matérias (`window.SUBJECTS`) |
 | `data/<materia>/week-XX.js` | Conteúdo de cada semana (`window.WEEKS_DATA[materia][N]`), 20 arquivos |
 
-**Ordem de carga** (importa): `subjects.js` → todos os `week-XX.js` → `visualizers.js` → `hub.js` → `app.js`. `hub.js` só define `window.HUB`; quem constrói o índice é `init()` em `app.js` (`HUB.build()` antes da primeira rota). Os helpers globais de `app.js` (`t`, `T`, `esc`, `rich`, `getSubject`, `weekTitle`, `partNum`, `wnum`, `pad2`, `setMain`, `VIS_DISPATCH`) são usados por `hub.js` só em tempo de render, depois da carga completa.
+**Ordem de carga** (importa): `subjects.js` → todos os `week-XX.js` → `visualizers.js` → `hub.js` → `study.js` → `app.js`. `hub.js` e `study.js` só definem `window.HUB` e `window.STUDY`; quem constrói o índice e liga os eventos é `init()` em `app.js` (`HUB.build()`, `STUDY.bind()` antes da primeira rota). Os helpers globais de `app.js` (`t`, `T`, `esc`, `rich`, `boldKeys`, `getSubject`, `getWeek`, `weekTitle`, `isWeekPopulated`, `subjectWeekNums`, `partNum`, `wnum`, `pad2`, `setMain`, `fcDeck`/`fcReset`/`fcAction`/`fcState`, `lastRoute`, `VIS_DISPATCH`) são usados pelos módulos só em tempo de render, depois da carga completa.
 
 ## Rotas (hash)
 
@@ -27,6 +28,8 @@ HTML + CSS + JavaScript puros. Sem framework, sem build, sem dependências de ru
 | `#<subjectId>/week-N` | Dossiê da semana: cabeçalho escuro + abas fixas + folha contínua com todas as seções |
 | `#<subjectId>/week-N/<secao>` | Mesma página, rolando até a seção (`overview`, `concepts`, `theories`, `cases`, `glossary`, `flashcards`, `authors`, `notes`, `links`, `connections`). Mudar só a seção não re-renderiza |
 | `#<subjectId>/rN` | Revisão do bloco (resumo por semana + todos os flashcards) |
+| `#<subjectId>/review[/N ou /A-B]` | Modo Revisão: flashcards da matéria inteira (ou da faixa de semanas), chips por semana, embaralhar, "só revisar" |
+| `#<subjectId>/quiz[/N ou /A-B]` | Modo Prova: configuração (semanas, número, fontes) → questões → correção com "refazer as erradas" |
 | `#hub` | Hub de conhecimento: busca em primeiro plano, quadro de ligações, fichas mais citadas, lista por semana |
 | `#hub/<subjectId>` | Quadro filtrado por matéria |
 | `#hub/<subjectId>/<slug>` | Ficha do conceito ou teoria |
@@ -61,4 +64,5 @@ Só transições CSS em `transform`/`opacity` (gaveta, pastas, flashcard) e o de
 - `node --check` em `app.js`, `hub.js`, `visualizers.js`.
 - `~/.claude/tools/pw/studyhub-qa.mjs <base> <out> full`: abre home, matéria, semana, revisão, hub, ficha e as 20 semanas em 1366×900 e 390×844, coleta erros de console, confere que todo `.stage[data-renderer]` inicializou e acusa overflow horizontal.
 - `~/.claude/tools/pw/studyhub-sections.mjs <base> <out> pt-BR`: screenshots por seção da semana (desktop e mobile), busca e hover do quadro.
+- `~/.claude/tools/pw/studyhub-study.mjs <base> <out>`: fluxo completo da revisão (chips, teclado, embaralhar, "só revisar") e da prova (setup → 10 questões por teclado → correção → refazer), desktop e mobile.
 - Servidor local: `python3 -m http.server 3141` na pasta do app. Usar `reducedMotion: 'reduce'` no Playwright para capturas com rolagem.
