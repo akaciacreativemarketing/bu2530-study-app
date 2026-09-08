@@ -398,5 +398,7 @@ window.HUB = (function () {
       </div></article>`, `${nodeName(node)} · ${T('hub')}`);
   }
 
-  return { build, render, slugFor, search, get nodes() { return nodes; }, get citeEdges() { return citeEdges; }, get weekEdges() { return weekEdges; } };
+  function nodeBySlug(subject, slug) { build(); return bySlug[subject] ? bySlug[subject][slug] || null : null; }
+
+  return { build, render, slugFor, nodeBySlug, search, get nodes() { return nodes; }, get citeEdges() { return citeEdges; }, get weekEdges() { return weekEdges; } };
 })();

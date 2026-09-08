@@ -71,9 +71,21 @@ As visualizações são a imagem do produto. Fotos ou 3D no hero seriam enfeite 
 
 Ver 08. As arestas nascem só dos dados (mesma semana, `connections`, citação cruzada por texto). A citação cruzada usa chaves com 6 caracteres ou mais, ignora uma lista de termos genéricos e descarta qualquer chave que apareça em mais de 8 nós de outras semanas (frequência alta = termo genérico, não ligação). Na ficha, essas ligações aparecem sob o título "Citação cruzada · automática".
 
-## D10 · Arsenal aprovado · aceita (07/set/2026)
+## D10 · Arsenal aprovado · aceita (07/set/2026) · executado sem dependência (08/set/2026)
 
 O dono aprovou os quatro itens oferecidos: mapa vivo em canvas 2D na home, GSAP sóbrio (reveals e linhas que se desenham, só `transform`/`opacity`, `prefers-reduced-motion` obrigatório), modo escuro por preferência do sistema com toggle, e Lottie discreto (loader e check). Roteamento: mecânica com `gsap-*`, gosto com a lente anti-slop, Lottie via `text-to-lottie` verificado por render.
+
+**Como ficou na Fase 4.** O canvas virou o quadro de ligações do Hub (D6/D9). Os momentos de motion aprovados (pastas que sobem na capa, seções que entram na folha, desenho progressivo do quadro) couberam em CSS (`@keyframes rise` com `--i` para o stagger, 30ms por item, teto de 9) e no próprio canvas; GSAP por CDN não foi adicionado porque não sobrou nada que precisasse de timeline, e quebraria o uso em `file://` sem rede. Lottie tampouco: não há estado de carregamento nem confirmação que uma animação vetorial melhore (o carimbo "Certo" da prova já é o feedback). Ambos continuam aprovados para o dia em que houver um momento que os justifique (candidato: o traçado das Trilhas). O "modo escuro" virou o inverso, a **folha clara** (D15), porque a direção B já nasce escura.
+
+## D15 · Folha clara como escolha, não como padrão · aceita (08/set/2026)
+
+**Contexto.** A direção B é escura por identidade (06). Leitura longa de dia, no celular, pede a opção de fundo claro; 05 previa avaliar isso na Fase 4.
+**Decisão.** Toggle "Escuro · Claro" no topo, gravado em `uol-theme`. Sem detecção automática por `prefers-color-scheme`: o escuro é a cara do produto e o claro é uma escolha do visitante. Na folha clara o chão vira papel (`#F3EEE2`), a folha fica um tom mais clara (`#FBF8F1`) para manter a hierarquia, a manila escurece um pouco como fundo e vira dourado-tinta (`#7E6A3E`) quando é texto, o carimbo continua vermelho. O quadro de ligações continua escuro em qualquer tema: é um objeto (cortiça), não uma superfície.
+**Consequências.** Nenhuma cor de componente é definida só dentro do bloco do tema; tudo passa pelos tokens da camada `tokens`, e o bloco claro só os redefine (mais um bloco pequeno de exceções de contraste em `components`).
+
+## D16 · Impressão da semana sem página extra · aceita (08/set/2026)
+
+"Imprimir · salvar PDF" no cabeçalho da semana chama `window.print()`. O CSS de impressão esconde a casca (topo, gaveta, abas, ferramentas, rodapé), abre todas as fichas (`beforeprint`/`afterprint`), imprime os palcos com borda e escala 1.15, e troca o fichário de flashcards por uma lista pergunta/resposta (`.print-only`) para caber no papel. Não há rota `/print`: a página é a mesma.
 
 ## D6 (complemento) · Prancha visual antes da escolha · aceita (07/set/2026)
 

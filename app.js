@@ -7,8 +7,8 @@
 window.WEEKS_DATA = window.WEEKS_DATA || {};
 window.SUBJECTS = window.SUBJECTS || [];
 
-/* ─── Estado leve (01: só idioma e última rota) ─────────── */
-const STORE = { lang: 'uol-lang', last: 'uol-last' };
+/* ─── Estado leve (01: idioma, folha clara e última rota) ── */
+const STORE = { lang: 'uol-lang', last: 'uol-last', theme: 'uol-theme' };
 const LEGACY_KEYS = ['uol-xp', 'uol-fc-count', 'uol-lang-toggle', 'uol-migrated'];
 
 function storeGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
@@ -21,8 +21,21 @@ function detectLang() {
   return nav.startsWith('pt') ? 'pt' : 'en';
 }
 let lang = detectLang();
+let theme = storeGet(STORE.theme) === 'light' ? 'light' : 'dark';
 let currentSubject = null;
 let lastRoute = null;
+
+function applyTheme() {
+  const root = document.documentElement;
+  if (theme === 'light') root.setAttribute('data-theme', 'light'); else root.removeAttribute('data-theme');
+  const meta = document.querySelector('meta[name="theme-color"]'); if (meta) meta.setAttribute('content', theme === 'light' ? '#F3EEE2' : '#151210');
+}
+function toggleTheme() {
+  theme = theme === 'light' ? 'dark' : 'light';
+  storeSet(STORE.theme, theme);
+  applyTheme();
+  renderTopNav(lastRoute);
+}
 
 /* Gamificação removida (04·D2, arquivo em 07): limpa as chaves antigas. */
 function cleanLegacyStorage() {
@@ -47,6 +60,12 @@ const UI = {
   reviewMode:   { pt: 'Revisar flashcards',       en: 'Review flashcards' },
   quizMode:     { pt: 'Modo prova',               en: 'Exam mode' },
   mnemonic:     { pt: 'Macete',                   en: 'Mnemonic' },
+  themeDark:    { pt: 'Escuro',                   en: 'Dark' },
+  themeLight:   { pt: 'Claro',                    en: 'Light' },
+  themeLabel:   { pt: 'Alternar folha clara',     en: 'Toggle light sheet' },
+  print:        { pt: 'Imprimir · salvar PDF',    en: 'Print · save PDF' },
+  resume:       { pt: 'Continuar de onde parou',  en: 'Pick up where you left off' },
+  tasksBlock:   { pt: 'O que o curso cobrou',     en: 'What the course asked for' },
   trails:       { pt: 'Trilhas',                  en: 'Trails' },
   soon:         { pt: 'em breve',                 en: 'soon' },
   part:         { pt: 'Parte',                    en: 'Part' },
@@ -211,8 +230,27 @@ function renderTopNav(r) {
   el.innerHTML = `
     <a href="#home" class="hide-m ${view === 'home' || view === 'subject' || view === 'week' || view === 'review' ? 'on' : ''}">${T('subjects')}</a>
     <a href="#hub" class="${view === 'hub' ? 'on' : ''}">${T('hubShort')}</a>
-    <button type="button" class="lang" id="langBtn" aria-label="${lang === 'pt' ? 'Switch to English' : 'Mudar para português'}">${lang === 'pt' ? '<b>PT</b> · EN' : 'PT · <b>EN</b>'}</button>`;
+    <button type="button" class="lang" id="langBtn" aria-label="${lang === 'pt' ? 'Switch to English' : 'Mudar para português'}">${lang === 'pt' ? '<b>PT</b> · EN' : 'PT · <b>EN</b>'}</button>
+    <button type="button" class="theme" id="themeBtn" aria-label="${T('themeLabel')}" aria-pressed="${theme === 'light'}">${theme === 'light' ? `${T('themeDark')} · <b>${T('themeLight')}</b>` : `<b>${T('themeDark')}</b> · ${T('themeLight')}`}</button>`;
   document.getElementById('langBtn').addEventListener('click', toggleLang);
+  document.getElementById('themeBtn').addEventListener('click', toggleTheme);
+}
+
+/* Continuar de onde parou (01): só rotas de conteúdo são lembradas */
+function resumeHTML() {
+  const last = storeGet(STORE.last); if (!last) return '';
+  const saved = location.hash; let r;
+  try { history.replaceState(null, '', last); r = parseHash(); } finally { history.replaceState(null, '', saved || '#home'); }
+  if (!r || r.redirect) return '';
+  let label = '';
+  if (r.view === 'week') label = `<b>${wnum(r.week)}</b> ${esc(weekTitle(r.subject.id, r.week))}`;
+  else if (r.view === 'subject') label = `<b>${T('part')} ${partNum(r.subject)}</b> ${esc(t(r.subject.name))}`;
+  else if (r.view === 'review-all') label = `<b>${T('reviewMode')}</b> ${esc(t(r.subject.name))}`;
+  else if (r.view === 'quiz') label = `<b>${T('quizMode')}</b> ${esc(t(r.subject.name))}`;
+  else if (r.view === 'review') label = `<b>${T('review')} ${r.review.replace('r', '')}</b> ${esc(t(r.subject.name))}`;
+  else if (r.view === 'hub' && r.slug && window.HUB) { const n = HUB.nodeBySlug(r.subject, r.slug); if (n) label = `<b>${T('hubShort')}</b> ${esc(lang === 'pt' ? n.pt : n.en)}`; }
+  if (!label) return '';
+  return `<div class="resume"><span>${T('resume')}:</span><a href="${esc(last)}">${label} →</a></div>`;
 }
 
 function renderDrawer(r) {
@@ -268,11 +306,12 @@ function toggleLang() {
 function coverHTML(s, opts) {
   const wide = !!(opts && opts.wide);
   const nums = subjectWeekNums(s);
+  let k = 0;
   const folders = nums.map(n => {
     const rv = (s.reviews || []).find(x => x.after === n);
     const title = wide ? esc(weekTitle(s.id, n)) : esc(shortTitle(weekTitle(s.id, n)));
-    return `<a class="folder" href="#${s.id}/week-${n}"><b>${wnum(n)}</b>${title}</a>` +
-      (rv && wide ? `<a class="folder rev" href="#${s.id}/${rv.id}"><b>R${rv.range[0]}–${rv.range[1]}</b>${T('review')} · ${T('weeks')} ${rv.range[0]}–${rv.range[1]}</a>` : '');
+    return `<a class="folder rise" style="--i:${Math.min(k++, 9)}" href="#${s.id}/week-${n}"><b>${wnum(n)}</b>${title}</a>` +
+      (rv && wide ? `<a class="folder rev rise" style="--i:${Math.min(k++, 9)}" href="#${s.id}/${rv.id}"><b>R${rv.range[0]}–${rv.range[1]}</b>${T('review')} · ${T('weeks')} ${rv.range[0]}–${rv.range[1]}</a>` : '');
   }).join('');
   const H = wide ? 'h1' : 'h2';
   return `
@@ -308,6 +347,7 @@ function renderHome() {
         <h1 class="disp">Study Hub</h1>
         <p class="lede">${T('heroLede')}</p>
         <span class="stamp">${T('openAll')}</span>
+        ${resumeHTML()}
       </div>
       <div class="home-figs" aria-label="${T('figNodes')}">
         <div><b>${f.weeks}</b><span>${T('figWeeks')}</span></div>
@@ -359,7 +399,7 @@ function renderWeek(s, num, section) {
           <h1 class="disp">${esc(title)}</h1>
           ${lang === 'pt' && titleEn !== titlePt ? `<div class="wk-en">${esc(titleEn)}</div>` : ''}
           ${meta ? `<div class="wk-meta">${meta}</div>` : ''}
-          ${populated && w.flashcards && w.flashcards.length ? `<div class="wk-tools"><a href="#${s.id}/review/${num}">${T('reviewMode')} · ${wnum(num)} →</a><a href="#${s.id}/quiz/${num}">${T('quizMode')} · ${wnum(num)} →</a></div>` : ''}
+          ${populated ? `<div class="wk-tools">${w.flashcards && w.flashcards.length ? `<a href="#${s.id}/review/${num}">${T('reviewMode')} · ${wnum(num)} →</a><a href="#${s.id}/quiz/${num}">${T('quizMode')} · ${wnum(num)} →</a>` : ''}<a href="#print" data-act="print">${T('print')} ↗</a></div>` : ''}
         </div>
       </div>
       <nav class="wk-pn" aria-label="${T('weeks')}">
@@ -388,9 +428,10 @@ function sectionHTML(d, i, s, num, w) {
     case 'links':       inner = linksHTML(w.links); count = w.links.length; break;
     case 'connections': inner = connectionsHTML(w.connections, s); count = w.connections.length; break;
   }
-  return `<section class="sec" id="sec-${d.key}" data-key="${d.key}">
+  const printExtra = d.key === 'flashcards' ? `<dl class="print-only print-fc">${w.flashcards.map((f, k) => `<div><dt>${pad2(k + 1)} · ${esc(t(f.q))}</dt><dd>${esc(t(f.a))}</dd></div>`).join('')}</dl>` : '';
+  return `<section class="sec rise" style="--i:${Math.min(i, 6)}" id="sec-${d.key}" data-key="${d.key}">
     <div class="sec-head"><div><div class="n">§ ${pad2(i + 1)}</div><h2 class="disp">${T(d.ui)}</h2></div>${count ? `<div class="cnt">${count} ${T('items')}</div>` : ''}</div>
-    ${inner}
+    ${inner}${printExtra}
   </section>`;
 }
 
@@ -488,7 +529,8 @@ function notesHTML(notes) {
   const blocks = parseNotes(t(notes));
   return blocks.map(b => {
     const isSrc = /^(FONTES|SOURCES)/i.test(b.title || '');
-    return `<div class="note-block ${isSrc ? 'src' : ''}">${b.title ? `<h3>${esc(b.title)}</h3>` : ''}<div class="prose">${isSrc ? esc(b.body) : noteBody(b.body)}</div></div>`;
+    const isTasks = /TAREFAS DO CURSO|COURSE TASKS/i.test(b.title || '');
+    return `<div class="note-block ${isSrc ? 'src' : ''} ${isTasks ? 'tasks' : ''}">${b.title ? `<h3>${isTasks ? T('tasksBlock') : esc(b.title)}</h3>` : ''}<div class="prose">${isSrc ? esc(b.body) : noteBody(b.body)}</div></div>`;
   }).join('');
 }
 
@@ -780,7 +822,8 @@ function route(force) {
     case 'hub':     if (window.HUB) HUB.render(r); else renderHome(); break;
   }
   if (r.view !== 'week') window.scrollTo(0, 0);
-  storeSet(STORE.last, location.hash || '#home');
+  if (['week', 'subject', 'review', 'review-all', 'quiz'].includes(r.view) || (r.view === 'hub' && r.slug)) storeSet(STORE.last, location.hash);
+  const main = document.getElementById('main'); if (main && !(r.view === 'week' && r.section)) main.focus({ preventScroll: true });
 }
 
 /* ─── Eventos delegados ─────────────────────────────────── */
@@ -798,7 +841,11 @@ function bindEvents() {
     }
   });
   const main = document.getElementById('main');
+  window.addEventListener('beforeprint', () => document.querySelectorAll('details.ficha').forEach(d => { d.dataset.wasOpen = d.open ? '1' : ''; d.open = true; }));
+  window.addEventListener('afterprint', () => document.querySelectorAll('details.ficha').forEach(d => { d.open = d.dataset.wasOpen === '1'; }));
   main.addEventListener('click', e => {
+    const pr = e.target.closest('[data-act="print"]');
+    if (pr) { e.preventDefault(); window.print(); return; }
     const fcBtn = e.target.closest('.fc [data-act]');
     if (fcBtn) { const deck = fcBtn.closest('.fc'); fcAction(deck.dataset.deck, fcBtn.dataset.act); return; }
     const secBtn = e.target.closest('.sec-act button[data-open]');
@@ -825,6 +872,7 @@ function bindEvents() {
 function init() {
   cleanLegacyStorage();
   document.documentElement.lang = lang;
+  applyTheme();
   bindEvents();
   if (window.STUDY) STUDY.bind();
   window.addEventListener('hashchange', () => route());

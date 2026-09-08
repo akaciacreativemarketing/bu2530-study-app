@@ -38,7 +38,7 @@ Legado: `#week-N`, `#rN` e `#dashboard` redirecionam. `route()` em `app.js` desp
 
 ## Estado local (localStorage)
 
-Só duas chaves: `uol-lang` (`pt` | `en`, gravada quando o visitante troca) e `uol-last` (última rota, para retomar). O idioma inicial vem de `navigator.language` (D7). `cleanLegacyStorage()` apaga as chaves da gamificação removida (`uol-xp`, `uol-fc-count`, `uol-lang-toggle`, `uol-migrated`, `uol-*-status`, `uol-*-sections-*`, `bu2530-*`) na primeira visita. O app funciona igual sem localStorage. A pilha "sabia / revisar" dos flashcards vive em memória (`fcState`) e some ao recarregar.
+Três chaves: `uol-lang` (`pt` | `en`, gravada quando o visitante troca), `uol-theme` (`dark` | `light`, D15) e `uol-last` (última rota de conteúdo: semana, matéria, revisão, prova ou ficha do Hub; a home mostra "Continuar de onde parou" a partir dela). O idioma inicial vem de `navigator.language` (D7); o tema inicial é sempre o escuro. `cleanLegacyStorage()` apaga as chaves da gamificação removida (`uol-xp`, `uol-fc-count`, `uol-lang-toggle`, `uol-migrated`, `uol-*-status`, `uol-*-sections-*`, `bu2530-*`) na primeira visita. O app funciona igual sem localStorage. A pilha "sabia / revisar" dos flashcards vive em memória (`fcState`) e some ao recarregar.
 
 ## Layout
 
@@ -50,7 +50,11 @@ Só duas chaves: `uol-lang` (`pt` | `en`, gravada quando o visitante troca) e `u
 
 ## Motion
 
-Só transições CSS em `transform`/`opacity` (gaveta, pastas, flashcard) e o desenho progressivo do quadro em canvas. `prefers-reduced-motion` zera tudo (inclusive `scroll-behavior`). GSAP e Lottie (D10) continuam aprovados para a Fase 4, por CDN.
+Só CSS em `transform`/`opacity`: transições (gaveta, pastas, flashcard) e a animação `rise` com stagger por `--i` (pastas da capa, seções da folha), mais o desenho progressivo do quadro em canvas. `prefers-reduced-motion` zera tudo (inclusive `scroll-behavior`). GSAP e Lottie (D10) foram avaliados e não adicionados; continuam aprovados se um momento futuro os justificar.
+
+## Impressão
+
+`@media print` no fim do `style.css` (fora das camadas): esconde a casca, abre as fichas (`beforeprint`/`afterprint` em `app.js`), imprime os palcos com borda e a lista pergunta/resposta dos flashcards (`.print-only`). Acionada pelo link "Imprimir · salvar PDF" do cabeçalho da semana (`data-act="print"`).
 
 ## Restrições que continuam valendo
 
@@ -65,4 +69,5 @@ Só transições CSS em `transform`/`opacity` (gaveta, pastas, flashcard) e o de
 - `~/.claude/tools/pw/studyhub-qa.mjs <base> <out> full`: abre home, matéria, semana, revisão, hub, ficha e as 20 semanas em 1366×900 e 390×844, coleta erros de console, confere que todo `.stage[data-renderer]` inicializou e acusa overflow horizontal.
 - `~/.claude/tools/pw/studyhub-sections.mjs <base> <out> pt-BR`: screenshots por seção da semana (desktop e mobile), busca e hover do quadro.
 - `~/.claude/tools/pw/studyhub-study.mjs <base> <out>`: fluxo completo da revisão (chips, teclado, embaralhar, "só revisar") e da prova (setup → 10 questões por teclado → correção → refazer), desktop e mobile.
+- `~/.claude/tools/pw/studyhub-f4.mjs <base> <out>`: folha clara (toggle, persistência, capturas), emulação de impressão (casca escondida, fichas abertas, lista de flashcards), motion em repouso após 1s, "continuar de onde parou", bloco de tarefas.
 - Servidor local: `python3 -m http.server 3141` na pasta do app. Usar `reducedMotion: 'reduce'` no Playwright para capturas com rolagem.
